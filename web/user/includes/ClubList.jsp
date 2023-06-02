@@ -10,6 +10,7 @@
                     <th>Club Name</th>
                     <th></th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -17,10 +18,13 @@
                     <td>${club.code}</td>
                     <td>${club.name}</td>
                     <td>
-                        <a href="#">View detail</a>
+                        <a href="<%=request.getContextPath()%>/user?command=ViewClubDetails">View detail</a>
                     </td>
                     <td>
                         <a href="#">Join club request</a>
+                    </td>
+                    <td>
+                        <a href="#">Remove</a>
                     </td>
                 </tr>
             </tbody>

@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Your Profile</title>
+        <title>Profile</title>
         <style>
             a {
                 text-decoration: none;
@@ -12,7 +12,7 @@
     </head>
     <body>
     <center>
-        <h1>Your Profile</h1>
+        <h1>Profile</h1>
         <form action="user" method="get">
             <input type="hidden" name="command" value="LoadEditProfile">
             <table border="1" width="200">

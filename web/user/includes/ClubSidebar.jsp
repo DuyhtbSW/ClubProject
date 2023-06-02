@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<link rel="stylesheet" href="style/Club.css"/>
+<link rel="stylesheet" href="user/style/Club.css"/>
 <!DOCTYPE html>
 <div class="sidebar">
     <div class="sidebar-header">
@@ -28,7 +28,7 @@
                 <a href="<%=request.getContextPath()%>/user?command=ClubManage">
                 <!--<a href="<%=request.getContextPath()%>/ClubManage.jsp">-->
                     <span class="ti-layout-grid2-thumb"></span>
-                    <span>Manage Club</span>
+                    <span>Club Manage</span>
                 </a>
             </li>
             <li>
