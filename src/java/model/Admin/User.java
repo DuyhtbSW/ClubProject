@@ -1,21 +1,21 @@
-package model;
+package model.Admin;
 
 import java.util.Date;
 
 public class User {
 
     private int userId;
-    private String userName, userEmail, userPass, userPhone, userGender;
+    private String userName, userEmail, userPassword, userPhone, userGender;
     private Date DOB;
 
     public User() {
     }
 
-    public User(int userId, String userName, String userEmail, String userPass, String userPhone, String userGender, Date DOB) {
+    public User(int userId, String userName, String userEmail, String userPassword, String userPhone, String userGender, Date DOB) {
         this.userId = userId;
         this.userName = userName;
         this.userEmail = userEmail;
-        this.userPass = userPass;
+        this.userPassword = userPassword;
         this.userPhone = userPhone;
         this.userGender = userGender;
         this.DOB = DOB;
@@ -45,12 +45,12 @@ public class User {
         this.userEmail = userEmail;
     }
 
-    public String getUserPass() {
-        return userPass;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public void setUserPass(String userPass) {
-        this.userPass = userPass;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
     public String getUserPhone() {
@@ -79,7 +79,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "userId=" + userId + ", userName=" + userName + ", userEmail=" + userEmail + ", userPass=" + userPass + ", userPhone=" + userPhone + ", userGender=" + userGender + ", DOB=" + DOB + '}';
+        return "User{" + "userId=" + userId + ", userName=" + userName + ", userEmail=" + userEmail + ", userPassword=" + userPassword + ", userPhone=" + userPhone + ", userGender=" + userGender + ", DOB=" + DOB + '}';
     }
     
 

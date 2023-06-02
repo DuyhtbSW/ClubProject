@@ -3,7 +3,6 @@
     Created on : May 23, 2023, 2:45:35 PM
     Author     : acer
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -14,10 +13,9 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
     </head>
     <body>
-
         <input type="checkbox" id="sidebar-toggle">
         <%@ include file="includes/admin-sidebar.jsp" %>
-        
+
         <div class="main-content">
             <%@ include file="includes/admin-header.jsp" %>
             <main>
@@ -57,26 +55,22 @@
                                 <div class="bday-flex">
                                     <div class="bday-img"></div>
                                     <div class="bday-info">
-                                        <h5>Dwayne F. Sanders</h5>
-                                        <small>Birthday Today</small>
+                                        <h5>Club Dever</h5>
+                                        <small>Event Today</small>
                                     </div>
                                 </div>
 
                                 <div class="text-center">
                                     <button>
                                         <span class="ti-gift"></span>
-                                        Wish him
+                                        View Detail
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
-
             </main>
-
         </div>
-
-    </body>
     </body>
 </html>

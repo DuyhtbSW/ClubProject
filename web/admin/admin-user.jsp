@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
         <title>Admin - User Page</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
-        
     </head>
     <body>
-
         <input type="checkbox" id="sidebar-toggle">
         <%@include file="includes/admin-sidebar.jsp" %>
 
@@ -50,15 +48,15 @@
                                 <div class="bday-flex">
                                     <div class="bday-img"></div>
                                     <div class="bday-info">
-                                        <h5>Dwayne F. Sanders</h5>
-                                        <small>Birthday Today</small>
+                                        <h5>Club Dever</h5>
+                                        <small>Event Today</small>
                                     </div>
                                 </div>
 
                                 <div class="text-center">
                                     <button>
                                         <span class="ti-gift"></span>
-                                        Wish him
+                                        View Detail
                                     </button>
                                 </div>
                             </div>

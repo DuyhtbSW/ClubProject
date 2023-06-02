@@ -1,22 +1,25 @@
 <%-- 
-    Document   : admin-member
-    Created on : May 23, 2023, 2:33:42 PM
+    Document   : admin-event-detail
+    Created on : Jun 1, 2023, 5:40:31 PM
     Author     : acer
 --%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
     <head>
+        <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-        <title>Admin - Member Page</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+
+        <title>Admin - Event Page</title>
     </head>
     <body>
 
         <input type="checkbox" id="sidebar-toggle">
         <%@ include file="includes/admin-sidebar.jsp" %>
-        
+
         <div class="main-content">
             <%@ include file="includes/admin-header.jsp" %>
             <main>
@@ -25,7 +28,7 @@
 
                 <section class="recent">
                     <div class="activity-grid">
-                        <%@ include file="includes/member-list.jsp" %>
+                        <%@ include file="includes/event-detail.jsp" %>
 
                         <div class="summary">
                             <div class="summary-card">
@@ -56,7 +59,7 @@
                                 <div class="bday-flex">
                                     <div class="bday-img"></div>
                                     <div class="bday-info">
-                                        <h5>Club Dever</h5>
+                                        <h5>Dever Club</h5>
                                         <small>Event Today</small>
                                     </div>
                                 </div>
@@ -64,7 +67,7 @@
                                 <div class="text-center">
                                     <button>
                                         <span class="ti-gift"></span>
-                                        View Detail
+                                        View detail
                                     </button>
                                 </div>
                             </div>

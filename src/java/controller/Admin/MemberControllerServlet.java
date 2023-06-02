@@ -1,26 +1,28 @@
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller;
+package controller.Admin;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Admin;
-import model.AdminDao;
+import java.util.List;
+import model.Admin.Member;
+import dao.Admin.MemberDao;
+import model.Admin.User;
+import dao.Admin.UserDao;
 
 /**
  *
  * @author acer
  */
-public class AdminControllerServlet extends HttpServlet {
+public class MemberControllerServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +41,10 @@ public class AdminControllerServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet adminServlet</title>");
+            out.println("<title>Servlet MemberControllerServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet adminServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet MemberControllerServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -65,10 +67,14 @@ public class AdminControllerServlet extends HttpServlet {
             theCommand = "LIST";
         }
         switch (theCommand) {
-            case "LOGIN":
-                loginAdmin(request, response);
+            case "LIST":
+                listAllMember(request, response);
+                break;
+            case "LOAD":
+                loadMember(request, response);
                 break;
             default:
+                listAllMember(request, response);
         }
     }
 
@@ -96,24 +102,19 @@ public class AdminControllerServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private void loginAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String iD = request.getParameter("username");
-        String passWord = request.getParameter("password");
-        Admin ad = new Admin(iD, passWord);
-        if (AdminDao.login(ad)) {
-            HttpSession session = request.getSession();
-            session.setAttribute("adminLogin", ad);
-            response.sendRedirect("admin-home.jsp");
-        } else {
-            try {
-                request.setAttribute("loginFail", "ID or Password is incorrect");
-                request.getRequestDispatcher("admin-login.jsp").forward(request, response);
-            } catch (ServletException ex) {
-                Logger.getLogger(AdminControllerServlet.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(AdminControllerServlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    private void listAllMember(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Member> mb = new MemberDao().listAllMember();
+        request.setAttribute("mb", mb);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("admin-member.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void loadMember(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String userId = request.getParameter("userId");
+        Member theMember = new MemberDao().getMember(userId);
+        request.setAttribute("The_Member", theMember);
+        RequestDispatcher dispathcher = request.getRequestDispatcher("admin-member-detail.jsp");
+        dispathcher.forward(request, response);
     }
 
 }

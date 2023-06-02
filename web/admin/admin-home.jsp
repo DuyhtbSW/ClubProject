@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
@@ -55,15 +55,15 @@
                                 <div class="bday-flex">
                                     <div class="bday-img"></div>
                                     <div class="bday-info">
-                                        <h5>Dwayne F. Sanders</h5>
-                                        <small>Birthday Today</small>
+                                        <h5>Club Dever</h5>
+                                        <small>Event Today</small>
                                     </div>
                                 </div>
 
                                 <div class="text-center">
                                     <button>
                                         <span class="ti-gift"></span>
-                                        Wish him
+                                        View Detail
                                     </button>
                                 </div>
                             </div>

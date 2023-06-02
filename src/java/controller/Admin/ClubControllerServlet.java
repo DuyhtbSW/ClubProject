@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller;
+package controller.Admin;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -11,15 +11,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import model.User;
-import model.UserDao;
+import model.Admin.Club;
+import dao.Admin.ClubDao;
 
 /**
  *
  * @author acer
  */
-public class UserControllerServlet extends HttpServlet {
+public class ClubControllerServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +41,10 @@ public class UserControllerServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet UserControllerServlet</title>");            
+            out.println("<title>Servlet ClubControllerServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet UserControllerServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ClubControllerServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -65,16 +68,19 @@ public class UserControllerServlet extends HttpServlet {
         }
         switch (theCommand) {
             case "LIST":
-                listAllUser(request, response);
+                listAllClub(request, response);
                 break;
             case "LOAD":
-                loadUser(request, response);
+                loadClub(request, response);
                 break;
             case "COUNT":
-                countUser(request, response);
+                countClub(request, response);
+                break;
+            case "UPDATE":
+                updateClub(request, response);
                 break;
             default:
-                listAllUser(request, response);
+                listAllClub(request, response);
         }
     }
 
@@ -102,24 +108,49 @@ public class UserControllerServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private void listAllUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<User> user = new UserDao().listAllUser();
-        request.setAttribute("user", user);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("admin-user.jsp");
+    private void listAllClub(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Club> cl = new ClubDao().listAllClub();
+        request.setAttribute("cl", cl);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("admin-club.jsp");
         dispatcher.forward(request, response);
     }
 
-    private void countUser(HttpServletRequest request, HttpServletResponse response) {
-        int count = new UserDao().countUser();
+    private void countClub(HttpServletRequest request, HttpServletResponse response) {
+        int count = new ClubDao().countClub();
         request.setAttribute("count", count);
     }
 
-    private void loadUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String userId = request.getParameter("userId");
-        User theUser = new UserDao().getUser(userId);
-        request.setAttribute("The_User", theUser);
-        RequestDispatcher dispathcher = request.getRequestDispatcher("admin-user-detail.jsp");
+    private void loadClub(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String clubId = request.getParameter("clubId");
+        Club theClub = new ClubDao().getClub(clubId);
+        request.setAttribute("The_Club", theClub);
+        RequestDispatcher dispathcher = request.getRequestDispatcher("admin-club-detail.jsp");
         dispathcher.forward(request, response);
     }
 
+    private void updateClub(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int clubId = Integer.parseInt(request.getParameter("clubId"));
+        String clubName = request.getParameter("clubName");
+        String clubDesription = request.getParameter("clubDesription");
+        int clubCreatorID = Integer.parseInt(request.getParameter("clubCreatorID"));
+        String dateCreatedstr = request.getParameter("dateCreated");
+        Date dateCreated = null;
+        if (dateCreatedstr != null && !dateCreatedstr.isEmpty()) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            sdf.setLenient(false);
+            try {
+                dateCreated = sdf.parse(dateCreatedstr);
+            } catch (ParseException e) {
+            }
+        }
+        Club theClub = new Club(clubId, clubName, clubDesription, clubCreatorID, dateCreated);
+        new ClubDao().updateClub(theClub);
+        loadClub(request, response);
+    }
+
+//    private void countMemberOfClub(HttpServletRequest request, HttpServletResponse response) {
+//        int count = new ClubDao().countMemberOfClub("clubId");
+//        request.setAttribute("count", count);
+//    }
+      
 }

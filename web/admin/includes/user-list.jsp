@@ -21,12 +21,16 @@
                             <c:param name="command" value="LOAD"></c:param>
                             <c:param name="userId" value="${item.userId}"></c:param>    
                         </c:url>
+                        <c:url var="deleteLink" value="UserControllerServlet">
+                            <c:param name="command" value="DELETE"></c:param>
+                            <c:param name="userId" value="${item.userId}"></c:param>    
+                        </c:url>
                         <tr>
                             <td>${item.userId}</td>
                             <td>${item.userName}</td>
                             <td>${item.userGender}</td>
                             <td>
-                                <a href="#">Remove</a>
+                                <a href="${deleteLink}" onclick="if(!(confirm('Sure?'))) return false">Remove</a>
                             </td>
                             <td>
                                 <a href="${tempLink}">View detail</a>

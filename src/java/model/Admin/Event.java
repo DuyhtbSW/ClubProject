@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package model;
+package model.Admin;
 
 import java.util.Date;
 
@@ -23,6 +23,13 @@ public class Event {
         this.clubId = clubId;
         this.userId = userId;
         this.statusId = statusId;
+        this.eventName = eventName;
+        this.eventDescription = eventDescription;
+        this.eventDate = eventDate;
+    }
+
+    public Event(int eventId, String eventName, String eventDescription, Date eventDate) {
+        this.eventId = eventId;
         this.eventName = eventName;
         this.eventDescription = eventDescription;
         this.eventDate = eventDate;

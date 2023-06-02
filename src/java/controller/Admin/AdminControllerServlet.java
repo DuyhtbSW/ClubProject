@@ -1,25 +1,26 @@
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller;
+package controller.Admin;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
-import model.Member;
-import model.MemberDao;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Admin.Admin;
+import dao.Admin.AdminDao;
+
 /**
  *
  * @author acer
  */
-public class MemberControllerServlet extends HttpServlet {
+public class AdminControllerServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +39,10 @@ public class MemberControllerServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet MemberControllerServlet</title>");            
+            out.println("<title>Servlet adminServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet MemberControllerServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet adminServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -64,13 +65,10 @@ public class MemberControllerServlet extends HttpServlet {
             theCommand = "LIST";
         }
         switch (theCommand) {
-            case "LIST":
-                listAllMember(request, response);
+            case "LOGIN":
+                loginAdmin(request, response);
                 break;
-            case "COUNT":
-                countMember(request, response);
             default:
-                listAllMember(request, response);
         }
     }
 
@@ -98,15 +96,24 @@ public class MemberControllerServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private void listAllMember(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Member> mb = new MemberDao().listAllMember();
-        request.setAttribute("mb", mb);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("admin-member.jsp");
-        dispatcher.forward(request, response);
-    }
-
-    private void countMember(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    private void loginAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String iD = request.getParameter("username");
+        String passWord = request.getParameter("password");
+        Admin ad = new Admin(iD, passWord);
+        if (AdminDao.login(ad)) {
+            HttpSession session = request.getSession();
+            session.setAttribute("adminLogin", ad);
+            response.sendRedirect("admin-home.jsp");
+        } else {
+            try {
+                request.setAttribute("loginFail", "ID or Password is incorrect");
+                request.getRequestDispatcher("admin-login.jsp").forward(request, response);
+            } catch (ServletException ex) {
+                Logger.getLogger(AdminControllerServlet.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(AdminControllerServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
 }

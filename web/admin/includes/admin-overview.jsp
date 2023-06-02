@@ -6,27 +6,15 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="model.ClubDao" %>
-<%@ page import="model.MemberDao" %>
-<%@ page import="model.UserDao" %>
+<%@ page import="dao.ClubDao" %>
+<%@ page import="dao.MemberDao" %>
+<%@ page import="dao.UserDao" %>
 
 <!DOCTYPE html>
 <div class="overview">
     <h2 class="dash-title">Overview</h2>
 
     <div class="dash-cards">
-        <div class="card-single">
-            <div class="card-body">
-                <span class="ti-briefcase"></span>
-                <div>
-                    <h5>Clubs</h5>
-                    <h4><c:out value="<%= ClubDao.countClub() %>" /></h4>
-                </div>
-            </div>
-            <div class="card-footer">
-                <a href="ClubControllerServlet">View all</a>
-            </div>
-        </div>
 
         <div class="card-single">
             <div class="card-body">
@@ -51,6 +39,19 @@
             </div>
             <div class="card-footer">
                 <a href="MemberControllerServlet">View all</a>
+            </div>
+        </div>
+                
+        <div class="card-single">
+            <div class="card-body">
+                <span class="ti-briefcase"></span>
+                <div>
+                    <h5>Clubs</h5>
+                    <h4><c:out value="${ ClubDao.countClub()}" /></h4>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="ClubControllerServlet">View all</a>
             </div>
         </div>
     </div>

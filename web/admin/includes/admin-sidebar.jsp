@@ -32,25 +32,26 @@
                 </a>
             </li>
             <li>
-                <a href="ClubControllerServlet">
-                    <span class="ti-layout-grid2-thumb"></span>
-                    <span>Clubs</span>
-                </a>
-            </li>
-            <li>
                 <a href="MemberControllerServlet">
                     <span class="ti-comments-smiley"></span>
                     <span>Members</span>
                 </a>
             </li>
             <li>
-                <a href="<%=request.getContextPath()%>/admin-post.jsp">
-                    <span class="ti-layout-list-thumb-alt"></span>
-                    <span>Post</span>
+                <a href="ClubControllerServlet">
+                    <span class="ti-layout-grid2-thumb"></span>
+                    <span>Clubs</span>
                 </a>
             </li>
             <li>
-                <a href="<%=request.getContextPath()%>/admin-event.jsp">
+<!--                <a href="<%=request.getContextPath()%>/admin-post.jsp">-->
+                <a href="#">
+                    <span class="ti-layout-list-thumb-alt"></span>
+                    <span>Post * Admin Don't Care</span>
+                </a>
+            </li>
+            <li>
+                <a href="EventControllerServlet">
                     <span class="ti-gallery"></span>
                     <span>Event</span>
                 </a>

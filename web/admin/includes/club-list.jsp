@@ -3,8 +3,10 @@
     Created on : May 23, 2023, 2:13:38 PM
     Author     : acer
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="dao.MemberDao" %>
+
 <!DOCTYPE html>
 <div class="activity-card">
     <form action="ClubControllerServlet" method="GET">
@@ -22,13 +24,17 @@
                 </thead>
                 <tbody>
                     <c:forEach var="item" items="${cl}">
+                        <c:url var="tempLink" value="ClubControllerServlet">
+                            <c:param name="command" value="LOAD"></c:param>
+                            <c:param name="clubId" value="${item.clubId}"></c:param>    
+                        </c:url>
                         <tr>
                             <td>${item.clubId}</td>
                             <td>${item.clubName}</td>
-                            <td>Number I don't know how to do</td>
+                            <td><c:out value="${MemberDao.countMemberOfClub(item.clubId)}" /></td>
                             <td>${item.clubCreatorId}</td>
                             <td>
-                                <a href="#">View detail</a>
+                                <a href="${tempLink}">View detail</a>
                             </td>
                         </tr>
                     </c:forEach>

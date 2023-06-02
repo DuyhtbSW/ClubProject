@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller;
+package controller.Admin;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -12,16 +12,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Club;
-import model.ClubDao;
+import model.Admin.Event;
+import dao.Admin.EventDao;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
  * @author acer
  */
-public class ClubControllerServlet extends HttpServlet {
+public class EventControllerServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +41,10 @@ public class ClubControllerServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ClubControllerServlet</title>");
+            out.println("<title>Servlet EventControllerServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ClubControllerServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet EventControllerServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -67,12 +68,19 @@ public class ClubControllerServlet extends HttpServlet {
         }
         switch (theCommand) {
             case "LIST":
-                listAllClub(request, response);
+                listAllEvent(request, response);
                 break;
-            case "COUNT":
-                countClub(request, response);
+            case "LOAD":
+                loadEvent(request, response);
+                break;
+            case "DELETE":
+                deleteEvent(request, response);
+                break;
+            case "UPDATE":
+                updateEvent(request, response);
+                break;
             default:
-                listAllClub(request, response);
+                listAllEvent(request, response);
         }
     }
 
@@ -87,7 +95,6 @@ public class ClubControllerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**
@@ -100,16 +107,45 @@ public class ClubControllerServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private void listAllClub(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Club> cl = new ClubDao().listAllClub();
-        request.setAttribute("cl", cl);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("admin-club.jsp");
+    private void listAllEvent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Event> event = new EventDao().listAllEvent();
+        request.setAttribute("event", event);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("admin-event.jsp");
         dispatcher.forward(request, response);
     }
 
-    private void countClub(HttpServletRequest request, HttpServletResponse response) {
-        int count = new ClubDao().countClub();
-        request.setAttribute("count", count);
+    private void loadEvent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String eventId = request.getParameter("eventId");
+        Event theEvent = new EventDao().getEvent(eventId);
+        request.setAttribute("The_Event", theEvent);
+        RequestDispatcher dispathcher = request.getRequestDispatcher("admin-event-detail.jsp");
+        dispathcher.forward(request, response);
     }
-      
+
+    private void updateEvent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int eventId = Integer.parseInt(request.getParameter("eventId"));
+        String eventName = request.getParameter("eventName");
+        String eventDescription = request.getParameter("eventDescription");
+        String eventDateStr = request.getParameter("eventDate");
+        Date eventDate = null;
+        if (eventDateStr != null && !eventDateStr.isEmpty()) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            sdf.setLenient(false);
+            try {
+                eventDate = sdf.parse(eventDateStr);
+            } catch (ParseException e) {
+            }
+        }
+
+        Event theEvent = new Event(eventId, eventName, eventDescription, eventDate);
+        new EventDao().updateEvent(theEvent);
+        loadEvent(request, response);
+    }
+
+    private void deleteEvent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String eventId = request.getParameter("eventId");
+        new EventDao().deleteEvent(eventId);
+        listAllEvent(request, response);
+    }
+
 }
