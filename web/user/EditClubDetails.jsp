@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -17,7 +18,9 @@
                 <section class="recent">
                     <div class="activity-grid">
                         <div class="activity-card">
-                            <h3><%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></h3>
+                            <c:if test="${warning != null}">
+                                <h3><%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></h3>
+                            </c:if>
                             <div class="table-responsive">
                                 <table>
                                     <thead>

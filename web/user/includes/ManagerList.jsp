@@ -2,7 +2,10 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <div class="activity-card">
-    <!--<h3>Managers List</h3>-->
+    <c:if test="${manager == null}">
+        <h3>No manager yet</h3>
+        <!--<h3><%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></h3>-->
+    </c:if>
     <div class="table-responsive">
         <table>
             <thead>
@@ -21,7 +24,7 @@
                         <td>${m.DOB}</td>
                         <td>${m.gender}</td>
                         <td>
-                            <a href="#">Set to member</a>
+                            <a href="<%=request.getContextPath()%>/user?command=SetToMember&mID=${m.ID}">Set to member</a>
                         </td>
                         <td>
                             <a href="#">Kick</a>

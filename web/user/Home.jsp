@@ -39,6 +39,9 @@
         <c:if test="${sessionScope.clubCreator != null}">
         <li><a href="<%=request.getContextPath()%>/user/ClubHome.jsp">Club Manager</a></li>
         </c:if>
+        <c:if test="${sessionScope.clubManager != null}">
+        <li><a href="<%=request.getContextPath()%>/user/Home.jsp">Club Manager</a></li>
+        </c:if>
         <c:if test="${sessionScope.account != null}">
             <%--<c:if test="${sessionScope.account.name != null}">--%>
             <!--<li><a href="user?command=LoadProfile">Hello ${sessionScope.account.name}</a></li>-->

@@ -16,6 +16,12 @@ public class User {
         this.Name = Name;
     }
 
+    public User(int ID, String Name, String DOB) {
+        this.ID = ID;
+        this.Name = Name;
+        this.DOB = DOB;
+    }
+
     public User(int ID, String Name, String DOB, String Gender) {
         this.ID = ID;
         this.Name = Name;

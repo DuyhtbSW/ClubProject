@@ -22,7 +22,10 @@
         <h1>Clubs</h1>
         <form action="user" method="get">
             <input type="hidden" name="command" value="Profile">
-            <a href="user/Home.jsp">Home</a><a href="user/CreateClub.jsp">Create Club</a><br><br>
+            <a href="user/Home.jsp">Home</a>
+            <c:if test="${sessionScope.account != null}">
+                <a href="user/CreateClub.jsp">Create Club</a>
+            </c:if><br><br>
             <table border="1" width="700">
                 <thead>
                     <tr>
@@ -46,7 +49,7 @@
                             <td>${c.name}</td>
                             <td>${c.dateCreated}</td>
                             <td>
-                                <a href="user?command=ViewDetailsClub&cID=${c.ID}&cCreatorID=${c.creatorID}">View Details</a>
+                                <a href="<%=request.getContextPath()%>/user?command=ViewDetailsClub&cID=${c.ID}&cCreatorID=${c.creatorID}">View Details</a>
                             </td>
                         </tr>
                     </c:forEach>
