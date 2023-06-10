@@ -11,6 +11,13 @@ public class User {
     public User() {
     }
 
+    public User(int userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
+    }
+    
+    
+
     public User(int userId, String userName, String userEmail, String userPassword, String userPhone, String userGender, Date DOB) {
         this.userId = userId;
         this.userName = userName;

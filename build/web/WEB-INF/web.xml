@@ -2,19 +2,27 @@
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
         <servlet-name>AdminControllerServlet</servlet-name>
-        <servlet-class>controller.AdminControllerServlet</servlet-class>
+        <servlet-class>controller.Admin.AdminControllerServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ClubControllerServlet</servlet-name>
-        <servlet-class>controller.ClubControllerServlet</servlet-class>
+        <servlet-class>controller.Admin.ClubControllerServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EventControllerServlet</servlet-name>
+        <servlet-class>controller.Admin.EventControllerServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>MemberControllerServlet</servlet-name>
-        <servlet-class>controller.MemberControllerServlet</servlet-class>
+        <servlet-class>controller.Admin.MemberControllerServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UserControllerServlet</servlet-name>
-        <servlet-class>controller.UserControllerServlet</servlet-class>
+        <servlet-class>controller.Admin.UserControllerServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserServlet</servlet-name>
+        <servlet-class>controller.User.UserServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AdminControllerServlet</servlet-name>
@@ -25,6 +33,10 @@
         <url-pattern>/ClubControllerServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>EventControllerServlet</servlet-name>
+        <url-pattern>/EventControllerServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>MemberControllerServlet</servlet-name>
         <url-pattern>/MemberControllerServlet</url-pattern>
     </servlet-mapping>
@@ -32,12 +44,18 @@
         <servlet-name>UserControllerServlet</servlet-name>
         <url-pattern>/UserControllerServlet</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserServlet</servlet-name>
+        <url-pattern>/UserServlet</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>admin-login.jsp</welcome-file>
+        <welcome-file>
+            /user/Home.jsp
+        </welcome-file>
     </welcome-file-list>
 </web-app>

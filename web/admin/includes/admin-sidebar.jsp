@@ -44,7 +44,6 @@
                 </a>
             </li>
             <li>
-<!--                <a href="<%=request.getContextPath()%>/admin-post.jsp">-->
                 <a href="#">
                     <span class="ti-layout-list-thumb-alt"></span>
                     <span>Post * Admin Don't Care</span>

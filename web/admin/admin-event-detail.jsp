@@ -30,47 +30,6 @@
                     <div class="activity-grid">
                         <%@ include file="includes/event-detail.jsp" %>
 
-                        <div class="summary">
-                            <div class="summary-card">
-                                <div class="summary-single">
-                                    <span class="ti-id-badge"></span>
-                                    <div>
-                                        <h5>196</h5>
-                                        <small>Create Club Request</small>
-                                    </div>
-                                </div>
-                                <div class="summary-single">
-                                    <span class="ti-calendar"></span>
-                                    <div>
-                                        <h5>16</h5>
-                                        <small>Event Request</small>
-                                    </div>
-                                </div>
-                                <div class="summary-single">
-                                    <span class="ti-face-smile"></span>
-                                    <div>
-                                        <h5>12</h5>
-                                        <small>Profile update request</small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="bday-card">
-                                <div class="bday-flex">
-                                    <div class="bday-img"></div>
-                                    <div class="bday-info">
-                                        <h5>Dever Club</h5>
-                                        <small>Event Today</small>
-                                    </div>
-                                </div>
-
-                                <div class="text-center">
-                                    <button>
-                                        <span class="ti-gift"></span>
-                                        View detail
-                                    </button>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </section>

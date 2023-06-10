@@ -6,9 +6,9 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="dao.ClubDao" %>
-<%@ page import="dao.MemberDao" %>
-<%@ page import="dao.UserDao" %>
+<%@ page import="dao.Admin.ClubDao" %>
+<%@ page import="dao.Admin.MemberDao" %>
+<%@ page import="dao.Admin.UserDao" %>
 
 <!DOCTYPE html>
 <div class="overview">
@@ -21,7 +21,7 @@
                 <span class="ti-reload"></span>
                 <div>
                     <h5>Users</h5>
-                    <h4><c:out value="<%= UserDao.countUser() %>" /></h4>
+                    <h4><%= UserDao.countUser() %></h4>
                 </div>
             </div>
             <div class="card-footer">

@@ -3,7 +3,7 @@
     Created on : May 24, 2023, 2:07:30 PM
     Author     : acer
 --%>
-<%@ page import="dao.MemberDao" %>
+<%@ page import="dao.Admin.MemberDao" %>
 
 <section id="detail">
     <h3>Club detail</h3>
@@ -13,7 +13,7 @@
         <Table>
             <tbody>
                 <tr>
-                    <TH>CLub ID</TH><TD>${The_Club.clubId}</TD><TD>${The_Club.clubId}</TD>
+                    <TH>Club ID</TH><TD>${The_Club.clubId}</TD><TD>${The_Club.clubId}</TD>
                 <tr>
                     <TH>Club Name</TH><TD>${The_Club.clubName}</TD><TD> <input type="text" name="clubName" value="${The_Club.clubName}"></TD>
                 <tr>

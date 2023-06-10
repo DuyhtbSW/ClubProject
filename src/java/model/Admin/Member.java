@@ -17,6 +17,11 @@ public class Member {
     public Member() {
     }
 
+    public Member(int userId, Date joinDate) {
+        this.userId = userId;
+        this.joinDate = joinDate;
+    }
+
     public Member(int clubId, int userId, int isClubManager, Date joinDate) {
         this.clubId = clubId;
         this.userId = userId;

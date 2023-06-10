@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import model.Admin.Club;
 import dao.Admin.ClubDao;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -62,6 +63,12 @@ public class ClubControllerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("loggedIn") == null) {
+            // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
+            response.sendRedirect(request.getContextPath() + "/admin-login.jsp");
+            return;
+        }
         String theCommand = request.getParameter("command");
         if (theCommand == null) {
             theCommand = "LIST";
@@ -72,6 +79,12 @@ public class ClubControllerServlet extends HttpServlet {
                 break;
             case "LOAD":
                 loadClub(request, response);
+                break;
+            case "CLUBREQUEST":
+                listClubRequest(request, response);
+                break;
+            case "CREATE":
+                createClub(request, response);
                 break;
             case "COUNT":
                 countClub(request, response);
@@ -147,10 +160,26 @@ public class ClubControllerServlet extends HttpServlet {
         new ClubDao().updateClub(theClub);
         loadClub(request, response);
     }
+    
+    
 
 //    private void countMemberOfClub(HttpServletRequest request, HttpServletResponse response) {
 //        int count = new ClubDao().countMemberOfClub("clubId");
 //        request.setAttribute("count", count);
 //    }
+
+    private void createClub(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int clubId = Integer.parseInt(request.getParameter("clubId"));
+        Club theClub = new Club(clubId);
+        new ClubDao().createClub(theClub);
+        listClubRequest(request, response);
+    }
+
+    private void listClubRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Club> clRe = new ClubDao().listClubRequest();
+        request.setAttribute("clRe", clRe);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("admin-club-create.jsp");
+        dispatcher.forward(request, response);
+    }
       
 }

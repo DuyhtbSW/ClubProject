@@ -144,5 +144,38 @@ public class EventDao {
             Logger.getLogger(EventDao.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static List<Event> getEventToday() {
+        List<Event> ev = new ArrayList<>();
+        ConnectDB db = ConnectDB.getInstance();
+        Connection con = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+        try {
+            con = db.openConnection();
+            String sql = "Select * From Event WHERE EventDate = CONVERT(date, GETDATE())";
+            statement = con.prepareStatement(sql);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                int eventId = rs.getInt(1);
+                String eventName = rs.getString(2);
+                String eventDesription = rs.getString(3);
+                Date eventDate = rs.getDate(4);
+                int clubId = rs.getInt(5);
+                int userID = rs.getInt(6);
+                int statusId = rs.getInt(7);
+                Event tmpEvent = new Event(eventId, clubId, userID, statusId, eventName, eventDesription, eventDate);
+                ev.add(tmpEvent);
+            }
+            rs.close();
+            statement.close();
+            con.close();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(EventDao.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(EventDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ev;
+    }
 
 }

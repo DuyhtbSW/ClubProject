@@ -14,9 +14,12 @@ import java.io.PrintWriter;
 import java.util.List;
 import model.Admin.Event;
 import dao.Admin.EventDao;
+import jakarta.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -62,6 +65,12 @@ public class EventControllerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("loggedIn") == null) {
+            // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
+            response.sendRedirect(request.getContextPath() + "/admin-login.jsp");
+            return;
+        }
         String theCommand = request.getParameter("command");
         if (theCommand == null) {
             theCommand = "LIST";
@@ -69,6 +78,9 @@ public class EventControllerServlet extends HttpServlet {
         switch (theCommand) {
             case "LIST":
                 listAllEvent(request, response);
+                break;
+            case "EVENTTODAY":
+                loadEventToday(request, response);
                 break;
             case "LOAD":
                 loadEvent(request, response);
@@ -111,6 +123,13 @@ public class EventControllerServlet extends HttpServlet {
         List<Event> event = new EventDao().listAllEvent();
         request.setAttribute("event", event);
         RequestDispatcher dispatcher = request.getRequestDispatcher("admin-event.jsp");
+        dispatcher.forward(request, response);
+    }
+    
+    private void loadEventToday(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Event> event = new EventDao().getEventToday();
+        request.setAttribute("eventtd", event);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("admin-event-today.jsp");
         dispatcher.forward(request, response);
     }
 

@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import model.Admin.User;
 import dao.Admin.UserDao;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -62,6 +63,12 @@ public class UserControllerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("loggedIn") == null) {
+            // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
+            response.sendRedirect(request.getContextPath() + "/admin-login.jsp");
+            return;
+        }
         String theCommand = request.getParameter("command");
         if (theCommand == null) {
             theCommand = "LIST";

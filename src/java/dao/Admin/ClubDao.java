@@ -59,7 +59,7 @@ public class ClubDao {
         ResultSet rs = null;
         try {
             con = db.openConnection();
-            String sql = "Select * from Clubs";
+            String sql = "Select * from Clubs WHERE clubstatus = 1";
             statement = con.prepareStatement(sql);
             rs = statement.executeQuery();
             while (rs.next()) {
@@ -84,7 +84,7 @@ public class ClubDao {
 
     public static int countClub() {
         ConnectDB db = ConnectDB.getInstance();
-        String sql = "Select count(*) as count from Clubs";
+        String sql = "Select count(*) as count from Clubs WHERE clubStatus = 1";
         Connection con = null;
         int count = 0;
         try {
@@ -151,5 +151,75 @@ public class ClubDao {
         }
         return clubName;
     }
-
+    
+    public static int countClubRequest() {
+        ConnectDB db = ConnectDB.getInstance();
+        String sql = "Select count(*) as count from Clubs where clubstatus = 0";
+        Connection con = null;
+        int count = 0;
+        try {
+            con = db.openConnection();
+            PreparedStatement statement = con.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                count = rs.getInt("count");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return count;
+    }
+    
+    public void  createClub(Club club) {
+        String sql = "Update Clubs Set ClubStatus = 1 WHERE clubId = ?";
+        ConnectDB db = ConnectDB.getInstance();
+        Connection con;
+        try {
+            con = db.openConnection();
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setInt(1, club.getClubId());
+            statement.execute();
+            statement.close();
+            con.close();
+        } catch (Exception ex) {
+            Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public List<Club> listClubRequest() {
+        List<Club> cl = new ArrayList<>();
+        ConnectDB db = ConnectDB.getInstance();
+        Connection con = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+        try {
+            con = db.openConnection();
+            String sql = "Select * from Clubs Where clubStatus = 0";
+            statement = con.prepareStatement(sql);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                int clubId = rs.getInt(1);
+                String clubName = rs.getString(2);
+                String clubDiscription = rs.getString(3);
+                int clubCreatorId = rs.getInt(4);
+                Date dateCreated = rs.getDate(5);
+                Club tmpClub = new Club(clubId, clubName, clubDiscription, clubCreatorId, dateCreated);
+                cl.add(tmpClub);
+            }
+            rs.close();
+            statement.close();
+            con.close();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return cl;
+    }
 }

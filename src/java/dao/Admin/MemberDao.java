@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Admin.Member;
+import model.Admin.User;
 
 /**
  *
@@ -128,4 +129,41 @@ public class MemberDao {
         }
         return count;
     }
+
+    public void deleteMember(String idd) {
+        ConnectDB db = ConnectDB.getInstance();
+        Connection con;
+        try {
+            String sql = "DELETE FROM Member WHERE UserId = ?";
+            con = db.openConnection();
+            PreparedStatement statement = con.prepareStatement(sql);
+            int id = Integer.parseInt(idd);
+            statement.setInt(1, id);
+            statement.execute();
+            con.close();
+            statement.close();
+        } catch (Exception ex) {
+            Logger.getLogger(MemberDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void updateMember(Member member) {
+        String sql = " UPDATE Member SET JoinDate= ? WHERE userId = ?";
+        ConnectDB db = ConnectDB.getInstance();
+        User user = null;
+        Connection con;
+        try {
+            con = db.openConnection();
+            PreparedStatement statement1 = con.prepareStatement(sql);
+            java.sql.Date sqlJoinDate = new java.sql.Date(member.getJoinDate().getTime());
+            statement1.setDate(1, sqlJoinDate);
+            statement1.setInt(2, member.getUserId());
+            statement1.execute();
+            statement1.close();
+            con.close();
+        } catch (Exception ex) {
+            Logger.getLogger(MemberDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }

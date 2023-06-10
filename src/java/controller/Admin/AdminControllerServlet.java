@@ -96,24 +96,40 @@ public class AdminControllerServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private void loginAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//    private void loginAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        String iD = request.getParameter("username");
+//        String passWord = request.getParameter("password");
+//        Admin ad = new Admin(iD, passWord);
+//        if (AdminDao.login(ad)) {
+//            HttpSession session = request.getSession();
+//            session.setAttribute("adminLogin", ad);
+//            session.setAttribute("loggedIn", true);
+//            response.sendRedirect("admin-home.jsp");
+//        } else {
+//            try {
+//                request.setAttribute("loginFail", "ID or Password is incorrect");
+//                request.getRequestDispatcher("admin-login.jsp").forward(request, response);
+//            } catch (ServletException ex) {
+//                Logger.getLogger(AdminControllerServlet.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (IOException ex) {
+//                Logger.getLogger(AdminControllerServlet.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//    }
+
+    private void loginAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String iD = request.getParameter("username");
         String passWord = request.getParameter("password");
         Admin ad = new Admin(iD, passWord);
         if (AdminDao.login(ad)) {
             HttpSession session = request.getSession();
             session.setAttribute("adminLogin", ad);
+            session.setAttribute("loggedIn", true);
             response.sendRedirect("admin-home.jsp");
-        } else {
-            try {
-                request.setAttribute("loginFail", "ID or Password is incorrect");
-                request.getRequestDispatcher("admin-login.jsp").forward(request, response);
-            } catch (ServletException ex) {
-                Logger.getLogger(AdminControllerServlet.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(AdminControllerServlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            return;
         }
+        request.setAttribute("loginFail", "ID or Password is incorrect");
+        request.getRequestDispatcher("admin-login.jsp").forward(request, response);
     }
 
 }
