@@ -13,7 +13,7 @@ import java.util.Date;
 public class Club {
 
     private int clubId, clubCreatorId, clubStatus;
-    private String clubName, clubDiscription;
+    private String clubCode, clubName, clubDiscription;
     private Date dateCreated;
 
     public Club() {
@@ -22,12 +22,13 @@ public class Club {
     public Club(int clubId) {
         this.clubId = clubId;
     }
-    
-    public Club(int clubId, String clubName, String clubDiscription, int clubCreatorId, Date dateCreated) {
+
+    public Club(int clubId, String clubCode, String clubName, String clubDiscription, int clubCreatorId, Date dateCreated) {
         this.clubId = clubId;
+        this.clubCreatorId = clubCreatorId;
+        this.clubCode = clubCode;
         this.clubName = clubName;
         this.clubDiscription = clubDiscription;
-        this.clubCreatorId = clubCreatorId;
         this.dateCreated = dateCreated;
     }
 
@@ -39,8 +40,6 @@ public class Club {
         this.clubDiscription = clubDiscription;
         this.dateCreated = dateCreated;
     }
-    
-    
 
     public int getClubId() {
         return clubId;
@@ -56,6 +55,22 @@ public class Club {
 
     public void setClubCreatorId(int clubCreatorId) {
         this.clubCreatorId = clubCreatorId;
+    }
+
+    public int getClubStatus() {
+        return clubStatus;
+    }
+
+    public void setClubStatus(int clubStatus) {
+        this.clubStatus = clubStatus;
+    }
+
+    public String getClubCode() {
+        return clubCode;
+    }
+
+    public void setClubCode(String clubCode) {
+        this.clubCode = clubCode;
     }
 
     public String getClubName() {
@@ -82,19 +97,9 @@ public class Club {
         this.dateCreated = dateCreated;
     }
 
-    public int getClubStatus() {
-        return clubStatus;
-    }
-
-    public void setClubStatus(int clubStatus) {
-        this.clubStatus = clubStatus;
-    }
-
     @Override
     public String toString() {
         return "Club{" + "clubId=" + clubId + ", clubCreatorId=" + clubCreatorId + ", clubStatus=" + clubStatus + ", clubName=" + clubName + ", clubDiscription=" + clubDiscription + ", dateCreated=" + dateCreated + '}';
     }
-
-    
 
 }

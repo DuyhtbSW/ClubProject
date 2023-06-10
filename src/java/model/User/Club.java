@@ -8,7 +8,7 @@ public class Club {
 
     private int ID;
 //    private int ID, CreatorID;
-    private String Code, Name, Description, CreatorID, DateCreated;
+    private String Code, Name, Description, CreatorID, DateCreated, Status, JoinRequest;
 
     public Club() {
     }
@@ -20,6 +20,17 @@ public class Club {
         this.Name = Name;
         this.Description = Description;
         this.DateCreated = DateCreated;
+    }
+
+    public Club(int ID, String Code, String Name, String Description, String CreatorID, String DateCreated, String Status, String JoinRequest) {
+        this.ID = ID;
+        this.Code = Code;
+        this.Name = Name;
+        this.Description = Description;
+        this.CreatorID = CreatorID;
+        this.DateCreated = DateCreated;
+        this.Status = Status;
+        this.JoinRequest = JoinRequest;
     }
 
     public int getID() {
@@ -77,6 +88,22 @@ public class Club {
 
     public void setDateCreated(String DateCreated) {
         this.DateCreated = DateCreated;
+    }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String Status) {
+        this.Status = Status;
+    }
+
+    public String getJoinRequest() {
+        return JoinRequest;
+    }
+
+    public void setJoinRequest(String JoinRequest) {
+        this.JoinRequest = JoinRequest;
     }
 
     @Override

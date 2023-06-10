@@ -1,12 +1,8 @@
-<%-- 
-    Document   : admin-manager
-    Created on : May 23, 2023, 2:21:00 PM
-    Author     : acer
---%>
-
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
+        <%@ include file="includes/admin-conditionlogin.jsp" %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
         <title>Admin - Manager Page</title>

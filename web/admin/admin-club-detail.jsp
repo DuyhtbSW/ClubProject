@@ -1,13 +1,8 @@
-<%-- 
-    Document   : admin-club-detail
-    Created on : May 24, 2023, 2:19:19 PM
-    Author     : acer
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
+        <%@ include file="includes/admin-conditionlogin.jsp" %>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">

@@ -1,9 +1,3 @@
-<%-- 
-    Document   : manager-list
-    Created on : May 23, 2023, 2:14:56 PM
-    Author     : acer
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <div class="activity-card">

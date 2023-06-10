@@ -2,6 +2,10 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <div class="activity-card">
+    <c:if test="${post == null}">
+        <h3>No post yet</h3>
+        <!--<h3><%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></h3>-->
+    </c:if>
     <div class="table-responsive">
         <table>
             <thead>
@@ -22,7 +26,7 @@
                         <td>${p.title}</td>
                         <td>${p.description}</td>
                         <td>
-                            <a href="#">View comment</a>
+                            <a href="<%=request.getContextPath()%>/user?command=ViewComment&pID=${p.ID}">View comment</a>
                         </td>
                         <td>
                             <a href="#">Manage post</a>

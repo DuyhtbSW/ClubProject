@@ -40,23 +40,23 @@
         <li><a href="<%=request.getContextPath()%>/user/ClubHome.jsp">Club Manager</a></li>
         </c:if>
         <c:if test="${sessionScope.clubManager != null}">
-        <li><a href="<%=request.getContextPath()%>/user/Home.jsp">Club Manager</a></li>
+        <li><a href="<%=request.getContextPath()%>/user?command=Home">Club Manager</a></li>
         </c:if>
         <c:if test="${sessionScope.account != null}">
-            <%--<c:if test="${sessionScope.account.name != null}">--%>
-            <!--<li><a href="user?command=LoadProfile">Hello ${sessionScope.account.name}</a></li>-->
+            <c:if test="${sessionScope.account.name != null}">
+            <li><a href="<%=request.getContextPath()%>/user?command=LoadProfile">Hello ${sessionScope.account.name}</a></li>
+            </c:if>
+            <%--<c:if test="${sessionScope.account.name == null}">--%>
+            <!--<li><a href="user?command=LoadProfile">Hello ${sessionScope.account.email}</a></li>-->
         <%--</c:if>--%>
-        <%--<c:if test="${sessionScope.account.name == null}">--%>
-        <!--<li><a href="user?command=LoadProfile">Hello ${sessionScope.account.email}</a></li>-->
-        <%--</c:if>--%>
-        <c:choose>
-            <c:when test="${sessionScope.account.name != null}">
-                <li><a href="<%=request.getContextPath()%>/user?command=LoadProfile">Hello ${sessionScope.account.name}</a></li>
-                </c:when>
-                <c:otherwise>
-                <li><a href="<%=request.getContextPath()%>/user?command=LoadProfile">Hello ${sessionScope.account.email}</a></li>
-                </c:otherwise>
-            </c:choose>
+        <%--<c:choose>--%>
+        <%--<c:when test="${sessionScope.account.name != null}">--%>
+            <!--<li><a href="<%=request.getContextPath()%>/user?command=LoadProfile">Hello ${sessionScope.account.name}</a></li>-->
+        <%--</c:when>--%>
+        <%--<c:otherwise>--%>
+        <!--<li><a href="<%=request.getContextPath()%>/user?command=LoadProfile">Hello ${sessionScope.account.email}</a></li>-->
+        <%--</c:otherwise>--%>
+        <%--</c:choose>--%>
         <li><a href="<%=request.getContextPath()%>/user?command=Logout">Logout</a></li>
         </c:if>
         <c:if test="${sessionScope.account == null}">

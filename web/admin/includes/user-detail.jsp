@@ -1,9 +1,3 @@
-<%-- 
-    Document   : user-detail
-    Created on : May 26, 2023, 3:32:54 PM
-    Author     : acer
---%>
-
 <section id="detail">
     <h3>User detail</h3>
     <form action="UserControllerServlet" method="GET">

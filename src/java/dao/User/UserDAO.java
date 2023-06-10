@@ -115,7 +115,7 @@ public class UserDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 club.add(new Club(rs.getInt(1), rs.getString(2), rs.getString(3),
-                        rs.getString(4), rs.getString(5), rs.getString(6)));
+                        rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8)));
             }
         } catch (Exception e) {
         }
@@ -189,7 +189,7 @@ public class UserDAO {
     public void insertClub(String cCode, String cName, String cDescription, int cCreatorID, Date cDateCreated) {
         try {
             con = new DBConnect().getConnection();
-            String query = "insert into Clubs values (?, ?, ?, ?, ?)";
+            String query = "insert into Clubs values (?, ?, ?, ?, ?, 0, 0)";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, cCode);
             ps.setString(2, cName);
@@ -237,7 +237,7 @@ public class UserDAO {
     public Club getClubCreatorFromUserID(int userID) {
         try {
             con = new DBConnect().getConnection();
-            String query = "select * from Clubs\n" + "where ClubCreatorID = ?";
+            String query = "select * from Clubs\n" + "where ClubCreatorID = ? and ClubStatus = 1";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, userID);
             ResultSet rs = ps.executeQuery();
@@ -579,6 +579,45 @@ public class UserDAO {
             ps.setDate(1, joinDated);
             ps.setString(2, clubID);
             ps.setString(3, userID);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void joinRequestDecline(String clubID, String userID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "delete Member\n"
+                    + "where ClubID = ? and UserID = ? and MemberStatus = 0";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, clubID);
+            ps.setString(2, userID);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void deleteMember(String clubID, String userID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "delete Member\n"
+                    + "where ClubID = ? and UserID = ? and IsClubManager = 0 and MemberStatus = 1";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, clubID);
+            ps.setString(2, userID);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void deleteManager(String clubID, String userID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "delete Member\n"
+                    + "where ClubID = ? and UserID = ? and IsClubManager = 1 and MemberStatus = 1";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, clubID);
+            ps.setString(2, userID);
             ps.executeUpdate();
         } catch (Exception e) {
         }

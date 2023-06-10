@@ -73,6 +73,9 @@ public class UserServlet extends HttpServlet {
             case "JoinRequestAccept":
                 JoinRequestAccept(request, response);
                 break;
+            case "JoinRequestDecline":
+                JoinRequestDecline(request, response);
+                break;
             case "ClubManage":
                 ClubManage(request, response);
                 break;
@@ -97,8 +100,14 @@ public class UserServlet extends HttpServlet {
             case "SetToManager":
                 SetToManager(request, response);
                 break;
+            case "KickMember":
+                KickMember(request, response);
+                break;
             case "SetToMember":
                 SetToMember(request, response);
+                break;
+            case "KickManager":
+                KickManager(request, response);
                 break;
             case "ViewComment":
                 ViewComment(request, response);
@@ -279,7 +288,7 @@ public class UserServlet extends HttpServlet {
             } else {
                 User u = userDAO.checkUserEmail(acc);
                 if (u == null) {
-                    userDAO.insertUser(extractUsername(acc), acc, pass);
+                    userDAO.insertUser(capitalized(extractUsername(acc)), acc, pass);
                     request.setAttribute("warning", "Register Successfully!\nPlease Login!");
                     request.getRequestDispatcher("user/Register.jsp").forward(request, response);
                 } else {
@@ -360,6 +369,39 @@ public class UserServlet extends HttpServlet {
         return capitalizedSentence.toString().trim();
     }
 
+    private boolean isValidDOB(String dateString) {
+        try {
+            LocalDate birthDate = LocalDate.parse(dateString);
+            LocalDate currentDate = LocalDate.now();
+
+            if (birthDate.isAfter(currentDate)) {
+                return false;
+            }
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+
+    private boolean isValidYear(String dateString, int minYear, int maxYear) {
+        try {
+            LocalDate birthDate = LocalDate.parse(dateString);
+
+            int year = birthDate.getYear();
+
+            if (year <= minYear) {
+                return false;
+            }
+
+            if (year >= maxYear) {
+                return false;
+            }
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+
     private void EditProfile(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, DateTimeParseException {
         response.setContentType("text/html;charset=UTF-8");
@@ -379,6 +421,8 @@ public class UserServlet extends HttpServlet {
         LocalDate localDate = LocalDate.parse(dateStr, inputFormatter);
         String formattedDate = localDate.format(outputFormatter);
 
+        boolean isValidPhone = phone.matches("0[3579]\\d{8}");
+
         if (u == null) {
             request.getRequestDispatcher("user/Login.jsp").forward(request, response);
 //            response.sendRedirect("user/Home.jsp");
@@ -388,19 +432,20 @@ public class UserServlet extends HttpServlet {
             UserDAO userDAO = new UserDAO();
 
             if (name.equals("") || email.equals("") || phone.equals("") || dob.equals("") || gender.equals("")) {
-                request.setAttribute("name", name);
-                request.setAttribute("email", email);
-                request.setAttribute("phone", phone);
-                request.setAttribute("dob", formattedDate);
-                request.setAttribute("gender", gender);
                 request.setAttribute("warning", "Please complete all information!");
                 LoadEditProfile(request, response);
 //                request.getRequestDispatcher("EditProfile.jsp").forward(request, response);
-            } //            else if (true) {
-            //
-            //            } 
-            else {
-                userDAO.editUser(name, email, phone, formattedDate, gender, ID);
+            } else if (!gender.equalsIgnoreCase("Male") && !gender.equalsIgnoreCase("Female") && !gender.equalsIgnoreCase("Other")) {
+                request.setAttribute("warning", "Please type 'Male' or 'Female' or 'Other'");
+                LoadEditProfile(request, response);
+            } else if (!isValidPhone) {
+                request.setAttribute("warning", "Please type correct phone number format!");
+                LoadEditProfile(request, response);
+            } else if (!isValidDOB(formattedDate) || !isValidYear(formattedDate, 1995, 2006)) {
+                request.setAttribute("warning", "Please type correct birthDay and birthYear must be before 2005 and after 1995!");
+                LoadEditProfile(request, response);
+            } else {
+                userDAO.editUser(capitalized(name), email, phone, formattedDate, capitalize(gender), ID);
                 LoadProfile(request, response);
             }
         }
@@ -463,7 +508,6 @@ public class UserServlet extends HttpServlet {
             if (clubCode.equals("") || clubName.equals("") || clubDescription.equals("")) {
                 request.setAttribute("warning", "Please complete all information!");
                 request.getRequestDispatcher("user/CreateClub.jsp").forward(request, response);
-
             } else if (clubCode.length() != 3) {
                 request.setAttribute("warning", "Club Code must be 3 letters!");
                 request.getRequestDispatcher("user/CreateClub.jsp").forward(request, response);
@@ -472,10 +516,9 @@ public class UserServlet extends HttpServlet {
                 request.getRequestDispatcher("user/CreateClub.jsp").forward(request, response);
             } else {
                 int ID = u.getID();
-
                 UserDAO userDAO = new UserDAO();
                 userDAO.insertClub(clubCode.toUpperCase(), clubName, clubDescription, ID, java.sql.Date.valueOf(currentDate));
-
+                request.setAttribute("warning", "Please wait for admin to accept!");
                 request.getRequestDispatcher("user/CreateClub.jsp").forward(request, response);
             }
         }
@@ -561,7 +604,7 @@ public class UserServlet extends HttpServlet {
     private void JoinRequestAccept(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+
         String userID = request.getParameter("userID");
         String clubID = request.getParameter("clubID");
 
@@ -579,18 +622,37 @@ public class UserServlet extends HttpServlet {
         }
     }
 
+    private void JoinRequestDecline(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+
+        String userID = request.getParameter("userID");
+        String clubID = request.getParameter("clubID");
+
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("account");
+
+        if (user == null) {
+            request.getRequestDispatcher("user/Login.jsp").forward(request, response);
+        } else {
+            UserDAO userDAO = new UserDAO();
+            userDAO.joinRequestDecline(clubID, userID);
+            request.getRequestDispatcher("user/JoinClubRequest.jsp").forward(request, response);
+        }
+    }
+
     private void ClubManage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
         HttpSession session = request.getSession();
-        Club clubID = (Club) session.getAttribute("clubCreator");
+        Club club = (Club) session.getAttribute("clubCreator");
 
         UserDAO userDAO = new UserDAO();
 
-        if (clubID != null) {
-            Club club = userDAO.getClubToManage(clubID.getID());
-            request.setAttribute("club", club);
+        if (club != null) {
+            Club clubs = userDAO.getClubToManage(club.getID());
+            request.setAttribute("club", clubs);
             request.getRequestDispatcher("user/ClubManage.jsp").forward(request, response);
         } else {
             request.getRequestDispatcher("user/Login.jsp").forward(request, response);
@@ -603,17 +665,18 @@ public class UserServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         HttpSession session = request.getSession();
-        Club clubID = (Club) session.getAttribute("clubCreator");
+        Club club = (Club) session.getAttribute("clubCreator");
 
         UserDAO userDAO = new UserDAO();
 
-        if (clubID != null) {
-            ArrayList<User> manager = userDAO.getClubManagersWithoutCreator(clubID.getID(), clubID.getCreatorID());
+        if (club != null) {
+            ArrayList<User> manager = userDAO.getClubManagersWithoutCreator(club.getID(), club.getCreatorID());
             if (manager == null) {
                 request.setAttribute("warning", "No manager yet");
                 request.getRequestDispatcher("user/ClubManager.jsp").forward(request, response);
             } else {
                 request.setAttribute("manager", manager);
+                request.setAttribute("clubID", club.getID());
                 request.getRequestDispatcher("user/ClubManager.jsp").forward(request, response);
             }
         } else {
@@ -627,17 +690,18 @@ public class UserServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         HttpSession session = request.getSession();
-        Club clubID = (Club) session.getAttribute("clubCreator");
+        Club club = (Club) session.getAttribute("clubCreator");
 
         UserDAO userDAO = new UserDAO();
 
-        if (clubID != null) {
-            ArrayList<User> member = userDAO.getClubMembersWithoutCreator(clubID.getID(), clubID.getCreatorID());
+        if (club != null) {
+            ArrayList<User> member = userDAO.getClubMembersWithoutCreator(club.getID(), club.getCreatorID());
             if (member == null) {
                 request.setAttribute("warning", "No member yet");
                 request.getRequestDispatcher("user/ClubMember.jsp").forward(request, response);
             } else {
                 request.setAttribute("member", member);
+                request.setAttribute("clubID", club.getID());
                 request.getRequestDispatcher("user/ClubMember.jsp").forward(request, response);
             }
         } else {
@@ -651,12 +715,12 @@ public class UserServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         HttpSession session = request.getSession();
-        Club clubID = (Club) session.getAttribute("clubCreator");
+        Club club = (Club) session.getAttribute("clubCreator");
 
         UserDAO userDAO = new UserDAO();
 
-        if (clubID != null) {
-            ArrayList<Post> post = userDAO.getPostFromClubID(clubID.getID());
+        if (club != null) {
+            ArrayList<Post> post = userDAO.getPostFromClubID(club.getID());
             if (post == null) {
                 request.setAttribute("warning", "No post yet");
                 request.getRequestDispatcher("user/ClubPost.jsp").forward(request, response);
@@ -675,13 +739,13 @@ public class UserServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         HttpSession session = request.getSession();
-        Club clubID = (Club) session.getAttribute("clubCreator");
+        Club club = (Club) session.getAttribute("clubCreator");
 
         UserDAO userDAO = new UserDAO();
 
-        if (clubID != null) {
-            Club club = userDAO.getClubToManage(clubID.getID());
-            request.setAttribute("club", club);
+        if (club != null) {
+            Club clubs = userDAO.getClubToManage(club.getID());
+            request.setAttribute("club", clubs);
             request.getRequestDispatcher("user/ViewClubDetails.jsp").forward(request, response);
         } else {
             request.getRequestDispatcher("user/Login.jsp").forward(request, response);
@@ -694,13 +758,13 @@ public class UserServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         HttpSession session = request.getSession();
-        Club clubID = (Club) session.getAttribute("clubCreator");
+        Club club = (Club) session.getAttribute("clubCreator");
 
         UserDAO userDAO = new UserDAO();
 
-        if (clubID != null) {
-            Club club = userDAO.getClubToManage(clubID.getID());
-            request.setAttribute("club", club);
+        if (club != null) {
+            Club clubs = userDAO.getClubToManage(club.getID());
+            request.setAttribute("club", clubs);
             request.getRequestDispatcher("user/EditClubDetails.jsp").forward(request, response);
         } else {
             request.getRequestDispatcher("user/Login.jsp").forward(request, response);
@@ -717,9 +781,9 @@ public class UserServlet extends HttpServlet {
         String description = request.getParameter("description");
 
         HttpSession session = request.getSession();
-        Club clubID = (Club) session.getAttribute("clubCreator");
+        Club club = (Club) session.getAttribute("clubCreator");
 
-        if (clubID == null) {
+        if (club == null) {
             request.getRequestDispatcher("user/Login.jsp").forward(request, response);
 //            response.sendRedirect("user/Home.jsp");
         } else {
@@ -739,7 +803,7 @@ public class UserServlet extends HttpServlet {
                 request.setAttribute("warning", "Club Code must be letters!");
                 LoadEditClub(request, response);
             } else {
-                userDAO.editClub(code, name, description, clubID.getID());
+                userDAO.editClub(code, name, description, club.getID());
                 ViewClubDetails(request, response);
             }
         }
@@ -752,14 +816,33 @@ public class UserServlet extends HttpServlet {
         String memberID = request.getParameter("mID");
 
         HttpSession session = request.getSession();
-        Club clubID = (Club) session.getAttribute("clubCreator");
+        Club club = (Club) session.getAttribute("clubCreator");
 
-        if (clubID == null) {
+        if (club == null) {
             request.getRequestDispatcher("user/Login.jsp").forward(request, response);
         } else {
             UserDAO userDAO = new UserDAO();
-            userDAO.setToManager(memberID, clubID.getID());
+            userDAO.setToManager(memberID, club.getID());
             ClubManager(request, response);
+        }
+    }
+
+    private void KickMember(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+
+        String clubID = request.getParameter("cID");
+        String memberID = request.getParameter("mID");
+
+        HttpSession session = request.getSession();
+        Club club = (Club) session.getAttribute("clubCreator");
+
+        if (club == null) {
+            request.getRequestDispatcher("user/Login.jsp").forward(request, response);
+        } else {
+            UserDAO userDAO = new UserDAO();
+            userDAO.deleteMember(clubID, memberID);
+            ClubMember(request, response);
         }
     }
 
@@ -770,14 +853,33 @@ public class UserServlet extends HttpServlet {
         String managerID = request.getParameter("mID");
 
         HttpSession session = request.getSession();
-        Club clubID = (Club) session.getAttribute("clubCreator");
+        Club club = (Club) session.getAttribute("clubCreator");
 
-        if (clubID == null) {
+        if (club == null) {
             request.getRequestDispatcher("user/Login.jsp").forward(request, response);
         } else {
             UserDAO userDAO = new UserDAO();
-            userDAO.setToMember(managerID, clubID.getID());
+            userDAO.setToMember(managerID, club.getID());
             ClubMember(request, response);
+        }
+    }
+
+    private void KickManager(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+
+        String clubID = request.getParameter("cID");
+        String managerID = request.getParameter("mID");
+
+        HttpSession session = request.getSession();
+        Club club = (Club) session.getAttribute("clubCreator");
+
+        if (club == null) {
+            request.getRequestDispatcher("user/Login.jsp").forward(request, response);
+        } else {
+            UserDAO userDAO = new UserDAO();
+            userDAO.deleteMember(clubID, managerID);
+            ClubManager(request, response);
         }
     }
 
@@ -788,12 +890,12 @@ public class UserServlet extends HttpServlet {
         String postID = request.getParameter("pID");
 
         HttpSession session = request.getSession();
-        Club clubID = (Club) session.getAttribute("clubCreator");
+        Club club = (Club) session.getAttribute("clubCreator");
 
         UserDAO userDAO = new UserDAO();
 
-        if (clubID != null) {
-            ArrayList<Post> post = userDAO.getPostFromClubID(clubID.getID());
+        if (club != null) {
+            ArrayList<Post> post = userDAO.getPostFromClubID(club.getID());
             ArrayList<PostComment> postComment = userDAO.getPostComment(postID);
             if (postComment == null) {
                 request.setAttribute("warning", "No comment yet");
@@ -816,12 +918,12 @@ public class UserServlet extends HttpServlet {
         String postID = request.getParameter("pID");
 
         HttpSession session = request.getSession();
-        Club clubID = (Club) session.getAttribute("clubCreator");
+        Club club = (Club) session.getAttribute("clubCreator");
 
         UserDAO userDAO = new UserDAO();
 
-        if (clubID != null) {
-            ArrayList<Post> post = userDAO.getPostFromClubID(clubID.getID());
+        if (club != null) {
+            ArrayList<Post> post = userDAO.getPostFromClubID(club.getID());
             ArrayList<PostComment> postComment = userDAO.getPostComment(postID);
             if (postComment == null) {
                 request.setAttribute("warning", "No comment yet");
@@ -847,13 +949,13 @@ public class UserServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("account");
-        Club clubID = (Club) session.getAttribute("clubCreator");
+        Club club = (Club) session.getAttribute("clubCreator");
 
         UserDAO userDAO = new UserDAO();
         LocalDate currentDate = LocalDate.now();
 
-        if (user != null || clubID != null) {
-            ArrayList<Post> post = userDAO.getPostFromClubID(clubID.getID());
+        if (user != null || club != null) {
+            ArrayList<Post> post = userDAO.getPostFromClubID(club.getID());
             ArrayList<PostComment> postComment = userDAO.getPostComment(postID);
             if (postComment == null) {
                 request.setAttribute("warning", "No comment yet");
@@ -889,12 +991,12 @@ public class UserServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("account");
-        Club clubID = (Club) session.getAttribute("clubCreator");
+        Club club = (Club) session.getAttribute("clubCreator");
 
         UserDAO userDAO = new UserDAO();
 
-        if (user != null || clubID != null) {
-            ArrayList<Post> post = userDAO.getPostFromClubID(clubID.getID());
+        if (user != null || club != null) {
+            ArrayList<Post> post = userDAO.getPostFromClubID(club.getID());
             ArrayList<PostComment> postComment = userDAO.getPostComment(postID);
             if (postComment == null) {
                 request.setAttribute("warning", "No comment yet");

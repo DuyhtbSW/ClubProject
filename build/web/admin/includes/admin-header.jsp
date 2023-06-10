@@ -1,11 +1,5 @@
-<%-- 
-    Document   : admin-header
-    Created on : May 23, 2023, 2:08:54 PM
-    Author     : acer
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<link rel="stylesheet" href="style/style-admin-homepage.css"/>
+<link rel="stylesheet" href="admin/style/style-admin-homepage.css"/>
 <!DOCTYPE html>
 <header>
     <div class="search-wrapper">

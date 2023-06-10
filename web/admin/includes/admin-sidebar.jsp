@@ -1,12 +1,6 @@
-<%-- 
-    Document   : admin-sidebar
-    Created on : May 23, 2023, 2:02:35 PM
-    Author     : acer
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
-<link rel="stylesheet" href="../style/style-admin-homepage.css"/>
+<link rel="stylesheet" href="admin/style/style-admin-homepage.css"/>
 <!DOCTYPE html>
 <div class="sidebar">
     <div class="sidebar-header">
@@ -20,25 +14,25 @@
     <div class="sidebar-menu">
         <ul>
             <li>
-                <a href="<%=request.getContextPath()%>/admin-home.jsp">
+                <a href="<%=request.getContextPath()%>/admin/admin-home.jsp">
                     <span class="ti-home"></span>
                     <span>Home</span>
                 </a>
             </li>
             <li>
-                <a href="UserControllerServlet">
+                <a href="<%=request.getContextPath()%>/UserControllerServlet">
                     <span class="ti-face-smile"></span>
                     <span>User</span>
                 </a>
             </li>
             <li>
-                <a href="MemberControllerServlet">
+                <a href="<%=request.getContextPath()%>/MemberControllerServlet">
                     <span class="ti-comments-smiley"></span>
                     <span>Members</span>
                 </a>
             </li>
             <li>
-                <a href="ClubControllerServlet">
+                <a href="<%=request.getContextPath()%>/ClubControllerServlet">
                     <span class="ti-layout-grid2-thumb"></span>
                     <span>Clubs</span>
                 </a>
@@ -50,7 +44,7 @@
                 </a>
             </li>
             <li>
-                <a href="EventControllerServlet">
+                <a href="<%=request.getContextPath()%>/EventControllerServlet">
                     <span class="ti-gallery"></span>
                     <span>Event</span>
                 </a>

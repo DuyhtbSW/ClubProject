@@ -1,13 +1,7 @@
-<%-- 
-    Document   : admin-member
-    Created on : May 23, 2023, 2:30:57 PM
-    Author     : acer
---%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="dao.UserDao" %>
-<%@ page import="dao.ClubDao" %>
+<%@ page import="dao.Admin.UserDao" %>
+<%@ page import="dao.Admin.ClubDao" %>
 
 <!DOCTYPE html>
 <div class="activity-card">
@@ -30,7 +24,7 @@
                             <c:param name="command" value="LOAD"></c:param>
                             <c:param name="userId" value="${item.userId}"></c:param>    
                         </c:url>
-                        <c:url var="deleteLink" value="UserControllerServlet">
+                        <c:url var="deleteLink" value="MemberControllerServlet">
                             <c:param name="command" value="DELETE"></c:param>
                             <c:param name="userId" value="${item.userId}"></c:param>    
                         </c:url>

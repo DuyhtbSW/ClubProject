@@ -21,7 +21,8 @@
                 <tr><td>Phone:</td><td><input type="text" name="phone" value="${user.phone}"></td></tr>
                 <tr><td>Gender:</td><td><input type="text" name="gender" value="${user.gender}"></td></tr>
                 <tr><td>Date of birth:</td><td><input type="text" name="dob" value="${user.DOB}"></td></tr>
-                <tr><td><a href="<%=request.getContextPath()%>/user/Home.jsp">Home</a></td><td><input type="submit" name="save" value="Save"/><a href="user?command=LoadProfile">Cancel</a><br>
+                <tr><td></td><td><input type="submit" name="save" value="Save"/><a href="user?command=LoadProfile">Cancel</a><br>
+                <!--<tr><td><a href="<%=request.getContextPath()%>/user?command=Home">Home</a></td><td><input type="submit" name="save" value="Save"/><a href="user?command=LoadProfile">Cancel</a><br>-->
                         <%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></td></tr>
             </table>
         </form>

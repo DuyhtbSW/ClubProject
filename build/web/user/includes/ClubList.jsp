@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <div class="activity-card">
-<!--    <h3>Club Manage</h3>-->
+    <!--    <h3>Club Manage</h3>-->
     <div class="table-responsive">
         <table>
             <thead>
@@ -21,7 +21,7 @@
                         <a href="<%=request.getContextPath()%>/user?command=ViewClubDetails">View detail</a>
                     </td>
                     <td>
-                        <a href="#">Join club request</a>
+                        <a href="<%=request.getContextPath()%>/user?command=JoinClubRequestList&clubID=${club.ID}">Join club request</a>
                     </td>
                     <td>
                         <a href="#">Remove</a>

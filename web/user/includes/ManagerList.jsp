@@ -27,7 +27,7 @@
                             <a href="<%=request.getContextPath()%>/user?command=SetToMember&mID=${m.ID}">Set to member</a>
                         </td>
                         <td>
-                            <a href="#">Kick</a>
+                            <a href="<%=request.getContextPath()%>/user?command=KickManager&cID=${clubID}&mID=${m.ID}">Kick</a>
                         </td>
                     </tr>
                 </c:forEach>

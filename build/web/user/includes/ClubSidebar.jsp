@@ -13,7 +13,7 @@
     <div class="sidebar-menu">
         <ul>
             <li>
-                <a href="<%=request.getContextPath()%>/user/Home.jsp">
+                <a href="<%=request.getContextPath()%>/user?command=Home">
                     <span class="ti-home"></span>
                     <span>Home</span>
                 </a>

@@ -1,8 +1,3 @@
-<%-- 
-    Document   : event-list
-    Created on : May 23, 2023, 2:44:41 PM
-    Author     : acer
---%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

@@ -1,8 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <div class="activity-card">
-    <h3>Events List</h3>
-
+    <!--<h3>Events List</h3>-->
     <div class="table-responsive">
         <table>
             <thead>
@@ -10,7 +9,7 @@
                     <th>Event ID</th>
                     <th>Club of event</th>
                     <th>Date</th>
-                    <th>REMOVE</th>
+                    <th></th>
                     <th></th>
                 </tr>
             </thead>
@@ -20,10 +19,10 @@
                     <td>IT Club</td>
                     <td>22 Aug, 2020</td>
                     <td>
-                        <a href="#">Remove</a>
+                        <a href="#">Event attendees</a>
                     </td>
                     <td>
-                        <a href="#">View detail</a>
+                        <a href="#">Manage event</a>
                     </td>
                 </tr>
             </tbody>

@@ -1,8 +1,3 @@
-<%-- 
-    Document   : event-detail
-    Created on : Jun 1, 2023, 5:42:46 PM
-    Author     : acer
---%>
 <%@ page import="dao.Admin.EventDao" %>
 
 <section id="detail">

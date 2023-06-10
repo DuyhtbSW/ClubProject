@@ -13,7 +13,9 @@
         <div class="main-content">
             <%@ include file="includes/ClubHeader.jsp" %>
             <main>
+                <h2 class="dash-title">Events List</h2>
                 <section class="recent">
+                    <h4><a href="#">Create Event</a></h4>
                     <div class="activity-grid">
                         <%@ include file="includes/EventList.jsp" %>
                     </div>

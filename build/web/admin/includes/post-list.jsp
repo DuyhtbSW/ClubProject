@@ -1,9 +1,3 @@
-<%-- 
-    Document   : post-list
-    Created on : May 23, 2023, 2:39:45 PM
-    Author     : acer
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <div class="activity-card">

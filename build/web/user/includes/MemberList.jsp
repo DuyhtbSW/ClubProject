@@ -2,7 +2,10 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <div class="activity-card">
-    <!--<h3>Members List</h3>-->
+    <c:if test="${member == null}">
+        <h3>No member yet</h3>
+        <!--<h3><%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></h3>-->
+    </c:if>
     <div class="table-responsive">
         <table>
             <thead>
@@ -22,10 +25,10 @@
                         <td>${m.gender}</td>
                         <!--<td>${m.ID}</td>-->
                         <td>
-                            <a href="#">Set to manager</a>
+                            <a href="<%=request.getContextPath()%>/user?command=SetToManager&mID=${m.ID}">Set to manager</a>
                         </td>
                         <td>
-                            <a href="#">Kick</a>
+                            <a href="<%=request.getContextPath()%>/user?command=KickMember&cID=${clubID}&mID=${m.ID}">Kick</a>
                         </td>
                     </tr>
                 </c:forEach>

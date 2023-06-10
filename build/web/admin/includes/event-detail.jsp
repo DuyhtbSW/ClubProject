@@ -1,9 +1,4 @@
-<%-- 
-    Document   : event-detail
-    Created on : Jun 1, 2023, 5:42:46 PM
-    Author     : acer
---%>
-<%@ page import="dao.EventDao" %>
+<%@ page import="dao.Admin.EventDao" %>
 
 <section id="detail">
     <h3>Event detail</h3>
@@ -21,7 +16,7 @@
                 <tr>
                     <TH>Event Date</TH><TD>${The_Event.eventDate}</TD><TD> <input type="text" name="eventDate" value="${The_Event.eventDate}"></TD>
                 <tr>
-                    <TH>Event Status</TH><TD>${The_Event.statusId}</TD><TD><input type="text" name="eventDate" value="${The_Event.statusId}"></TD>
+                    <TH>Event Status</TH><TD>${The_Event.statusId}</TD><TD>${The_Event.statusId}</TD>
                 <tr>
                     <TH></TH><TH><a href="EventControllerServlet"> Back to the List</a></TH>
                     <TH>

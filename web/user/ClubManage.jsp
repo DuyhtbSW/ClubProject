@@ -15,6 +15,9 @@
             <main>
                 <h2 class="dash-title">Club Manage</h2>
                 <section class="recent">
+                    <table>
+                        <td><h3><a href="#">Public</a></h3></td><td><h3><a href="#">Private</a></h3></td>
+                    </table>
                     <div class="activity-grid">
                         <%@ include file="includes/ClubList.jsp" %>
                     </div>

@@ -1,8 +1,3 @@
-<%-- 
-    Document   : member-detail
-    Created on : May 26, 2023, 9:46:36 PM
-    Author     : acer
---%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="dao.Admin.UserDao" %>
 <%@ page import="dao.Admin.ClubDao" %>

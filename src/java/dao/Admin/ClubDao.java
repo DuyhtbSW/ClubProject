@@ -1,10 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao.Admin;
 
-import dao.Admin.ConnectDB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,10 +11,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Admin.Club;
 
-/**
- *
- * @author acer
- */
 public class ClubDao {
 
     public Club getClub(String idd) {
@@ -34,11 +25,12 @@ public class ClubDao {
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
-                String clubName = rs.getString(2);
-                String clubDesription = rs.getString(3);
-                int clubCreatorID = rs.getInt(4);
-                Date dateCreated = rs.getDate(5);
-                club = new Club(id, clubName, clubDesription, clubCreatorID, dateCreated);
+                String clubCode = rs.getString(2);
+                String clubName = rs.getString(3);
+                String clubDesription = rs.getString(4);
+                int clubCreatorID = rs.getInt(5);
+                Date dateCreated = rs.getDate(6);
+                club = new Club(id, clubCode, clubName, clubDesription, clubCreatorID, dateCreated);
             }
             rs.close();
             statement.close();
@@ -64,11 +56,12 @@ public class ClubDao {
             rs = statement.executeQuery();
             while (rs.next()) {
                 int clubId = rs.getInt(1);
-                String clubName = rs.getString(2);
-                String clubDiscription = rs.getString(3);
-                int clubCreatorId = rs.getInt(4);
-                Date dateCreated = rs.getDate(5);
-                Club tmpClub = new Club(clubId, clubName, clubDiscription, clubCreatorId, dateCreated);
+                String clubCode = rs.getString(2);
+                String clubName = rs.getString(3);
+                String clubDiscription = rs.getString(4);
+                int clubCreatorId = rs.getInt(5);
+                Date dateCreated = rs.getDate(6);
+                Club tmpClub = new Club(clubId, clubCode, clubName, clubDiscription, clubCreatorId, dateCreated);
                 cl.add(tmpClub);
             }
             rs.close();
@@ -126,10 +119,10 @@ public class ClubDao {
             Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public static String getClubName(int clubId){
+
+    public static String getClubName(int clubId) {
         ConnectDB db = ConnectDB.getInstance();
-        String sql = "  Select ClubName as clubName From Clubs where clubId = ?"; 
+        String sql = "  Select ClubName as clubName From Clubs where clubId = ?";
         Connection con = null;
         String clubName = null;
         try {
@@ -151,7 +144,7 @@ public class ClubDao {
         }
         return clubName;
     }
-    
+
     public static int countClubRequest() {
         ConnectDB db = ConnectDB.getInstance();
         String sql = "Select count(*) as count from Clubs where clubstatus = 0";
@@ -175,8 +168,8 @@ public class ClubDao {
         }
         return count;
     }
-    
-    public void  createClub(Club club) {
+
+    public void createClub(Club club) {
         String sql = "Update Clubs Set ClubStatus = 1 WHERE clubId = ?";
         ConnectDB db = ConnectDB.getInstance();
         Connection con;
@@ -191,7 +184,7 @@ public class ClubDao {
             Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public List<Club> listClubRequest() {
         List<Club> cl = new ArrayList<>();
         ConnectDB db = ConnectDB.getInstance();
@@ -205,11 +198,12 @@ public class ClubDao {
             rs = statement.executeQuery();
             while (rs.next()) {
                 int clubId = rs.getInt(1);
-                String clubName = rs.getString(2);
-                String clubDiscription = rs.getString(3);
-                int clubCreatorId = rs.getInt(4);
-                Date dateCreated = rs.getDate(5);
-                Club tmpClub = new Club(clubId, clubName, clubDiscription, clubCreatorId, dateCreated);
+                String clubCode = rs.getString(2);
+                String clubName = rs.getString(3);
+                String clubDiscription = rs.getString(4);
+                int clubCreatorId = rs.getInt(5);
+                Date dateCreated = rs.getDate(6);
+                Club tmpClub = new Club(clubId, clubCode, clubName, clubDiscription, clubCreatorId, dateCreated);
                 cl.add(tmpClub);
             }
             rs.close();
@@ -221,5 +215,22 @@ public class ClubDao {
             Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return cl;
+    }
+
+    public void declineClub(String idd) {
+        ConnectDB db = ConnectDB.getInstance();
+        Connection con;
+        try {
+            String sql = "DELETE FROM Clubs WHERE ClubId = ?";
+            con = db.openConnection();
+            PreparedStatement statement = con.prepareStatement(sql);
+            int id = Integer.parseInt(idd);
+            statement.setInt(1, id);
+            statement.execute();
+            con.close();
+            statement.close();
+        } catch (Exception ex) {
+            Logger.getLogger(MemberDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

@@ -1,12 +1,6 @@
-<%-- 
-    Document   : club-list
-    Created on : May 23, 2023, 2:13:38 PM
-    Author     : acer
---%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="dao.Admin.MemberDao" %>
-
 <!DOCTYPE html>
 <div class="activity-card">
     <form action="ClubControllerServlet" method="GET">

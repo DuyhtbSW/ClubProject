@@ -1,5 +1,5 @@
 ﻿INSERT INTO Admins (AdminName, AdminEmail, AdminPassword)
-VALUES ('admin', 'admin2@gmail.com', 'admin2');
+VALUES ('admin', 'admin@gmail.com', 'admin');
 
 -- Inserting records into the "Users" table with birthdates from 1999 to 2007
 INSERT INTO Users (UserName, UserEmail, UserPassword, UserPhone, UserDOB, UserGender)
@@ -8,13 +8,11 @@ VALUES ('John Doe', 'john.doe@example.com', 'password1', '123456789', '1999-01-0
 INSERT INTO Users (UserName, UserEmail, UserPassword, UserPhone, UserDOB, UserGender)
 VALUES ('Jane Smith', 'jane.smith@example.com', 'password2', '987654321', '2000-02-02', 'Female');
 
-
 INSERT INTO Users (UserName, UserEmail, UserPassword, UserPhone, UserDOB, UserGender)
 VALUES ('Mark Johnson', 'mark.johnson@example.com', 'password3', '456789123', '2001-03-03', 'Male');
 
 INSERT INTO Users (UserName, UserEmail, UserPassword, UserPhone, UserDOB, UserGender)
 VALUES ('Emily Brown', 'emily.brown@example.com', 'password4', '321654987', '2002-04-04', 'Female');
-
 
 INSERT INTO Users (UserName, UserEmail, UserPassword, UserPhone, UserDOB, UserGender)
 VALUES ('Michael Davis', 'michael.davis@example.com', 'password5', '789123456', '2006-08-08', 'Male');
@@ -45,26 +43,26 @@ VALUES ('Ava Lee', 'ava.lee@example.com', 'password13', '123456789', '2004-04-16
 
 
 
-INSERT INTO Clubs (ClubName, ClubDesription, ClubCreatorID, DateCreated)
-VALUES ('Dever', 'Dever là một câu lạc bộ học thuật, theo xu hướng nghiên cứu và phát triển sản phẩm', 1, '2017-11-15');
+INSERT INTO Clubs (ClubCode, ClubName, ClubDescription, ClubCreatorID, DateCreated)
+VALUES ('DEV','Dever', N'Dever là một câu lạc bộ học thuật, theo xu hướng nghiên cứu và phát triển sản phẩm', 1, '2017-11-15');
 
-INSERT INTO Clubs (ClubName, ClubDesription, ClubCreatorID, DateCreated)
-VALUES ('NYS Club', 'Name Your Soul CLB Nghệ Thuật FUDN', 2, '2019-10-12');
+INSERT INTO Clubs (ClubCode, ClubName, ClubDescription, ClubCreatorID, DateCreated)
+VALUES ('NYS','NYS Club', N'Name Your Soul CLB Nghệ Thuật FUDN', 2, '2019-10-12');
 
-INSERT INTO Clubs (ClubName, ClubDesription, ClubCreatorID, DateCreated)
-VALUES ('Mirai JC', 'FUDA Japanese Club Chúng mình là câu lạc bộ về văn hóa và học thuật của Nhật Bản trực thuộc', 3, '2021-07-15');
+INSERT INTO Clubs (ClubCode, ClubName, ClubDescription, ClubCreatorID, DateCreated)
+VALUES ('MJC','Mirai JC', N'FUDA Japanese Club Chúng mình là câu lạc bộ về văn hóa và học thuật của Nhật Bản trực thuộc', 3, '2021-07-15');
 
-INSERT INTO Clubs (ClubName, ClubDesription, ClubCreatorID, DateCreated)
-VALUES ('FPTU Vovinam club - FVC Đà Nẵng', 'CLB do các sinh viên trường Đại Học FPT Đà Nẵng yêu thích Vovinam thành lập', 4, '2021-01-26');
+INSERT INTO Clubs (ClubCode, ClubName, ClubDescription, ClubCreatorID, DateCreated)
+VALUES ('VOV',N'FPTU Vovinam club - FVC Đà Nẵng', N'CLB do các sinh viên trường Đại Học FPT Đà Nẵng yêu thích Vovinam thành lập', 4, '2021-01-26');
 
-INSERT INTO Clubs (ClubName, ClubDesription, ClubCreatorID, DateCreated)
-VALUES ('EVo - FUDA Event Club', 'CLB sự kiện trực thuộc FPT University Đà Nẵng, CLB báo nhất trường!', 5, '2018-07-23');
+INSERT INTO Clubs (ClubCode, ClubName, ClubDescription, ClubCreatorID, DateCreated)
+VALUES ('EVO','EVo - FUDA Event Club', N'CLB sự kiện trực thuộc FPT University Đà Nẵng, CLB báo nhất trường!', 5, '2018-07-23');
 
-INSERT INTO Clubs (ClubName, ClubDesription, ClubCreatorID, DateCreated)
-VALUES ('FUDA Hoops Gene', 'Câu lạc bộ Bóng rổ FUDN. Nơi các sinh viên trường Đại học FPT Đà Nẵng được thỏa sức đam mê với bóng rổ', 6, '2019-08-13');
+INSERT INTO Clubs (ClubCode, ClubName, ClubDescription, ClubCreatorID, DateCreated)
+VALUES ('FHG','FUDA Hoops Gene', N'Câu lạc bộ Bóng rổ FUDN. Nơi các sinh viên trường Đại học FPT Đà Nẵng được thỏa sức đam mê với bóng rổ', 6, '2019-08-13');
 
-INSERT INTO Clubs (ClubName, ClubDesription, ClubCreatorID, DateCreated)
-VALUES ('EFlame', 'English Club FPTU Danang. Leave A Memorable Experience!', 7, '2018-07-18');
+INSERT INTO Clubs (ClubCode, ClubName, ClubDescription, ClubCreatorID, DateCreated)
+VALUES ('EFL','EFlame', 'English Club FPTU Danang. Leave A Memorable Experience!', 7, '2018-07-18');
 
 INSERT INTO Member (ClubID, UserID, IsClubManager, JoinDate)
 VALUES (1, 1, 1, '2021-01-01');

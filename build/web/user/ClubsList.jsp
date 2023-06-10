@@ -22,7 +22,10 @@
         <h1>Clubs</h1>
         <form action="user" method="get">
             <input type="hidden" name="command" value="Profile">
-            <a href="user/Home.jsp">Home</a><a href="user/CreateClub.jsp">Create Club</a><br><br>
+            <a href="<%=request.getContextPath()%>/user?command=Home">Home</a>
+            <c:if test="${sessionScope.account != null}">
+                <a href="user/CreateClub.jsp">Create Club</a>
+            </c:if><br><br>
             <table border="1" width="700">
                 <thead>
                     <tr>
@@ -30,6 +33,7 @@
                         <th>Club Code</th>
                         <th>Club Name</th>
                         <th>Club Founding Date</th>
+                        <th>Club Status</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -45,8 +49,14 @@
                             <td>${c.code}</td>   
                             <td>${c.name}</td>
                             <td>${c.dateCreated}</td>
+                            <c:if test="${c.joinRequest == 0}">
+                                <td>Public</td>
+                            </c:if>
+                            <c:if test="${c.joinRequest == 1}">
+                                <td>Private</td>
+                            </c:if>
                             <td>
-                                <a href="user?command=ViewDetailsClub&cID=${c.ID}&cCreatorID=${c.creatorID}">View Details</a>
+                                <a href="<%=request.getContextPath()%>/user?command=ViewDetailsClub&cID=${c.ID}&cCreatorID=${c.creatorID}">View Details</a>
                             </td>
                         </tr>
                     </c:forEach>

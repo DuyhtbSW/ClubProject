@@ -24,7 +24,8 @@ ClubName nvarchar(255) NOT NULL,
 ClubDescription nvarchar(255) NOT NULL,
 ClubCreatorID int NOT NULL,
 DateCreated date,
-ClubStatus nvarchar(255) NOT NULL,
+ClubStatus bit default 0,
+JoinRequest bit default 0,
 primary key(ClubID),
 foreign key (ClubCreatorID) references Users (UserID)
 )
@@ -33,8 +34,9 @@ create table Member(
 ClubID int NOT NULL,
 UserID int NOT NULL,
 -- 0 = false : ko phai manager
-IsClubManager bit Default 0,
-JoinDate date,
+IsClubManager bit default 0,
+JoinDated date,
+MemberStatus bit default 0,
 primary key(UserID, ClubID),
 foreign key (UserID) references Users (UserID),
 foreign key (ClubID) references Clubs (ClubID)
@@ -58,6 +60,7 @@ PostDescription nvarchar(255) NOT NULL,
 PostDated date,
 UserID int NOT NULL,
 ClubID int NOT NULL,
+PostStatus bit default 0,
 primary key(PostID),
 foreign key (ClubID) references Clubs (ClubID),
 foreign key (UserID) references Users (UserID)
@@ -87,17 +90,18 @@ EventDesription nvarchar(255) NOT NULL,
 EventDated date,
 ClubID int NOT NULL,
 UserID int NOT NULL,
-StatusID int NOT NULL,
+EventStatus bit default 0,
 primary key(EventID),
-foreign key (StatusID) references EventStatus (StatusID),
 foreign key (ClubID) references Clubs (ClubID),
 foreign key (UserID) references Users (UserID)
 )
 
 create table EventAttendees(
 EventID int NOT NULL,
+ClubID int NOT NULL,
 UserID int NOT NULL,
 primary key(UserID, EventID),
 foreign key (EventID) references [Event] (EventID),
+foreign key (ClubID) references Clubs (ClubID),
 foreign key (UserID) references Users (UserID)
 )
