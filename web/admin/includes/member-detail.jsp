@@ -13,16 +13,18 @@
             </c:url>
             <tbody>
                 <tr>
-                    <TH>Member ID</TH><TD>${The_Member.userId}</TD><TD>${The_Member.userId}</TD>
+                    <TH>User ID</TH><TD>${The_Member.userId}</TD><TD>${The_Member.userId}</TD>
                     <TH>
                         <a href="${tempLink}">Edit this member</a>
                     </TH>
+                <tr>
+                    <TH>Member ID</TH><TD>${The_Member.memberId}</TD><TD>${The_Member.memberId}</TD>
                 <tr>
                     <TH>Member Name</TH><TD>${UserDao.getUserName(The_Member.userId)}</TD><TD>${UserDao.getUserName(The_Member.userId)}</TD>
                 <tr>
                     <TH>Club Name</TH><TD>${ClubDao.getClubName(The_Member.clubId)}</TD><TD>${ClubDao.getClubName(The_Member.clubId)}</TD>
                 <tr>
-                    <TH>Is Club Manager</TH><TD>${The_Member.isClubManager}</TD><TD>${The_Member.isClubManager}</TD>
+                    <TH>Is Club Manager</TH><TD>${The_Member.isClubManager == 1 ? "True" : "False"}</TD><TD>${The_Member.isClubManager == 1 ? "True" : "False"}</TD>
                 <tr>
                     <TH>Join Date</TH><TD>${The_Member.joinDate}</TD><TD> <input type="text" name="joinDate" value="${The_Member.joinDate}"></TD>
                 <tr>

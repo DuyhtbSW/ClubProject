@@ -30,7 +30,9 @@ public class ClubDao {
                 String clubDesription = rs.getString(4);
                 int clubCreatorID = rs.getInt(5);
                 Date dateCreated = rs.getDate(6);
-                club = new Club(id, clubCode, clubName, clubDesription, clubCreatorID, dateCreated);
+                boolean clubStatus = rs.getBoolean(7);
+                boolean clubRequest = rs.getBoolean(8);
+                club = new Club(id, clubCreatorID, clubCode, clubName, clubDesription, dateCreated, clubStatus, clubRequest);
             }
             rs.close();
             statement.close();
@@ -58,10 +60,12 @@ public class ClubDao {
                 int clubId = rs.getInt(1);
                 String clubCode = rs.getString(2);
                 String clubName = rs.getString(3);
-                String clubDiscription = rs.getString(4);
+                String clubDescription = rs.getString(4);
                 int clubCreatorId = rs.getInt(5);
                 Date dateCreated = rs.getDate(6);
-                Club tmpClub = new Club(clubId, clubCode, clubName, clubDiscription, clubCreatorId, dateCreated);
+                boolean clubStatus = rs.getBoolean(7);
+                boolean clubRequest = rs.getBoolean(8);
+                Club tmpClub = new Club(clubId, clubCreatorId, clubCode, clubName, clubDescription, dateCreated, clubStatus, clubRequest);
                 cl.add(tmpClub);
             }
             rs.close();
@@ -100,18 +104,20 @@ public class ClubDao {
     }
 
     public void updateClub(Club club) {
-        String sql = " UPDATE Clubs SET clubName= ?, clubDesription = ?, clubCreatorID = ?, dateCreated = ? WHERE clubId = ?";
+        String sql = "UPDATE Clubs SET ClubCode = ?, clubName= ?, clubDescription = ?, dateCreated = ?, clubStatus = ?, joinRequest=? WHERE clubId = ?";
         ConnectDB db = ConnectDB.getInstance();
         Connection con;
         try {
             con = db.openConnection();
             PreparedStatement statement = con.prepareStatement(sql);
-            statement.setString(1, club.getClubName());
-            statement.setString(2, club.getClubDiscription());
-            statement.setInt(3, club.getClubId());
+            statement.setString(1, club.getClubCode());
+            statement.setString(2, club.getClubName());
+            statement.setString(3, club.getClubDescription());
             java.sql.Date sqlDOB = new java.sql.Date(club.getDateCreated().getTime());
             statement.setDate(4, sqlDOB);
-            statement.setInt(5, club.getClubId());
+            statement.setBoolean(5, club.isClubStatus());
+            statement.setBoolean(6, club.isJoinRequest());
+            statement.setInt(7, club.getClubId());
             statement.execute();
             statement.close();
             con.close();
@@ -200,10 +206,12 @@ public class ClubDao {
                 int clubId = rs.getInt(1);
                 String clubCode = rs.getString(2);
                 String clubName = rs.getString(3);
-                String clubDiscription = rs.getString(4);
+                String clubDescription = rs.getString(4);
                 int clubCreatorId = rs.getInt(5);
                 Date dateCreated = rs.getDate(6);
-                Club tmpClub = new Club(clubId, clubCode, clubName, clubDiscription, clubCreatorId, dateCreated);
+                boolean clubStatus = rs.getBoolean(7);
+                boolean clubRequest = rs.getBoolean(8);
+                Club tmpClub = new Club(clubId, clubCreatorId, clubCode, clubName, clubDescription, dateCreated, clubStatus, clubRequest);
                 cl.add(tmpClub);
             }
             rs.close();
@@ -232,5 +240,44 @@ public class ClubDao {
         } catch (Exception ex) {
             Logger.getLogger(MemberDao.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public List<Club> search(String value) {
+        List<Club> cl = new ArrayList<>();
+        ConnectDB db = ConnectDB.getInstance();
+        Connection con = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+        try {
+            con = db.openConnection();
+            String sql = "SELECT *\n"
+                    + "    FROM Clubs\n"
+                    + "    WHERE ClubId LIKE '%" + value + "%'\n "
+                    + "         OR ClubCode LIKE '%" + value + "%'\n"
+                    + "        OR ClubName LIKE '%" + value + "%'\n"
+                    + "        OR ClubDescription LIKE '%" + value + "%'";
+            statement = con.prepareStatement(sql);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                int clubId = rs.getInt(1);
+                String clubCode = rs.getString(2);
+                String clubName = rs.getString(3);
+                String clubDescription = rs.getString(4);
+                int clubCreatorId = rs.getInt(5);
+                Date dateCreated = rs.getDate(6);
+                boolean clubStatus = rs.getBoolean(7);
+                boolean clubRequest = rs.getBoolean(8);
+                Club tmpClub = new Club(clubId, clubCreatorId, clubCode, clubName, clubDescription, dateCreated, clubStatus, clubRequest);
+                cl.add(tmpClub);
+            }
+            rs.close();
+            statement.close();
+            con.close();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return cl;
     }
 }

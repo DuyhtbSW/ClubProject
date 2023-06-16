@@ -11,25 +11,28 @@ import java.util.Date;
  * @author acer
  */
 public class Event {
-    int eventId, clubId, userId, statusId;
+    int eventId, clubId, eventStatus;
     String eventName, eventDescription;
     Date eventDate;
 
     public Event() {
     }
 
-    public Event(int eventId, int clubId, int userId, int statusId, String eventName, String eventDescription, Date eventDate) {
+    public Event(int eventId) {
         this.eventId = eventId;
-        this.clubId = clubId;
-        this.userId = userId;
-        this.statusId = statusId;
+    }
+    
+    public Event(int eventId, String eventName, String eventDescription, Date eventDate) {
+        this.eventId = eventId;
         this.eventName = eventName;
         this.eventDescription = eventDescription;
         this.eventDate = eventDate;
     }
-
-    public Event(int eventId, String eventName, String eventDescription, Date eventDate) {
+    
+    public Event(int eventId, int clubId, int eventStatus, String eventName, String eventDescription, Date eventDate) {
         this.eventId = eventId;
+        this.clubId = clubId;
+        this.eventStatus = eventStatus;
         this.eventName = eventName;
         this.eventDescription = eventDescription;
         this.eventDate = eventDate;
@@ -51,20 +54,12 @@ public class Event {
         this.clubId = clubId;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getEventStatus() {
+        return eventStatus;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getStatusId() {
-        return statusId;
-    }
-
-    public void setStatusId(int statusId) {
-        this.statusId = statusId;
+    public void setEventStatus(int eventStatus) {
+        this.eventStatus = eventStatus;
     }
 
     public String getEventName() {
@@ -93,8 +88,8 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event{" + "eventId=" + eventId + ", clubId=" + clubId + ", userId=" + userId + ", statusId=" + statusId + ", eventName=" + eventName + ", eventDescription=" + eventDescription + ", eventDate=" + eventDate + '}';
+        return "Event{" + "eventId=" + eventId + ", clubId=" + clubId + ", eventStatus=" + eventStatus + ", eventName=" + eventName + ", eventDescription=" + eventDescription + ", eventDate=" + eventDate + '}';
     }
-
+    
     
 }

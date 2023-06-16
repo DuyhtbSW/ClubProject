@@ -3,6 +3,7 @@
 <%@ page import="dao.Admin.EventDao" %>
 <%@ page import="model.Admin.Event" %>
 <%@ page import="dao.Admin.ClubDao" %>
+<%@ page import="dao.Admin.EventDao" %>
 <div class="summary">
     <div class="summary-card">
         <div class="summary-single" >
@@ -18,8 +19,11 @@
         <div class="summary-single">
             <span class="ti-calendar"></span>
             <div>
-                <h5>0</h5>
-                <small>Event Request</small>
+                <c:url var="tempLink" value="EventControllerServlet">
+                    <c:param name="command" value="EVENTREQUEST"></c:param>
+                </c:url>
+                <h5><%= EventDao.countEventRequest() %></h5>
+                <a type="submit" href="<%=request.getContextPath()%>/${tempLink}"><small>Event Request</small></a>
             </div>
         </div>
         <div class="summary-single">
@@ -32,7 +36,7 @@
     </div>
     <div class="bday-card">
         <div class="bday-flex">
-            <img class="bday-img" src="images/logoEvent.jpg" alt="alt"/>
+            <img class="bday-img" src="<%=request.getContextPath()%>/admin/images/Event.jpg" alt="alt"/>
             <div class="bday-info">
                 <h5>
                     <% List<Event> events = EventDao.getEventToday(); %> 
@@ -58,7 +62,7 @@
             </c:url>
             <button>
                 <span class="ti-gift"></span>
-                <a href="${tempLink}">View detail</a>
+                <a href="<%=request.getContextPath()%>/${tempLink}">View detail</a>
             </button>
         </div>
     </div>

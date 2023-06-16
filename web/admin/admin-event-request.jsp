@@ -1,36 +1,38 @@
+<%-- 
+    Document   : admin-event-request
+    Created on : Jun 11, 2023, 10:24:27 AM
+    Author     : acer
+--%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="vi">
+<html>
     <head>
         <%@ include file="includes/admin-conditionlogin.jsp" %>
-        <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-        <title>Admin - Club Page</title>
+        <title>Admin - Event Page</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
     </head>
     <body>
-
         <input type="checkbox" id="sidebar-toggle">
         <%@ include file="includes/admin-sidebar.jsp" %>
 
         <div class="main-content">
             <%@ include file="includes/admin-header.jsp" %>
             <main>
-                <%@ include file="includes/admin-overview.jsp" %>
+
+                <%@include file="includes/admin-overview.jsp" %>
 
                 <section class="recent">
                     <div class="activity-grid">
-                        <%@ include file="includes/club-list.jsp" %>
+                        <%@ include file="includes/event-request.jsp" %>
                         
                         <%@ include file="includes/admin-summary.jsp" %>
 
                     </div>
                 </section>
-
             </main>
-
         </div>
-
     </body>
 </html>

@@ -12,9 +12,10 @@ import java.util.Date;
  */
 public class Club {
 
-    private int clubId, clubCreatorId, clubStatus;
-    private String clubCode, clubName, clubDiscription;
+    private int clubId, clubCreatorId ;
+    private String clubCode, clubName, clubDescription;
     private Date dateCreated;
+    boolean clubStatus, joinRequest;
 
     public Club() {
     }
@@ -23,22 +24,46 @@ public class Club {
         this.clubId = clubId;
     }
 
-    public Club(int clubId, String clubCode, String clubName, String clubDiscription, int clubCreatorId, Date dateCreated) {
+    public Club(int clubId, String clubCode, String clubName, String clubDescription, Date dateCreated, boolean clubStatus, boolean joinRequest) {
+        this.clubId = clubId;
+        this.clubCode = clubCode;
+        this.clubName = clubName;
+        this.clubDescription = clubDescription;
+        this.dateCreated = dateCreated;
+        this.clubStatus = clubStatus;
+        this.joinRequest = joinRequest;
+    }
+    
+    
+
+    public Club(int clubId, String clubCode, String clubName, String clubDescription, int clubCreatorId, Date dateCreated) {
         this.clubId = clubId;
         this.clubCreatorId = clubCreatorId;
         this.clubCode = clubCode;
         this.clubName = clubName;
-        this.clubDiscription = clubDiscription;
+        this.clubDescription = clubDescription;
         this.dateCreated = dateCreated;
     }
 
-    public Club(int clubId, int clubCreatorId, int clubStatus, String clubName, String clubDiscription, Date dateCreated) {
+    public Club(int clubId, int clubCreatorId, String clubCode, String clubName, String clubDescription, Date dateCreated, boolean clubStatus) {
         this.clubId = clubId;
         this.clubCreatorId = clubCreatorId;
-        this.clubStatus = clubStatus;
+        this.clubCode = clubCode;
         this.clubName = clubName;
-        this.clubDiscription = clubDiscription;
+        this.clubDescription = clubDescription;
         this.dateCreated = dateCreated;
+        this.clubStatus = clubStatus;
+    }
+
+    public Club(int clubId, int clubCreatorId, String clubCode, String clubName, String clubDescription, Date dateCreated, boolean clubStatus, boolean joinRequest) {
+        this.clubId = clubId;
+        this.clubCreatorId = clubCreatorId;
+        this.clubCode = clubCode;
+        this.clubName = clubName;
+        this.clubDescription = clubDescription;
+        this.dateCreated = dateCreated;
+        this.clubStatus = clubStatus;
+        this.joinRequest = joinRequest;
     }
 
     public int getClubId() {
@@ -57,12 +82,20 @@ public class Club {
         this.clubCreatorId = clubCreatorId;
     }
 
-    public int getClubStatus() {
+    public boolean isClubStatus() {
         return clubStatus;
     }
 
-    public void setClubStatus(int clubStatus) {
+    public void setClubStatus(boolean clubStatus) {
         this.clubStatus = clubStatus;
+    }
+
+    public boolean isJoinRequest() {
+        return joinRequest;
+    }
+
+    public void setJoinRequest(boolean joinRequest) {
+        this.joinRequest = joinRequest;
     }
 
     public String getClubCode() {
@@ -81,12 +114,12 @@ public class Club {
         this.clubName = clubName;
     }
 
-    public String getClubDiscription() {
-        return clubDiscription;
+    public String getClubDescription() {
+        return clubDescription;
     }
 
-    public void setClubDiscription(String clubDiscription) {
-        this.clubDiscription = clubDiscription;
+    public void getClubDescription(String clubDescription) {
+        this.clubDescription = clubDescription;
     }
 
     public Date getDateCreated() {
@@ -99,7 +132,8 @@ public class Club {
 
     @Override
     public String toString() {
-        return "Club{" + "clubId=" + clubId + ", clubCreatorId=" + clubCreatorId + ", clubStatus=" + clubStatus + ", clubName=" + clubName + ", clubDiscription=" + clubDiscription + ", dateCreated=" + dateCreated + '}';
+        return "Club{" + "clubId=" + clubId + ", clubCreatorId=" + clubCreatorId + ", clubCode=" + clubCode + ", clubName=" + clubName + ", clubDescription=" + clubDescription + ", dateCreated=" + dateCreated + ", clubStatus=" + clubStatus + ", joinRequest=" + joinRequest + '}';
     }
 
+    
 }

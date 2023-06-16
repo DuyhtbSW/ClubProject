@@ -15,8 +15,6 @@ public class User {
         this.userId = userId;
         this.userName = userName;
     }
-    
-    
 
     public User(int userId, String userName, String userEmail, String userPassword, String userPhone, String userGender, Date DOB) {
         this.userId = userId;
@@ -41,7 +39,11 @@ public class User {
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        if (userName != null && !userName.trim().isEmpty()) { // Kiểm tra xem userInput có bằng null hoặc rỗng hay không
+            this.userName = userName;
+        } else {
+            throw new IllegalArgumentException("Tên người dùng không hợp lệ"); // nếu userInput bị null hoặc rỗng, throw một IllegalArgumentException
+        }
     }
 
     public String getUserEmail() {
@@ -88,7 +90,5 @@ public class User {
     public String toString() {
         return "User{" + "userId=" + userId + ", userName=" + userName + ", userEmail=" + userEmail + ", userPassword=" + userPassword + ", userPhone=" + userPhone + ", userGender=" + userGender + ", DOB=" + DOB + '}';
     }
-    
 
-    
 }

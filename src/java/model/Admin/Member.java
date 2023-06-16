@@ -11,7 +11,7 @@ import java.util.Date;
  * @author acer
  */
 public class Member {
-    int clubId, userId, isClubManager;
+    int clubId, userId, isClubManager, memberId, memberStatus;
     Date joinDate;
 
     public Member() {
@@ -22,12 +22,35 @@ public class Member {
         this.joinDate = joinDate;
     }
 
-    public Member(int clubId, int userId, int isClubManager, Date joinDate) {
+    
+    public Member(int memberId, int userId, int clubId, int isClubManager, Date joinDate,  int memberStatus) {
         this.clubId = clubId;
         this.userId = userId;
         this.isClubManager = isClubManager;
+        this.memberId = memberId;
+        this.memberStatus = memberStatus;
         this.joinDate = joinDate;
     }
+
+    public int getMemberStatus() {
+        return memberStatus;
+    }
+
+    public void setMemberStatus(int memberStatus) {
+        this.memberStatus = memberStatus;
+    }
+
+    
+
+    public int getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(int memberId) {
+        this.memberId = memberId;
+    }
+    
+    
 
     public int getClubId() {
         return clubId;
@@ -63,8 +86,8 @@ public class Member {
 
     @Override
     public String toString() {
-        return "Member{" + "clubId=" + clubId + ", userId=" + userId + ", isClubManager=" + isClubManager + ", joinDate=" + joinDate + '}';
+        return "Member{" + "clubId=" + clubId + ", userId=" + userId + ", isClubManager=" + isClubManager + ", memberId=" + memberId + ", memberStatus=" + memberStatus + ", joinDate=" + joinDate + '}';
     }
-    
+
     
 }

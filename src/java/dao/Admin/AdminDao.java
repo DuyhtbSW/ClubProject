@@ -9,11 +9,12 @@ import java.util.logging.Logger;
 import model.Admin.Admin;
 
 public class AdminDao {
+    
     public static boolean login(Admin ad) {
-        ConnectDB db = ConnectDB.getInstance();
-        String sql = "Select * from [Admins] where AdminEmail = ? and AdminPassword = ?;";
-        Connection con = null;
         try {
+            ConnectDB db = ConnectDB.getInstance();
+            String sql = "Select * from [Admins] where AdminEmail = ? and AdminPassword = ?;";
+            Connection con = null;
             con = db.openConnection();
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setString(1, ad.getAdminEmail().trim());
@@ -23,14 +24,10 @@ public class AdminDao {
                 System.out.println("Success");
                 return true;
             }
-        } catch (Exception ex) {
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(AdminDao.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(AdminDao.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AdminDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }

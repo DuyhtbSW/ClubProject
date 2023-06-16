@@ -56,6 +56,9 @@ public class ClubControllerServlet extends HttpServlet {
             case "DELETE":
                 declineClub(request, response);
                 break;
+            case "SEARCH":
+                searchClub(request, response);
+                break;
             default:
                 listAllClub(request, response);
         }
@@ -92,8 +95,9 @@ public class ClubControllerServlet extends HttpServlet {
         String clubName = request.getParameter("clubName");
         String clubCode = request.getParameter("clubCode");
         String clubDesription = request.getParameter("clubDesription");
-        int clubCreatorID = Integer.parseInt(request.getParameter("clubCreatorID"));
         String dateCreatedstr = request.getParameter("dateCreated");
+        boolean clubStatus = Boolean.parseBoolean(request.getParameter("clubStatus"));
+        boolean joinRequest = Boolean.parseBoolean(request.getParameter("joinRequest"));
         Date dateCreated = null;
         if (dateCreatedstr != null && !dateCreatedstr.isEmpty()) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -103,7 +107,7 @@ public class ClubControllerServlet extends HttpServlet {
             } catch (ParseException e) {
             }
         }
-        Club theClub = new Club(clubId, clubCode, clubName, clubDesription, clubCreatorID, dateCreated);
+        Club theClub = new Club(clubId, clubCode, clubName, clubDesription, dateCreated, clubStatus, joinRequest);
         new ClubDao().updateClub(theClub);
         loadClub(request, response);
     }
@@ -126,5 +130,13 @@ public class ClubControllerServlet extends HttpServlet {
         String clubId = request.getParameter("clubId");
         new ClubDao().declineClub(clubId);
         listClubRequest(request, response);
+    }
+
+    private void searchClub(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String value = request.getParameter("searchTerm");
+        List<Club> theClub = new ClubDao().search(value);
+        request.setAttribute("The_Club", theClub);
+        RequestDispatcher dispathcher = request.getRequestDispatcher("admin/admin-club-search.jsp");
+        dispathcher.forward(request, response);
     }
 }

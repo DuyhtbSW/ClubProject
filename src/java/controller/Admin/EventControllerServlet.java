@@ -50,6 +50,12 @@ public class EventControllerServlet extends HttpServlet {
             case "UPDATE":
                 updateEvent(request, response);
                 break;
+            case "EVENTREQUEST":
+                listEventRequest(request, response);
+                break;
+            case "ACCEPT":
+                acceptEventRequest(request, response);
+                break;
             default:
                 listAllEvent(request, response);
         }
@@ -106,5 +112,19 @@ public class EventControllerServlet extends HttpServlet {
         String eventId = request.getParameter("eventId");
         new EventDao().deleteEvent(eventId);
         listAllEvent(request, response);
+    }
+
+    private void listEventRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Event> evRe = new EventDao().listEventRequest();
+        request.setAttribute("evRe", evRe);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("admin/admin-event-request.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void acceptEventRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int eventId = Integer.parseInt(request.getParameter("eventId"));
+        Event theEvent = new Event(eventId);
+        new EventDao().acceptEvent(theEvent);
+        listEventRequest(request, response);
     }
 }

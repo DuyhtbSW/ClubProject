@@ -25,20 +25,22 @@ import model.Admin.User;
 public class MemberDao {
 
     public Member getMember(String idd) {
-        int userId = Integer.parseInt(idd);
+        int memberId = Integer.parseInt(idd);
         ConnectDB db = ConnectDB.getInstance();
         Member member = null;
         try {
-            String sql = " Select * from Member where userID = ?";
+            String sql = " Select * from Member where memberID = ?";
             Connection con = db.openConnection();
             PreparedStatement statement = con.prepareStatement(sql);
-            statement.setInt(1, userId);
+            statement.setInt(1, memberId);
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
+                int userId = rs.getInt("userID");
                 int clubId = rs.getInt("ClubID");
                 int isClubManager = rs.getInt("IsClubManager");
                 Date joinDate = rs.getDate("JoinDate");
-                member = new Member(clubId, userId, isClubManager, joinDate);
+                int memberStatus = rs.getInt("memberStatus");
+                member = new Member(userId, userId, clubId, isClubManager, joinDate, memberStatus);
             }
             rs.close();
             statement.close();
@@ -63,11 +65,13 @@ public class MemberDao {
             statement = con.prepareStatement(sql);
             rs = statement.executeQuery();
             while (rs.next()) {
-                int clubId = rs.getInt(1);
+                int memberId = rs.getInt(1);
                 int userId = rs.getInt(2);
-                int isClubManager = rs.getInt(3);
-                Date joinDate = rs.getDate(4);
-                Member tmpMem = new Member(clubId, userId, isClubManager, joinDate);
+                int clubId = rs.getInt(3);
+                int isClubManager = rs.getInt(4);
+                Date joinDate = rs.getDate(5);
+                int memberStatus = rs.getInt(6);
+                Member tmpMem = new Member(memberId, userId, clubId, isClubManager, joinDate, memberStatus);
                 mb.add(tmpMem);
             }
             rs.close();
@@ -164,6 +168,34 @@ public class MemberDao {
         } catch (Exception ex) {
             Logger.getLogger(MemberDao.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public static String getMemberName(int memberId) {
+        ConnectDB db = ConnectDB.getInstance();
+        String sql = "SELECT UserName as userName\n"
+                + "FROM Users u\n"
+                + "INNER JOIN Member m ON u.UserID = m.UserID\n"
+                + "WHERE memberId = ?";
+        Connection con = null;
+        String userName = null;
+        try {
+            con = db.openConnection();
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setInt(1, memberId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                userName = rs.getString("userName");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return userName;
     }
 
 }

@@ -1,9 +1,12 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%-- 
+    Document   : event-request
+    Created on : Jun 11, 2023, 10:25:14 AM
+    Author     : acer
+--%>
+
 <div class="activity-card">
     <form action="EventControllerServlet" method="GET">
-        <h3>Event Today List</h3>
+        <h3>Event Request List</h3>
         <div class="table-responsive">
             <table border="1" id="table">
                 <thead>
@@ -11,14 +14,14 @@
                         <th>Event ID</th>
                         <th>Event Name</th>
                         <th>Date</th>
-                        <th>REMOVE</th>
+                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var="item" items="${eventtd}">
+                    <c:forEach var="item" items="${evRe}">
                         <c:url var="tempLink" value="EventControllerServlet">
-                            <c:param name="command" value="LOAD"></c:param>
+                            <c:param name="command" value="ACCEPT"></c:param>
                             <c:param name="eventId" value="${item.eventId}"></c:param>    
                         </c:url>
                         <c:url var="deleteLink" value="EventControllerServlet">
@@ -30,10 +33,10 @@
                             <td>${item.eventName}</td>
                             <td>${item.eventDate}</td>
                             <td>
-                                <a href="<%=request.getContextPath()%>/${deleteLink}" onclick="if(!(confirm('Sure?'))) return false">Remove</a>
+                                <a href="${tempLink}" onclick="if(!(confirm('Sure?'))) return false">Accept</a>
                             </td>
                             <td>
-                                <a href="<%=request.getContextPath()%>/${tempLink}">View detail</a>
+                                <a href="${deleteLink}" onclick="if(!(confirm('Sure?'))) return false">Decline</a>
                             </td>
                         </tr>
                     </c:forEach>

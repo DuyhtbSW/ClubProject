@@ -29,7 +29,7 @@
                             <c:param name="userId" value="${item.userId}"></c:param>    
                         </c:url>
                         <tr>
-                            <td>${item.userId}</td>
+                            <td>${item.memberId}</td>
                             <td>${UserDao.getUserName(item.userId)}</td>
                             <td>${ClubDao.getClubName(item.clubId)}</td>
                             <td>

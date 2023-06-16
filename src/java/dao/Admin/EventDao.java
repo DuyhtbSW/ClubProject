@@ -21,7 +21,7 @@ import model.Admin.Event;
  */
 public class EventDao {
     
-    public static Event getEvent(String idd) {
+    public Event getEvent(String idd) {
         int eventId = Integer.parseInt(idd);
         ConnectDB db = ConnectDB.getInstance();
         Event event = null;
@@ -36,9 +36,8 @@ public class EventDao {
                 String eventDescription = rs.getString("EventDescription");
                 Date eventDate = rs.getDate("EventDate");
                 int clubId = rs.getInt("ClubID");
-                int userId = rs.getInt("UserID");
-                int statusId = rs.getInt("StatusID");
-                event = new Event(eventId, clubId, userId, statusId, eventName, eventDescription, eventDate);
+                int EventStatus = rs.getInt("EventStatus");
+                event = new Event(eventId, clubId, EventStatus, eventName, eventDescription, eventDate);
             }
             rs.close();
             statement.close();
@@ -83,7 +82,7 @@ public class EventDao {
         ResultSet rs = null;
         try {
             con = db.openConnection();
-            String sql = "Select * from Event";
+            String sql = "  Select * from Event Where EventStatus = 1";
             statement = con.prepareStatement(sql);
             rs = statement.executeQuery();
             while (rs.next()) {
@@ -92,9 +91,8 @@ public class EventDao {
                 String eventDesription = rs.getString(3);
                 Date eventDate = rs.getDate(4);
                 int clubId = rs.getInt(5);
-                int userID = rs.getInt(6);
-                int statusId = rs.getInt(7);
-                Event tmpEvent = new Event(eventId, clubId, userID, statusId, eventName, eventDesription, eventDate);
+                int eventSataus = rs.getInt(6);
+                Event tmpEvent = new Event(eventId, clubId, eventSataus, eventName, eventDesription, eventDate);
                 ev.add(tmpEvent);
             }
             rs.close();
@@ -109,7 +107,7 @@ public class EventDao {
     }
     
     public void updateEvent(Event event) {
-        String sql = " UPDATE Event SET EventName = ?, EventDescription = ?, EventDate = ? WHERE eventID = ?";
+        String sql = " UPDATE Event SET EventName = ?, EventDescription = ?, EventDate = ?, EventStatus = ? WHERE eventID = ?";
         ConnectDB db = ConnectDB.getInstance();
         Connection con;
         try {
@@ -119,7 +117,8 @@ public class EventDao {
             statement.setString(2, event.getEventDescription());
             java.sql.Date sqlDOB = new java.sql.Date(event.getEventDate().getTime());
             statement.setDate(3, sqlDOB);
-            statement.setInt(4, event.getEventId());
+            statement.setInt(4, event.getEventStatus());
+            statement.setInt(5, event.getEventId());
             statement.execute();
             statement.close();
             con.close();
@@ -153,7 +152,7 @@ public class EventDao {
         ResultSet rs = null;
         try {
             con = db.openConnection();
-            String sql = "Select * From Event WHERE EventDate = CONVERT(date, GETDATE())";
+            String sql = "Select * From Event WHERE EventDate = CONVERT(date, GETDATE()) and EventStatus = 1";
             statement = con.prepareStatement(sql);
             rs = statement.executeQuery();
             while (rs.next()) {
@@ -162,9 +161,64 @@ public class EventDao {
                 String eventDesription = rs.getString(3);
                 Date eventDate = rs.getDate(4);
                 int clubId = rs.getInt(5);
-                int userID = rs.getInt(6);
-                int statusId = rs.getInt(7);
-                Event tmpEvent = new Event(eventId, clubId, userID, statusId, eventName, eventDesription, eventDate);
+                int eventSataus = rs.getInt(6);
+                Event tmpEvent = new Event(eventId, clubId, eventSataus, eventName, eventDesription, eventDate);
+                ev.add(tmpEvent);
+            }
+            rs.close();
+            statement.close();
+            con.close();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(EventDao.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(EventDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ev;
+    }
+    
+    public static int countEventRequest() {
+        ConnectDB db = ConnectDB.getInstance();
+        String sql = "Select count(*) as count from Event where EventStatus = 0";
+        Connection con = null;
+        int count = 0;
+        try {
+            con = db.openConnection();
+            PreparedStatement statement = con.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                count = rs.getInt("count");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return count;
+    }
+    
+    public List<Event> listEventRequest() {
+        List<Event> ev = new ArrayList<>();
+        ConnectDB db = ConnectDB.getInstance();
+        Connection con = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+        try {
+            con = db.openConnection();
+            String sql = "Select * from Event Where EventStatus = 0";
+            statement = con.prepareStatement(sql);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                int eventId = rs.getInt(1);
+                String clubName = rs.getString(2);
+                String eventDescription = rs.getString(3);
+                Date eventDate = rs.getDate(4);
+                int clubId = rs.getInt(5);
+                int eventStatus = rs.getInt(6);
+                Event tmpEvent = new Event(eventId, clubId, eventStatus, clubName, eventDescription, eventDate);
                 ev.add(tmpEvent);
             }
             rs.close();
@@ -178,4 +232,19 @@ public class EventDao {
         return ev;
     }
 
+    public void acceptEvent(Event event) {
+        String sql = "Update Event Set EventStatus = 1 WHERE EventID = ?";
+        ConnectDB db = ConnectDB.getInstance();
+        Connection con;
+        try {
+            con = db.openConnection();
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setInt(1, event.getEventId());
+            statement.execute();
+            statement.close();
+            con.close();
+        } catch (Exception ex) {
+            Logger.getLogger(EventDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

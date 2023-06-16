@@ -1,3 +1,5 @@
+<%@ page import="dao.Admin.UserDao" %>
+
 <div class="activity-card">
     <form action="ClubControllerServlet" method="GET">
         <h3>Clubs Request List</h3>
@@ -5,7 +7,7 @@
             <table border="1">
                 <thead>
                     <tr>
-                        <th>CLub ID</th>
+                        <th>Club ID</th>
                         <th>Club Name</th>
                         <th>Club Description</th>
                         <th>Manager</th>
@@ -27,9 +29,9 @@
                         <tr>
                             <td>${item.clubId}</td>
                             <td>${item.clubName}</td>
-                            <th>${item.clubDiscription}</th>
-                            <td>${item.clubCreatorId}</td>
-                            <th>${item.dateCreated}</th>
+                            <td>${item.clubDescription}</td>
+                            <td>${UserDao.getUserName(item.clubCreatorId)}</td>
+                            <td>${item.dateCreated}</td>
                             <td>
                                 <a href="${tempLink}" onclick="if(!(confirm('Sure?'))) return false">Accept</a>
                             </td>

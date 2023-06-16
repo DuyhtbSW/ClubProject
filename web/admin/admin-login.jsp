@@ -1,3 +1,9 @@
+<%-- 
+    Document   : admin-login
+    Created on : May 23, 2023, 11:51:42 AM
+    Author     : acer
+--%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -6,11 +12,11 @@
         <title>Admin Login</title>
         <link rel="stylesheet" href="style/admin-login.css"/>
     </head>
-    <body>s
+    <body>
         <h1>Login page</h1>
+        <p id="error">${loginFail}</p>
         <form action="<%=request.getContextPath()%>/AdminControllerServlet" method="GET" onsubmit = " return validateLogin()">
             <input type="hidden" name="command" value="LOGIN">
-            <p id="error">${loginFail}</p>
             <div class="form-group">
                 <label for="username">Admin ID<span>*</span></label>
                 <input type="text" id="username" name="username">
@@ -21,6 +27,17 @@
             </div>
             <button type="submit">Login</button>
         </form>
-
     </body>
+    <script>
+    function validateLogin() {
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        if (username && password) {
+            return true;
+        } else {
+            alert("Please fill in both fields!");
+            return false;
+        }
+    }
+</script>
 </html>

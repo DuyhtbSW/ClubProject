@@ -16,7 +16,7 @@
                 <tr>
                     <TH>Event Date</TH><TD>${The_Event.eventDate}</TD><TD> <input type="text" name="eventDate" value="${The_Event.eventDate}"></TD>
                 <tr>
-                    <TH>Event Status</TH><TD>${The_Event.statusId}</TD><TD>${The_Event.statusId}</TD>
+                    <TH>Event Status</TH><TD>${The_Event.eventStatus == 1 ? "Accepted" : "Waiting to accept"}</TD><TD><input type="text" name="eventStatus" value="${The_Event.eventStatus}" placeholder="0: Waiting, 1: Accepted"></TD>
                 <tr>
                     <TH></TH><TH><a href="EventControllerServlet"> Back to the List</a></TH>
                     <TH>

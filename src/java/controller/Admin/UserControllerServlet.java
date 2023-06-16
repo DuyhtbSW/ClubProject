@@ -81,6 +81,10 @@ public class UserControllerServlet extends HttpServlet {
         dispathcher.forward(request, response);
     }
 
+    public enum Gender {
+        MALE, FEMALE
+    };
+
     private void updateUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int userId = Integer.parseInt(request.getParameter("userId"));
         String userName = request.getParameter("userName");
@@ -90,18 +94,38 @@ public class UserControllerServlet extends HttpServlet {
         String userDOBSrt = request.getParameter("userDOB");
         String userGender = request.getParameter("userGender");
         Date userDOB = null;
-        if (userDOBSrt != null && !userDOBSrt.isEmpty()) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            sdf.setLenient(false);
-            try {
-                userDOB = sdf.parse(userDOBSrt);
-            } catch (ParseException e) {
-            }
-        }
 
+        // Kiểm tra xem input có null hoặc rỗng hay không
+        if (userName != null && !userName.trim().isEmpty()
+                && userEmail != null && !userEmail.trim().isEmpty()
+                && userPass != null && !userPass.trim().isEmpty()
+                && userGender != null && !userGender.trim().isEmpty()) {
+
+            // Kiểm tra giá trị gender có hợp lệ hay không
+            if ("Male".equalsIgnoreCase(userGender) || "Female".equalsIgnoreCase(userGender)) {
+
+                // Kiểm tra định dạng của ngày sinh và chuyển đổi thành kiểu dữ liệu Date
+                if (userDOBSrt != null && !userDOBSrt.isEmpty()) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    sdf.setLenient(false);
+                    try {
+                        userDOB = sdf.parse(userDOBSrt);
+                    } catch (ParseException e) {
+                        throw new IllegalArgumentException("Ngày sinh không hợp lệ"); // nếu định dạng không hợp lệ, throw một IllegalArgumentException
+                    }
+                } else {
+                    throw new IllegalArgumentException("Ngày sinh không được bỏ trống"); // nếu ngày sinh bị bỏ trống, throw một IllegalArgumentException
+                }
+            } else {
+                throw new IllegalArgumentException("Giới tính không hợp lệ"); // nếu giới tính không hợp lệ, throw một IllegalArgumentException
+            }
         User theUser = new User(userId, userName, userEmail, userPass, userPhone, userGender, userDOB);
+
         new UserDao().updateUser(theUser);
         loadUser(request, response);
+        }else {
+            throw new IllegalArgumentException("Thông tin người dùng không hợp lệ"); // nếu thông tin người dùng không hợp lệ, throw một IllegalArgumentException
+        }
     }
 
     private void deleteUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

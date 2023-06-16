@@ -20,12 +20,15 @@ public class AdminControllerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String theCommand = request.getParameter("command");
-        if (theCommand == null) {
-            theCommand = "LIST";
+         if (theCommand == null) {
+            theCommand = "HOME";
         }
         switch (theCommand) {
             case "LOGIN":
                 loginAdmin(request, response);
+                break;
+            case "HOME":
+                home(request, response);
                 break;
             default:
         }
@@ -45,11 +48,15 @@ public class AdminControllerServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("adminLogin", ad);
             session.setAttribute("loggedIn", true);
-            response.sendRedirect("admin/admin-home.jsp");
-            return;
+            response.sendRedirect("AdminControllerServlet");
+        } else {
+            request.setAttribute("loginFail", "ID or Password is incorrect");
+            request.getRequestDispatcher("admin/admin-login.jsp").forward(request, response);
         }
-        request.setAttribute("loginFail", "ID or Password is incorrect");
-        request.getRequestDispatcher("admin/admin-login.jsp").forward(request, response);
     }
 
+    private void home(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.getRequestDispatcher("admin/admin-home.jsp").forward(request, response);
+    }
 }

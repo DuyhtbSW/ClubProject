@@ -1,0 +1,44 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Jun 13, 2023, 2:38:53 PM
+    Author     : acer
+*/
+
+.activity-card {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.table-responsive table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table-responsive th, td {
+  padding: 10px;
+  text-align: left;
+}
+
+.table-responsive th {
+  background-color: #ffe678;
+  font-weight: bold;
+}
+
+.table-responsive tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.table-responsive a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.table-responsive a:hover {
+  text-decoration: underline;
+}
