@@ -7,18 +7,28 @@ import java.time.format.DateTimeParseException;
 public class Post {
 
     private int ID;
-    private String Title, Description, Dated, UserID, ClubID;
+    private String title, description, date, memberID, clubID, status;
 
     public Post() {
     }
 
-    public Post(int ID, String Title, String Description, String Dated, String UserID, String ClubID) {
+    public Post(int ID, String title, String description, String date, String memberID, String clubID) {
         this.ID = ID;
-        this.Title = Title;
-        this.Description = Description;
-        this.Dated = Dated;
-        this.UserID = UserID;
-        this.ClubID = ClubID;
+        this.title = title;
+        this.description = description;
+        this.date = date;
+        this.memberID = memberID;
+        this.clubID = clubID;
+    }
+
+    public Post(int ID, String title, String description, String date, String memberID, String clubID, String status) {
+        this.ID = ID;
+        this.title = title;
+        this.description = description;
+        this.date = date;
+        this.memberID = memberID;
+        this.clubID = clubID;
+        this.status = status;
     }
 
     public int getID() {
@@ -30,23 +40,23 @@ public class Post {
     }
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
-    public void setTitle(String Title) {
-        this.Title = Title;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
-    public void setDescription(String Description) {
-        this.Description = Description;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getDated() {
-        String dateStr = Dated;
+    public String getDate() {
+        String dateStr = date;
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         try {
@@ -58,28 +68,36 @@ public class Post {
         }
     }
 
-    public void setDated(String Dated) {
-        this.Dated = Dated;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public String getUserID() {
-        return UserID;
+    public String getMemberID() {
+        return memberID;
     }
 
-    public void setUserID(String UserID) {
-        this.UserID = UserID;
+    public void setMemberID(String memberID) {
+        this.memberID = memberID;
     }
 
     public String getClubID() {
-        return ClubID;
+        return clubID;
     }
 
-    public void setClubID(String ClubID) {
-        this.ClubID = ClubID;
+    public void setClubID(String clubID) {
+        this.clubID = clubID;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
     public String toString() {
-        return "Post{" + "ID=" + ID + ", Title=" + Title + ", Description=" + Description + ", Dated=" + Dated + ", UserID=" + UserID + ", ClubID=" + ClubID + '}';
+        return "Post{" + "ID=" + ID + ", title=" + title + ", description=" + description + ", date=" + date + ", memberID=" + memberID + ", clubID=" + clubID + ", status=" + status + '}';
     }
 }

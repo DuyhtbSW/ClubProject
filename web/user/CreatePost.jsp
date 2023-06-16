@@ -1,11 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-        <title>Edit Club</title>
+        <title>Create Post</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
         <style>
             a {
@@ -15,7 +14,7 @@
             th, td {
                 text-align: center;
             }
-
+            
             textarea {
                 resize: none;
             }
@@ -23,12 +22,13 @@
     </head>
     <body>
         <input type="checkbox" id="sidebar-toggle">
-        <%@include file="includes/ClubSidebar.jsp" %>
+        <%@ include file="includes/ClubSidebar.jsp" %>
         <div class="main-content">
-            <%@include file="includes/ClubHeader.jsp" %>
+            <%@ include file="includes/ClubHeader.jsp" %>
             <main>
-                <h2 class="dash-title">Edit Club</h2>
+                <h2 class="dash-title">Create Post</h2>
                 <section class="recent">
+                    <h4><a href="<%=request.getContextPath()%>/user?command=ClubPost">Back</a></h4>
                     <div class="activity-grid">
                         <div class="activity-card">
                             <c:if test="${warning != null}">
@@ -38,26 +38,20 @@
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Club Code</th>
-                                            <th>Club Name</th>
-                                            <th>Club Description</th>
+                                            <th>Title</th>
+                                            <th>Description</th>
                                             <th></th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     <form action="<%=request.getContextPath()%>/user" method="get">
-                                        <input type="hidden" name="command" value="EditClub">
+                                        <input type="hidden" name="command" value="CreatePost">
                                         <tr>
-                                            <td><input type="text" name="code" value="${club.code}"></td>
-                                            <td><textarea rows="2" cols="25" name="name">${club.name}</textarea></td>
-                                            <td><textarea rows="4" cols="27" name="description">${club.description}</textarea></td>
+                                            <td><textarea rows="3" cols="27" name="title"></textarea></td>
+                                            <td><textarea rows="3" cols="30" name="description"></textarea></td>
                                             <td>
-                                                <input type="submit" name="save" value="Save"/>
-                                                <!--<a href="<%=request.getContextPath()%>/user?command=EditClub">Save</a>-->
-                                            </td>
-                                            <td>
-                                                <a href="<%=request.getContextPath()%>/user?command=ViewClubDetails">Cancel</a>
+                                                <input type="submit" value="Create"/>
                                             </td>
                                         </tr>
                                     </form>

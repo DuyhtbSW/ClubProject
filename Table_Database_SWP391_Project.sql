@@ -32,8 +32,8 @@ foreign key (ClubCreatorID) references Users (UserID)
 
 create table Member(
 MemberID int identity(1,1) NOT NULL,
-ClubID int NOT NULL,
 UserID int NOT NULL,
+ClubID int NOT NULL,
 -- 0 = false : ko phai manager
 IsClubManager bit default 0,
 JoinDate date,
@@ -48,8 +48,10 @@ RatingID int identity(1,1) NOT NULL,
 Vote tinyint NOT NULL,
 Note nvarchar(255) NOT NULL,
 MemberID int NOT NULL,
+ClubID int NOT NULL,
 primary key(RatingID),
-foreign key (MemberID) references Member (MemberID)
+foreign key (MemberID) references Member (MemberID),
+foreign key (ClubID) references Clubs (ClubID)
 )
 
 create table Post(
@@ -58,9 +60,11 @@ PostTitle nvarchar(255) NOT NULL,
 PostDescription nvarchar(255) NOT NULL,
 PostDate date,
 MemberID int NOT NULL,
+ClubID int NOT NULL,
 PostStatus bit default 0,
 primary key(PostID),
-foreign key (MemberID) references Member (MemberID)
+foreign key (MemberID) references Member (MemberID),
+foreign key (ClubID) references Clubs (ClubID)
 )
 
 create table PostComment(
@@ -79,18 +83,21 @@ EventID int identity(1,1) NOT NULL,
 EventName nvarchar(255) NOT NULL,
 EventDesription nvarchar(255) NOT NULL,
 EventDate date,
-MemberID int NOT NULL,
+ClubID int NOT NULL,
 EventStatus bit default 0,
 primary key(EventID),
-foreign key (MemberID) references Member (MemberID)
+foreign key (ClubID) references Clubs (ClubID)
 )
 
 create table EventAttendees(
+EventAttendeesID int identity(1,1) NOT NULL,
 EventID int NOT NULL,
 MemberID int NOT NULL,
-primary key(EventID, MemberID),
+ClubID int NOT NULL,
+primary key(EventAttendeesID),
 foreign key (EventID) references [Event] (EventID),
-foreign key (MemberID) references Member (MemberID)
+foreign key (MemberID) references Member (MemberID),
+foreign key (ClubID) references Clubs (ClubID)
 )
 
 create table [Notification](

@@ -16,6 +16,7 @@
             <main>
                 <h2 class="dash-title">Join Club Request</h2>
                 <section class="recent">
+                    <h4><a href="<%=request.getContextPath()%>/user?command=ClubManage">Back</a></h4>
                     <div class="activity-grid">
                         <div class="activity-card">
                             <!--    <h3>Club Manage</h3>-->
@@ -41,9 +42,9 @@
                                                 <td>
                                                     <a href="<%=request.getContextPath()%>/user?command=JoinRequestDecline&clubID=${clubID}&userID=${jr.ID}">Decline</a>
                                                 </td>
-                                                <td>
+<!--                                                <td>
                                                     <a href="<%=request.getContextPath()%>/user?command=ClubManage">Back</a>
-                                                </td>
+                                                </td>-->
                                             </tr>
                                         </c:forEach>
                                     </tbody>

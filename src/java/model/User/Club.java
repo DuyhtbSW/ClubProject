@@ -7,30 +7,29 @@ import java.time.format.DateTimeParseException;
 public class Club {
 
     private int ID;
-//    private int ID, CreatorID;
-    private String Code, Name, Description, CreatorID, DateCreated, Status, JoinRequest;
+    private String code, name, description, creatorID, dateCreated, status, joinRequest;
 
     public Club() {
     }
 
-    public Club(int ID, String Code, String Name, String Description, String CreatorID, String DateCreated) {
+    public Club(int ID, String code, String name, String description, String creatorID, String dateCreated) {
         this.ID = ID;
-        this.CreatorID = CreatorID;
-        this.Code = Code;
-        this.Name = Name;
-        this.Description = Description;
-        this.DateCreated = DateCreated;
+        this.code = code;
+        this.name = name;
+        this.description = description;
+        this.creatorID = creatorID;
+        this.dateCreated = dateCreated;
     }
 
-    public Club(int ID, String Code, String Name, String Description, String CreatorID, String DateCreated, String Status, String JoinRequest) {
+    public Club(int ID, String code, String name, String description, String creatorID, String dateCreated, String status, String joinRequest) {
         this.ID = ID;
-        this.Code = Code;
-        this.Name = Name;
-        this.Description = Description;
-        this.CreatorID = CreatorID;
-        this.DateCreated = DateCreated;
-        this.Status = Status;
-        this.JoinRequest = JoinRequest;
+        this.code = code;
+        this.name = name;
+        this.description = description;
+        this.creatorID = creatorID;
+        this.dateCreated = dateCreated;
+        this.status = status;
+        this.joinRequest = joinRequest;
     }
 
     public int getID() {
@@ -41,40 +40,40 @@ public class Club {
         this.ID = ID;
     }
 
-    public String getCreatorID() {
-        return CreatorID;
-    }
-
-    public void setCreatorID(String CreatorID) {
-        this.CreatorID = CreatorID;
-    }
-
     public String getCode() {
-        return Code;
+        return code;
     }
 
-    public void setCode(String Code) {
-        this.Code = Code;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
-    public void setName(String Name) {
-        this.Name = Name;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
-    public void setDescription(String Description) {
-        this.Description = Description;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getCreatorID() {
+        return creatorID;
+    }
+
+    public void setCreatorID(String creatorID) {
+        this.creatorID = creatorID;
     }
 
     public String getDateCreated() {
-        String dateStr = DateCreated;
+        String dateStr = dateCreated;
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         try {
@@ -86,28 +85,28 @@ public class Club {
         }
     }
 
-    public void setDateCreated(String DateCreated) {
-        this.DateCreated = DateCreated;
+    public void setDateCreated(String dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public String getStatus() {
-        return Status;
+        return status;
     }
 
-    public void setStatus(String Status) {
-        this.Status = Status;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getJoinRequest() {
-        return JoinRequest;
+        return joinRequest;
     }
 
-    public void setJoinRequest(String JoinRequest) {
-        this.JoinRequest = JoinRequest;
+    public void setJoinRequest(String joinRequest) {
+        this.joinRequest = joinRequest;
     }
 
     @Override
     public String toString() {
-        return "Club{" + "ID=" + ID + ", Code=" + Code + ", Name=" + Name + ", Description=" + Description + ", CreatorID=" + CreatorID + ", DateCreated=" + DateCreated + '}';
+        return "Club{" + "ID=" + ID + ", code=" + code + ", name=" + name + ", description=" + description + ", creatorID=" + creatorID + ", dateCreated=" + dateCreated + ", status=" + status + ", joinRequest=" + joinRequest + '}';
     }
 }

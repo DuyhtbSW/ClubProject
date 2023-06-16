@@ -7,6 +7,20 @@
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
         <title>View Comment</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+        <style>
+            a {
+                text-decoration: none;
+                padding: 0 1%;
+            }
+
+            th, td {
+                text-align: center;
+            }
+
+            textarea {
+                resize: none;
+            }
+        </style>
     </head>
     <body>
         <input type="checkbox" id="sidebar-toggle">
@@ -30,7 +44,7 @@
                                     <thead>
                                         <tr>
                                             <th>Poster</th>
-                                            <th>Post Dated</th>
+                                            <th>Post Date</th>
                                             <th>Title</th>
                                             <th>Description</th>
                                             <th></th>
@@ -38,17 +52,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="p" items="${post}">
-                                            <tr>
-                                                <td>${p.userID}</td>
-                                                <td>${p.dated}</td>
-                                                <td>${p.title}</td>
-                                                <td>${p.description}</td>
-                                                <td>
-                                                    <a href="<%=request.getContextPath()%>/user?command=ClubPost">Back</a>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
+                                        <tr>
+                                            <td>${post.memberID}</td>
+                                            <td>${post.date}</td>
+                                            <td>${post.title}</td>
+                                            <td>${post.description}</td>
+                                            <td>
+                                                <a href="<%=request.getContextPath()%>/user?command=ClubPost">Back</a>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -57,8 +69,8 @@
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Commentor</th>
-                                            <th>Comment Dated</th>
+                                            <th>Commenter</th>
+                                            <th>Comment Date</th>
                                             <th>Content</th>
                                             <th></th>
                                             <th></th>
@@ -68,7 +80,7 @@
                                         <c:forEach var="pc" items="${postComment}">
                                             <tr>
                                                 <td>${pc.commentorID}</td>
-                                                <td>${pc.dated}</td>
+                                                <td>${pc.date}</td>
                                                 <td>${pc.content}</td>
                                                 <td>
                                                     <a href="#">Edit</a>

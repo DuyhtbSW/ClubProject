@@ -7,36 +7,36 @@ import java.time.format.DateTimeParseException;
 public class User {
 
     private int ID;
-    private String Name, Email, Pass, Phone, DOB, Gender;
+    private String name, email, pass, phone, DOB, gender;
 
     public User() {
     }
 
-    public User(String Name) {
-        this.Name = Name;
+    public User(String name) {
+        this.name = name;
     }
 
-    public User(int ID, String Name, String DOB) {
+    public User(int ID, String name, String DOB) {
         this.ID = ID;
-        this.Name = Name;
+        this.name = name;
         this.DOB = DOB;
     }
 
-    public User(int ID, String Name, String DOB, String Gender) {
+    public User(int ID, String name, String DOB, String gender) {
         this.ID = ID;
-        this.Name = Name;
+        this.name = name;
         this.DOB = DOB;
-        this.Gender = Gender;
+        this.gender = gender;
     }
 
-    public User(int ID, String Name, String Email, String Pass, String Phone, String DOB, String Gender) {
+    public User(int ID, String name, String email, String pass, String phone, String DOB, String gender) {
         this.ID = ID;
-        this.Name = Name;
-        this.Email = Email;
-        this.Pass = Pass;
-        this.Phone = Phone;
+        this.name = name;
+        this.email = email;
+        this.pass = pass;
+        this.phone = phone;
         this.DOB = DOB;
-        this.Gender = Gender;
+        this.gender = gender;
     }
 
     public int getID() {
@@ -48,35 +48,35 @@ public class User {
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
-    public void setName(String Name) {
-        this.Name = Name;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
-    public void setEmail(String Email) {
-        this.Email = Email;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPass() {
-        return Pass;
+        return pass;
     }
 
-    public void setPass(String Pass) {
-        this.Pass = Pass;
+    public void setPass(String pass) {
+        this.pass = pass;
     }
 
     public String getPhone() {
-        return Phone;
+        return phone;
     }
 
-    public void setPhone(String Phone) {
-        this.Phone = Phone;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getDOB() {
@@ -97,15 +97,15 @@ public class User {
     }
 
     public String getGender() {
-        return Gender;
+        return gender;
     }
 
-    public void setGender(String Gender) {
-        this.Gender = Gender;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     @Override
     public String toString() {
-        return "User{" + "ID=" + ID + ", Name=" + Name + ", Email=" + Email + ", Pass=" + Pass + ", Phone=" + Phone + ", DOB=" + DOB + ", Gender=" + Gender + '}';
+        return "User{" + "ID=" + ID + ", name=" + name + ", email=" + email + ", pass=" + pass + ", phone=" + phone + ", DOB=" + DOB + ", gender=" + gender + '}';
     }
 }

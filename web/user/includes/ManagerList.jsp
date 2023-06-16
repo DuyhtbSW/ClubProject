@@ -9,28 +9,50 @@
     <div class="table-responsive">
         <table>
             <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>DOB</th>
-                    <th>Gender</th>
-                    <th></th>
-                    <th></th>
-                </tr>
+                <c:if test="${sessionScope.IsCreator != null}">
+                    <tr>
+                        <th>Name</th>
+                        <th>Join Date</th>
+                        <th>Gender</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </c:if>
+                <c:if test="${sessionScope.IsManager != null}">
+                    <tr>
+                        <th>Name</th>
+                        <th>Join Date</th>
+                        <th>Gender</th>
+                        <th></th>
+                    </tr>
+                </c:if>
             </thead>
             <tbody>
-                <c:forEach var="m" items="${manager}">
-                    <tr>
-                        <td>${m.name}</td>
-                        <td>${m.DOB}</td>
-                        <td>${m.gender}</td>
-                        <td>
-                            <a href="<%=request.getContextPath()%>/user?command=SetToMember&mID=${m.ID}">Set to member</a>
-                        </td>
-                        <td>
-                            <a href="<%=request.getContextPath()%>/user?command=KickManager&cID=${clubID}&mID=${m.ID}">Kick</a>
-                        </td>
-                    </tr>
-                </c:forEach>
+                <c:if test="${sessionScope.IsCreator != null}">
+                    <c:forEach var="m" items="${manager}">
+                        <tr>
+                            <td>${m.name}</td>
+                            <td>${m.DOB}</td>
+                            <td>${m.gender}</td>
+                            <td>
+                                <a href="<%=request.getContextPath()%>/user?command=SetToMember&mID=${m.ID}">Set to member</a>
+                            </td>
+                            <td>
+                                <a href="<%=request.getContextPath()%>/user?command=KickManager&cID=${clubID}&mID=${m.ID}">Kick</a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${sessionScope.IsManager != null}">
+                    <c:forEach var="m" items="${manager}">
+                        <tr>
+                            <td>${m.name}</td>
+                            <td>${m.DOB}</td>
+                            <td>${m.gender}</td>
+                            <td></td>
+                        </tr>
+                    </c:forEach>
+                </c:if>
             </tbody>
         </table>
     </div>

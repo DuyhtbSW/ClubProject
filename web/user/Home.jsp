@@ -37,10 +37,10 @@
         <a href="<%=request.getContextPath()%>/user?command=Home">Home</a>
         <a href="<%=request.getContextPath()%>/user?command=ClubsList">Clubs List</a>
         <c:if test="${sessionScope.clubCreator != null}">
-        <li><a href="<%=request.getContextPath()%>/user/ClubHome.jsp">Club Manager</a></li>
+        <li><a href="<%=request.getContextPath()%>/user?command=ForCreator">Club Manager</a></li>
         </c:if>
         <c:if test="${sessionScope.clubManager != null}">
-        <li><a href="<%=request.getContextPath()%>/user?command=Home">Club Manager</a></li>
+        <li><a href="<%=request.getContextPath()%>/user?command=ForManager">Club Manager</a></li>
         </c:if>
         <c:if test="${sessionScope.account != null}">
             <c:if test="${sessionScope.account.name != null}">

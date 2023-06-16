@@ -7,17 +7,17 @@ import java.time.format.DateTimeParseException;
 public class PostComment {
 
     private int ID;
-    private String Content, Dated, PostID, CommentorID;
+    private String content, date, postID, commentorID;
 
     public PostComment() {
     }
 
-    public PostComment(int ID, String Content, String Dated, String PostID, String CommentorID) {
+    public PostComment(int ID, String content, String date, String postID, String commentorID) {
         this.ID = ID;
-        this.Content = Content;
-        this.Dated = Dated;
-        this.PostID = PostID;
-        this.CommentorID = CommentorID;
+        this.content = content;
+        this.date = date;
+        this.postID = postID;
+        this.commentorID = commentorID;
     }
 
     public int getID() {
@@ -29,15 +29,15 @@ public class PostComment {
     }
 
     public String getContent() {
-        return Content;
+        return content;
     }
 
-    public void setContent(String Content) {
-        this.Content = Content;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public String getDated() {
-        String dateStr = Dated;
+    public String getDate() {
+        String dateStr = date;
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         try {
@@ -49,28 +49,28 @@ public class PostComment {
         }
     }
 
-    public void setDated(String Dated) {
-        this.Dated = Dated;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getPostID() {
-        return PostID;
+        return postID;
     }
 
-    public void setPostID(String PostID) {
-        this.PostID = PostID;
+    public void setPostID(String postID) {
+        this.postID = postID;
     }
 
     public String getCommentorID() {
-        return CommentorID;
+        return commentorID;
     }
 
-    public void setCommentorID(String CommentorID) {
-        this.CommentorID = CommentorID;
+    public void setCommentorID(String commentorID) {
+        this.commentorID = commentorID;
     }
 
     @Override
     public String toString() {
-        return "PostComment{" + "ID=" + ID + ", Content=" + Content + ", Dated=" + Dated + ", PostID=" + PostID + ", CommentorID=" + CommentorID + '}';
+        return "PostComment{" + "ID=" + ID + ", content=" + content + ", date=" + date + ", postID=" + postID + ", commentorID=" + commentorID + '}';
     }
 }
