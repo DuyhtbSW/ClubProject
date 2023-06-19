@@ -40,8 +40,8 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Club Code</th>
-                                                <th>Club Name</th>
-                                                <th>Club Founding Date</th>
+                                                <th>Name</th>
+                                                <th>Founding Date</th>
                                                 <th></th>
                                             </tr>
                                         </thead>

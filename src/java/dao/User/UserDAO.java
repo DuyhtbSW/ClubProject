@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import model.User.Event;
 import model.User.Club;
 import model.User.Post;
 import model.User.PostComment;
@@ -17,6 +18,7 @@ public class UserDAO {
     private ArrayList<Club> club;
     private ArrayList<Post> post;
     private ArrayList<PostComment> postComment;
+    private ArrayList<Event> event;
 
     public User checkUserLogin(String acc, String pass) {
         try {
@@ -217,13 +219,13 @@ public class UserDAO {
         return null;
     }
 
-    public ArrayList<Club> getClubCreator(int uID) {
+    public ArrayList<Club> getClubCreator(int userID) {
         try {
             club = new ArrayList<>();
             con = new DBConnect().getConnection();
             String query = "select * from Clubs\n" + "where ClubCreatorID = ?";
             PreparedStatement ps = con.prepareStatement(query);
-            ps.setInt(1, uID);
+            ps.setInt(1, userID);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 club.add(new Club(rs.getInt(1), rs.getString(2), rs.getString(3),
@@ -234,7 +236,7 @@ public class UserDAO {
         return club;
     }
 
-    public ArrayList<Club> getClubManager(int uID) {
+    public ArrayList<Club> getClubManager(int userID) {
         try {
             club = new ArrayList<>();
             con = new DBConnect().getConnection();
@@ -243,8 +245,29 @@ public class UserDAO {
                     + "INNER JOIN Member m ON c.ClubID = m.ClubID\n"
                     + "WHERE c.ClubCreatorID <> ? AND m.UserID = ? AND m.IsClubManager = 1 AND m.MemberStatus = 1";
             PreparedStatement ps = con.prepareStatement(query);
-            ps.setInt(1, uID);
-            ps.setInt(2, uID);
+            ps.setInt(1, userID);
+            ps.setInt(2, userID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                club.add(new Club(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), rs.getString(5), rs.getString(6)));
+            }
+        } catch (Exception e) {
+        }
+        return club;
+    }
+
+    public ArrayList<Club> getClubMember(int userID) {
+        try {
+            club = new ArrayList<>();
+            con = new DBConnect().getConnection();
+            String query = "SELECT c.ClubID, c.ClubCode, c.ClubName, c.ClubDescription, c.ClubCreatorID, c.DateCreated\n"
+                    + "FROM Clubs c\n"
+                    + "INNER JOIN Member m ON c.ClubID = m.ClubID\n"
+                    + "WHERE c.ClubCreatorID <> ? AND m.UserID = ? AND m.IsClubManager = 0 AND m.MemberStatus = 1";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, userID);
+            ps.setInt(2, userID);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 club.add(new Club(rs.getInt(1), rs.getString(2), rs.getString(3),
@@ -295,7 +318,7 @@ public class UserDAO {
             con = new DBConnect().getConnection();
             String query = "SELECT COUNT(*) AS PostCount\n"
                     + "FROM Post\n"
-                    + "WHERE ClubID = ?";
+                    + "WHERE ClubID = ? AND PostStatus = 1";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, clubID);
             ResultSet rs = ps.executeQuery();
@@ -312,7 +335,7 @@ public class UserDAO {
             con = new DBConnect().getConnection();
             String query = "SELECT COUNT(*) AS EventCount\n"
                     + "FROM [Event]\n"
-                    + "WHERE ClubID = ?";
+                    + "WHERE ClubID = ? AND EventStatus = 1";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, clubID);
             ResultSet rs = ps.executeQuery();
@@ -420,7 +443,7 @@ public class UserDAO {
                 String memberID = rs.getString(5);
                 String sClubID = rs.getString(6);
 
-                String posterName = getPosterName(memberID);
+                String posterName = getNameFromMemberID(memberID);
 
                 post.add(new Post(postID, postTitle, postDescription, postDate, posterName, sClubID));
 //                post.add(new Post(rs.getInt(1), rs.getString(2), rs.getString(3),
@@ -447,7 +470,7 @@ public class UserDAO {
                 String memberID = rs.getString(5);
                 String sClubID = rs.getString(6);
 
-                String posterName = getPosterName(memberID);
+                String posterName = getNameFromMemberID(memberID);
 
                 return new Post(pID, postTitle, postDescription, postDate, posterName, sClubID);
             }
@@ -472,7 +495,31 @@ public class UserDAO {
                 String mID = rs.getString(5);
                 String sClubID = rs.getString(6);
 
-                String posterName = getPosterName(mID);
+                String posterName = getNameFromMemberID(mID);
+
+                return new Post(pID, postTitle, postDescription, postDate, posterName, sClubID);
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    public Post getMyPost(int memberID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "SELECT * FROM Post\n" + "WHERE MemberID = ? AND PostStatus = 1";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, memberID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int pID = rs.getInt(1);
+                String postTitle = rs.getString(2);
+                String postDescription = rs.getString(3);
+                String postDate = rs.getString(4);
+                String mID = rs.getString(5);
+                String sClubID = rs.getString(6);
+
+                String posterName = getNameFromMemberID(mID);
 
                 return new Post(pID, postTitle, postDescription, postDate, posterName, sClubID);
             }
@@ -497,7 +544,7 @@ public class UserDAO {
                 String mID = rs.getString(5);
                 String sClubID = rs.getString(6);
 
-                String posterName = getPosterName(mID);
+                String posterName = getNameFromMemberID(mID);
 
                 return new Post(pID, postTitle, postDescription, postDate, posterName, sClubID);
             }
@@ -521,7 +568,7 @@ public class UserDAO {
         return 0;
     }
 
-    public String getPosterName(String memberID) {
+    public String getNameFromMemberID(String memberID) {
         String PosterName = null;
         try {
             con = new DBConnect().getConnection();
@@ -567,6 +614,17 @@ public class UserDAO {
             ps.setString(1, pTitle);
             ps.setString(2, pDescription);
             ps.setString(3, postID);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void deletePost(String pID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "delete Post\n" + "where PostID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, pID);
             ps.executeUpdate();
         } catch (Exception e) {
         }
@@ -657,6 +715,27 @@ public class UserDAO {
         try {
             postComment = new ArrayList<>();
             con = new DBConnect().getConnection();
+            String query = "SELECT PC.PostCommentID, PC.CommentContent, PC.CommentDate, U.UserName, PC.CommentorID\n"
+                    + "FROM PostComment PC\n"
+                    + "JOIN Member M ON PC.CommentorID = M.MemberID\n"
+                    + "JOIN Users U ON M.UserID = U.UserID\n"
+                    + "WHERE PC.PostID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, postID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                postComment.add(new PostComment(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), rs.getString(5)));
+            }
+        } catch (Exception e) {
+        }
+        return postComment;
+    }
+
+    public ArrayList<PostComment> getPostCommentTest(String postID) {
+        try {
+            postComment = new ArrayList<>();
+            con = new DBConnect().getConnection();
             String query = "SELECT PC.PostCommentID, PC.CommentContent, PC.CommentDate, PC.PostID, U.UserName\n"
                     + "FROM PostComment PC\n"
                     + "JOIN Member M ON PC.CommentorID = M.MemberID\n"
@@ -672,6 +751,78 @@ public class UserDAO {
         } catch (Exception e) {
         }
         return postComment;
+    }
+
+    public PostComment getComment(String pcID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "select * from PostComment\n" + "where PostCommentID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, pcID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return new PostComment(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), rs.getString(5));
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    public ArrayList<PostComment> getMyComments(String postID, int memberID) {
+        try {
+            postComment = new ArrayList<>();
+            con = new DBConnect().getConnection();
+            String query = "select * from PostComment\n" + "where PostID = ? and CommentorID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, postID);
+            ps.setInt(2, memberID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String commenterID = rs.getString(5);
+                String commenter = getNameFromMemberID(commenterID);
+                postComment.add(new PostComment(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), commenter));
+            }
+        } catch (Exception e) {
+        }
+        return postComment;
+    }
+
+    public ArrayList<PostComment> getNotMyComments(String postID, int memberID) {
+        try {
+            postComment = new ArrayList<>();
+            con = new DBConnect().getConnection();
+            String query = "select * from PostComment\n" + "where PostID = ? and CommentorID != ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, postID);
+            ps.setInt(2, memberID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String commenterID = rs.getString(5);
+                String commenter = getNameFromMemberID(commenterID);
+                postComment.add(new PostComment(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), commenter));
+            }
+        } catch (Exception e) {
+        }
+        return postComment;
+    }
+
+    public PostComment getMyComment(int memberID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "select * from PostComment\n" + "where CommentorID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, memberID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return new PostComment(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), rs.getString(5));
+            }
+        } catch (Exception e) {
+        }
+        return null;
     }
 
     public int getMemberIDFromPost(int userID, String clubID) {
@@ -708,6 +859,20 @@ public class UserDAO {
         }
     }
 
+    public void editComment(String content, String pcID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "update PostComment\n"
+                    + "set CommentContent = ?\n"
+                    + "where PostCommentID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, content);
+            ps.setString(2, pcID);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
     public void deleteComment(String pcID) {
         try {
             con = new DBConnect().getConnection();
@@ -728,6 +893,7 @@ public class UserDAO {
                     + "JOIN Clubs c ON m.ClubID = c.ClubID\n"
                     + "WHERE m.UserID = ?\n"
                     + "  AND m.IsClubManager = 1\n"
+                    + "  AND m.MemberStatus = 1\n"
                     + "  AND m.UserID != c.ClubCreatorID";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, userID);
@@ -738,6 +904,28 @@ public class UserDAO {
         } catch (Exception e) {
         }
         return isManager;
+    }
+
+    public String getClubMemberFromUserID(int userID) {
+        String isMember = null;
+        try {
+            con = new DBConnect().getConnection();
+            String query = "SELECT m.IsClubManager\n"
+                    + "FROM Member m\n"
+                    + "JOIN Clubs c ON m.ClubID = c.ClubID\n"
+                    + "WHERE m.UserID = ?\n"
+                    + "  AND m.IsClubManager = 0\n"
+                    + "  AND m.MemberStatus = 1\n"
+                    + "  AND m.UserID != c.ClubCreatorID";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                isMember = rs.getString(1);
+            }
+        } catch (Exception e) {
+        }
+        return isMember;
     }
 
     public Club checkClubStatus(String clubID) {
@@ -892,5 +1080,103 @@ public class UserDAO {
             ps.executeUpdate();
         } catch (Exception e) {
         }
+    }
+
+    public ArrayList<Event> getEventFromClubID(String clubID) {
+        try {
+            event = new ArrayList<>();
+            con = new DBConnect().getConnection();
+            String query = "select * from [Event]\n" + "where ClubID = ? and EventStatus = 1";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, clubID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                event.add(new Event(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), rs.getString(5), rs.getString(6)));
+            }
+        } catch (Exception e) {
+        }
+        return event;
+    }
+
+    public void insertEvent(String eName, String eDescription, Date eDate, String clubID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "insert into [Event] values (?, ?, ?, ?, 0)";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, eName);
+            ps.setString(2, eDescription);
+            ps.setDate(3, eDate);
+            ps.setString(4, clubID);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public Event getEvent(String eventID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "select * from [Event]\n" + "where EventID = ? and EventStatus = 1";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, eventID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return new Event(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), rs.getString(5), rs.getString(6));
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    public void editEvent(String eName, String eDate, String eDescription, String eventID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "update [Event]\n"
+                    + "set EventName = ?,\n"
+                    + "EventDate = ?,\n"
+                    + "EventDescription = ?\n"
+                    + "where EventID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, eName);
+            ps.setString(2, eDate);
+            ps.setString(3, eDescription);
+            ps.setString(4, eventID);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void deleteEvent(String eID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "delete [Event]\n" + "where EventID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, eID);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public ArrayList<User> getEventAttendees(String eventID) {
+        try {
+            user = new ArrayList<>();
+            con = new DBConnect().getConnection();
+            String query = "SELECT U.UserName\n"
+                    + "FROM Users U\n"
+                    + "JOIN Member M ON U.UserID = M.UserID\n"
+                    + "JOIN EventAttendees EA ON M.MemberID = EA.MemberID\n"
+                    + "JOIN [Event] E ON EA.EventID = E.EventID\n"
+                    + "JOIN Clubs C ON E.ClubID = C.ClubID\n"
+                    + "WHERE E.EventID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, eventID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                user.add(new User(rs.getString(1)));
+            }
+        } catch (Exception e) {
+        }
+        return user;
     }
 }

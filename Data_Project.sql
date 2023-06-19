@@ -192,48 +192,48 @@ VALUES ('Well done!', '2022-01-10', 5, 10);
 --VALUES ('Completed');
 
 -- Thêm dữ liệu vào bảng "Event"
-INSERT INTO [Event] (EventName, EventDesription, EventDate, ClubID, EventStatus)
+INSERT INTO [Event] (EventName, EventDescription, EventDate, ClubID, EventStatus)
 VALUES ('Dever Annual Conference', 'Join us for Dever Club annual conference and explore the latest trends!', '2022-11-11', 1, 1);
 
-INSERT INTO [Event] (EventName, EventDesription, EventDate, ClubID, EventStatus)
+INSERT INTO [Event] (EventName, EventDescription, EventDate, ClubID, EventStatus)
 VALUES ('NYS Club Art Exhibition', 'Experience the artistic expressions of NYS Club members through their artworks.', '2022-12-12', 2, 1);
 
-INSERT INTO [Event] (EventName, EventDesription, EventDate, ClubID, EventStatus)
+INSERT INTO [Event] (EventName, EventDescription, EventDate, ClubID, EventStatus)
 VALUES ('Mirai JC Cultural Festival', 'Immerse yourself in Japanese culture through various activities organized by Mirai JC Club.', '2023-01-15', 3, 1);
 
-INSERT INTO [Event] (EventName, EventDesription, EventDate, ClubID, EventStatus)
+INSERT INTO [Event] (EventName, EventDescription, EventDate, ClubID, EventStatus)
 VALUES ('Vovinam Workshop', 'Learn Vovinam martial arts techniques and self-defense skills in this interactive workshop.', '2023-02-20', 4, 1);
 
-INSERT INTO [Event] (EventName, EventDesription, EventDate, ClubID, EventStatus)
+INSERT INTO [Event] (EventName, EventDescription, EventDate, ClubID, EventStatus)
 VALUES ('EVo Networking Night', 'Expand your professional network and connect with industry experts at Evo Club Networking Night.', '2023-03-25', 5, 1);
 
-INSERT INTO [Event] (EventName, EventDesription, EventDate, ClubID, EventStatus)
+INSERT INTO [Event] (EventName, EventDescription, EventDate, ClubID, EventStatus)
 VALUES ('FUDA Hoops Gene Tournament', 'Compete in the FUDA Hoops Gene Club basketball tournament and showcase your skills.', '2023-04-30', 6, 1);
 
-INSERT INTO [Event] (EventName, EventDesription, EventDate, ClubID, EventStatus)
+INSERT INTO [Event] (EventName, EventDescription, EventDate, ClubID, EventStatus)
 VALUES ('EFlame English Speaking Contest', 'Participate in the EFlame Club English speaking contest and showcase your language proficiency.', '2023-05-05', 7, 1);
 
 -- Thêm dữ liệu vào bảng "EventAttendees"
-INSERT INTO EventAttendees (EventID, MemberID, ClubID)
-VALUES (1, 1, 1);
+INSERT INTO EventAttendees (EventID, MemberID)
+VALUES (1, 1);
 
-INSERT INTO EventAttendees (EventID, MemberID, ClubID)
-VALUES (1, 2, 2);
+INSERT INTO EventAttendees (EventID, MemberID)
+VALUES (1, 2);
 
-INSERT INTO EventAttendees (EventID, MemberID, ClubID)
-VALUES (2, 3, 3);
+INSERT INTO EventAttendees (EventID, MemberID)
+VALUES (2, 3);
 
-INSERT INTO EventAttendees (EventID, MemberID, ClubID)
-VALUES (2, 4, 4);
+INSERT INTO EventAttendees (EventID, MemberID)
+VALUES (2, 4);
 
-INSERT INTO EventAttendees (EventID, MemberID, ClubID)
-VALUES (3, 5, 5);
+INSERT INTO EventAttendees (EventID, MemberID)
+VALUES (3, 5);
 
-INSERT INTO EventAttendees (EventID, MemberID, ClubID)
-VALUES (4, 6, 6);
+INSERT INTO EventAttendees (EventID, MemberID)
+VALUES (4, 6);
 
-INSERT INTO EventAttendees (EventID, MemberID, ClubID)
-VALUES (4, 7, 7);
+INSERT INTO EventAttendees (EventID, MemberID)
+VALUES (4, 7);
 
 INSERT INTO [Notification] (Title, Note, UserID)
 VALUES (N'Create Club', N'Accepted', 1);

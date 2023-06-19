@@ -20,6 +20,14 @@
             textarea {
                 resize: none;
             }
+
+            #center2 {
+                padding-left: 11%;
+            }
+
+            #center3 {
+                padding-left: 7%;
+            }
         </style>
     </head>
     <body>
@@ -74,66 +82,64 @@
                                             <th>Content</th>
                                             <th></th>
                                             <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <c:forEach var="pc" items="${postComment}">
-                                            <tr>
-                                                <c:if test="${thisComment.ID == pc.ID}">
-                                                    <td>${pc.postID}</td>
-                                                    <td>${pc.date}</td>
-                                                    <td>
-                                                        <form action="user" method="get">
-                                                            <input type="hidden" name="command" value="EditComment">
-                                                            <!--<input type="hidden" name="comment" value="${comment}">-->
-                                                            <input type="hidden" name="pID" value="${postID}">
-                                                            <input type="hidden" name="pcID" value="${pc.ID}">
-                                                            <c:if test="${comments == null}">
-                                                                <textarea rows="2" cols="30" placeholder="Type a comment here..." name="comment">${thisComment.content}</textarea>
-                                                            </c:if>
-                                                            <c:if test="${comments != null}">
-                                                                <textarea rows="2" cols="30" placeholder="Type a comment here..." name="comment"></textarea>
-                                                            </c:if>
-                                                            <td>
-                                                                <input type="submit" value="Save">
-                                                            </td>
-                                                        </form>
-                                                    </td>
-                                                    <td>
-                                                        <a href="<%=request.getContextPath()%>/user?command=ViewComment&pID=${postID}">Cancel</a>
-                                                    </td>
-                                                </c:if>
-                                                <c:if test="${thisComment.ID != pc.ID}">
-                                                    <c:choose>
-                                                        <c:when test="${pc.commentorID == commenterID}">
-                                                            <td>${pc.postID}</td>
-                                                            <td>${pc.date}</td>
-                                                            <td>${pc.content}</td>
-                                                            <td>
-                                                                <a href="<%=request.getContextPath()%>/user?command=LoadEditComment&pID=${postID}&pcID=${pc.ID}">Edit</a>
-                                                            </td>
-                                                            <td>
-                                                                <a href="<%=request.getContextPath()%>/user?command=DeleteComment&pID=${postID}&pcID=${pc.ID}">Remove</a>
-                                                            </td>
-                                                        </c:when>
-                                                        <c:when test="${sessionScope.IsCreator != null || sessionScope.IsManager != null}">
-                                                            <td>${pc.postID}</td>
-                                                            <td>${pc.date}</td>
-                                                            <td>${pc.content}</td>
-                                                            <td></td>
-                                                            <td>
-                                                                <a href="<%=request.getContextPath()%>/user?command=DeleteComment&pID=${postID}&pcID=${pc.ID}">Remove</a>
-                                                            </td>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <td>${pc.postID}</td>
-                                                            <td>${pc.date}</td>
-                                                            <td>${pc.content}</td>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </c:if>
-                                            </tr>
-                                        </c:forEach>
+                                            <c:if test="${thisComment.ID == pc.ID}">
+                                            <table>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>${pc.commentorID}</td>
+                                                        <td>${pc.date}</td>
+                                                        <td>${pc.content}</td>
+                                                        <td>
+                                                            <a href="<%=request.getContextPath()%>/user?command=LoadEditComment&pID=${postID}&pcID=${pc.ID}">Edit</a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="<%=request.getContextPath()%>/user?command=DeleteComment&pID=${postID}&pcID=${pc.ID}">Remove</a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <thead>
+                                            <form action="<%=request.getContextPath()%>/user">
+                                                <input type="hidden" name="command" value="EditComment">
+                                                <input type="hidden" name="pID" value="${postID}">
+                                                <table>
+                                                    <tr>
+                                                        <td><textarea rows="3" cols="100" placeholder="Type a comment here..." name="comment">${thisComment.content}</textarea></td>
+                                                        <td><input type="submit" value="Save"/></td>
+                                                        <td><a href="<%=request.getContextPath()%>/user?command=ViewComment&pID=${postID}">Cancel</a></td>
+                                                    </tr>
+                                                </table>
+                                            </form>
+                                            </thead>
+                                        </c:if>
+
+                                        <c:if test="${thisComment.ID != pc.ID}">
+                                            <table>
+                                                <tbody>
+                                                    <tr>
+                                                        <td id="center1">${pc.commentorID}</td>
+                                                        <td id="center2">${pc.date}</td>
+                                                        <td id="center3">${pc.content}</td>
+                                                        <td>
+                                                            <a href="<%=request.getContextPath()%>/user?command=LoadEditComment&pID=${postID}&pcID=${pc.ID}">Edit</a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="<%=request.getContextPath()%>/user?command=DeleteComment&pID=${postID}&pcID=${pc.ID}">Remove</a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </c:if>
+                                    </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
@@ -157,3 +163,4 @@
         </div>
     </body>
 </html>
+s

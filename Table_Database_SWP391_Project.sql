@@ -72,16 +72,16 @@ PostCommentID int identity(1,1) NOT NULL,
 CommentContent nvarchar(255) NOT NULL,
 CommentDate date,
 PostID int NOT NULL,
-CommentorID int NOT NULL,
+CommenterID int NOT NULL,
 primary key(PostCommentID),
 foreign key (PostID) references Post (PostID),
-foreign key (CommentorID) references Member (MemberID)
+foreign key (CommenterID) references Member (MemberID)
 )
 
 create table [Event](
 EventID int identity(1,1) NOT NULL,
 EventName nvarchar(255) NOT NULL,
-EventDesription nvarchar(255) NOT NULL,
+EventDescription nvarchar(255) NOT NULL,
 EventDate date,
 ClubID int NOT NULL,
 EventStatus bit default 0,
@@ -93,11 +93,9 @@ create table EventAttendees(
 EventAttendeesID int identity(1,1) NOT NULL,
 EventID int NOT NULL,
 MemberID int NOT NULL,
-ClubID int NOT NULL,
 primary key(EventAttendeesID),
 foreign key (EventID) references [Event] (EventID),
-foreign key (MemberID) references Member (MemberID),
-foreign key (ClubID) references Clubs (ClubID)
+foreign key (MemberID) references Member (MemberID)
 )
 
 create table [Notification](
@@ -105,6 +103,8 @@ NotificationID int identity(1,1) NOT NULL,
 Title nvarchar(255) NOT NULL,
 Note nvarchar(255) NOT NULL,
 UserID int NOT NULL,
+[Date] date NOT NULL,
+[View] bit default 0,
 primary key(NotificationID),
 foreign key (UserID) references Users (UserID)
 )

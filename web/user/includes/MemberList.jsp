@@ -16,9 +16,19 @@
                         <th>Gender</th>
                         <th></th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </c:if>
                 <c:if test="${sessionScope.IsManager != null}">
+                    <tr>
+                        <th>Name</th>
+                        <th>Join Date</th>
+                        <th>Gender</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </c:if>
+                <c:if test="${sessionScope.IsMember != null}">
                     <tr>
                         <th>Name</th>
                         <th>Join Date</th>
@@ -34,6 +44,21 @@
                             <td>${m.name}</td>
                             <td>${m.DOB}</td>
                             <td>${m.gender}</td>
+                            <c:if test="${m.gender == 'Male'}">
+                                <td>
+                                    <a href="#">Chat with him</a>
+                                </td>
+                            </c:if>
+                            <c:if test="${m.gender == 'Female'}">
+                                <td>
+                                    <a href="#">Chat with her</a>
+                                </td>
+                            </c:if>
+                            <c:if test="${m.gender != 'Male' && m.gender != 'Female'}">
+                                <td>
+                                    <a href="#">Chat with ...</a>
+                                </td>
+                            </c:if>
                             <td>
                                 <a href="<%=request.getContextPath()%>/user?command=SetToManager&mID=${m.ID}">Set to manager</a>
                             </td>
@@ -49,12 +74,51 @@
                             <td>${m.name}</td>
                             <td>${m.DOB}</td>
                             <td>${m.gender}</td>
+                            <c:if test="${m.gender == 'Male'}">
+                                <td>
+                                    <a href="#">Chat with him</a>
+                                </td>
+                            </c:if>
+                            <c:if test="${m.gender == 'Female'}">
+                                <td>
+                                    <a href="#">Chat with her</a>
+                                </td>
+                            </c:if>
+                            <c:if test="${m.gender != 'Male' && m.gender != 'Female'}">
+                                <td>
+                                    <a href="#">Chat with ...</a>
+                                </td>
+                            </c:if>
                             <!--                            <td>
                                                             <a href="<%=request.getContextPath()%>/user?command=SetToManager&mID=${m.ID}">Set to manager</a>
                                                         </td>-->
                             <td>
                                 <a href="<%=request.getContextPath()%>/user?command=KickMember&cID=${clubID}&mID=${m.ID}">Kick</a>
                             </td>
+                        </tr>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${sessionScope.IsMember != null}">
+                    <c:forEach var="m" items="${member}">
+                        <tr>
+                            <td>${m.name}</td>
+                            <td>${m.DOB}</td>
+                            <td>${m.gender}</td>
+                            <c:if test="${m.gender == 'Male'}">
+                                <td>
+                                    <a href="#">Chat with him</a>
+                                </td>
+                            </c:if>
+                            <c:if test="${m.gender == 'Female'}">
+                                <td>
+                                    <a href="#">Chat with her</a>
+                                </td>
+                            </c:if>
+                            <c:if test="${m.gender != 'Male' && m.gender != 'Female'}">
+                                <td>
+                                    <a href="#">Chat with ...</a>
+                                </td>
+                            </c:if>
                         </tr>
                     </c:forEach>
                 </c:if>

@@ -31,9 +31,9 @@
                     <tr>
                         <th>No</th>
                         <th>Club Code</th>
-                        <th>Club Name</th>
-                        <th>Club Founding Date</th>
-                        <th>Club Status</th>
+                        <th>Name</th>
+                        <th>Founding Date</th>
+                        <th>Status</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -85,7 +85,7 @@
                     <b>${page}</b>
                 </c:when>
                 <c:otherwise>
-                    <!--<a href="?page=${page}">${page}</a>-->
+                    <!--<a href="<%=request.getContextPath()%>/user?command=ClubsList&page=${page}">${page}</a>-->
                 </c:otherwise>
             </c:choose>
         </c:forEach>

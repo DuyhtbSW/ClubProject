@@ -24,7 +24,12 @@
         <div class="main-content">
             <%@ include file="includes/ClubHeader.jsp" %>
             <main>
-                <h2 class="dash-title">Club Manage</h2>
+                <c:if test="${sessionScope.IsCreator != null || sessionScope.IsManager != null}">
+                    <h2 class="dash-title">Club Manage</h2>
+                </c:if>
+                <c:if test="${sessionScope.IsMember != null}">
+                    <h2 class="dash-title">Club Info</h2>
+                </c:if>
                 <section class="recent">
                     <c:if test="${sessionScope.IsCreator != null}">
                         <table>

@@ -44,7 +44,7 @@
                                     <thead>
                                         <tr>
                                             <th>Poster</th>
-                                            <th>Post Date</th>
+                                            <th>Date</th>
                                             <th>Title</th>
                                             <th>Description</th>
                                             <th></th>
@@ -70,24 +70,26 @@
                                     <thead>
                                         <tr>
                                             <th>Commenter</th>
-                                            <th>Comment Date</th>
+                                            <th>Date</th>
                                             <th>Content</th>
                                             <th></th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="pc" items="${postComment}">
+                                        <%--<c:forEach var="pc" items="${postComment}">--%>
+
+                                        <c:forEach var="mc" items="${myComments}">
                                             <tr>
-                                                <c:if test="${thisComment.ID == pc.ID}">
-                                                    <td>${pc.postID}</td>
-                                                    <td>${pc.date}</td>
+                                                <c:if test="${thisComment.ID == mc.ID}">
+                                                    <td>${mc.commentorID}</td>
+                                                    <td>${mc.date}</td>
                                                     <td>
                                                         <form action="user" method="get">
                                                             <input type="hidden" name="command" value="EditComment">
                                                             <!--<input type="hidden" name="comment" value="${comment}">-->
                                                             <input type="hidden" name="pID" value="${postID}">
-                                                            <input type="hidden" name="pcID" value="${pc.ID}">
+                                                            <input type="hidden" name="pcID" value="${mc.ID}">
                                                             <c:if test="${comments == null}">
                                                                 <textarea rows="2" cols="30" placeholder="Type a comment here..." name="comment">${thisComment.content}</textarea>
                                                             </c:if>
@@ -99,41 +101,70 @@
                                                             </td>
                                                         </form>
                                                     </td>
+                                                    <!--<td>-->
+                                                        <!--<a type="submit" href="<%=request.getContextPath()%>/user?command=EditComment&comment=${content}&pID=${postID}&pcID=${pc.ID}">Save</a>-->
+                                                        <!--<a type="submit" href="<%=request.getContextPath()%>/${user}&pID=${postID}&pcID=${pc.ID}">Save</a>-->
+                                                    <!--</td>-->
                                                     <td>
                                                         <a href="<%=request.getContextPath()%>/user?command=ViewComment&pID=${postID}">Cancel</a>
                                                     </td>
                                                 </c:if>
-                                                <c:if test="${thisComment.ID != pc.ID}">
-                                                    <c:choose>
-                                                        <c:when test="${pc.commentorID == commenterID}">
-                                                            <td>${pc.postID}</td>
-                                                            <td>${pc.date}</td>
-                                                            <td>${pc.content}</td>
-                                                            <td>
-                                                                <a href="<%=request.getContextPath()%>/user?command=LoadEditComment&pID=${postID}&pcID=${pc.ID}">Edit</a>
-                                                            </td>
-                                                            <td>
-                                                                <a href="<%=request.getContextPath()%>/user?command=DeleteComment&pID=${postID}&pcID=${pc.ID}">Remove</a>
-                                                            </td>
-                                                        </c:when>
-                                                        <c:when test="${sessionScope.IsCreator != null || sessionScope.IsManager != null}">
-                                                            <td>${pc.postID}</td>
-                                                            <td>${pc.date}</td>
-                                                            <td>${pc.content}</td>
-                                                            <td></td>
-                                                            <td>
-                                                                <a href="<%=request.getContextPath()%>/user?command=DeleteComment&pID=${postID}&pcID=${pc.ID}">Remove</a>
-                                                            </td>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <td>${pc.postID}</td>
-                                                            <td>${pc.date}</td>
-                                                            <td>${pc.content}</td>
-                                                        </c:otherwise>
-                                                    </c:choose>
+                                                <c:if test="${thisComment.ID != mc.ID}">
+                                                    <td>${mc.commentorID}</td>
+                                                    <td>${mc.date}</td>
+                                                    <td>${mc.content}</td>
+                                                    <td>
+                                                        <a href="<%=request.getContextPath()%>/user?command=LoadEditComment&pID=${postID}&pcID=${mc.ID}">Edit</a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="<%=request.getContextPath()%>/user?command=DeleteComment&pID=${postID}&pcID=${mc.ID}">Remove</a>
+                                                    </td>
                                                 </c:if>
                                             </tr>
                                         </c:forEach>
+                                        <c:if test="${thisComment.ID != pc.ID && sessionScope.IsCreator != null}">
+<!--                                                    <td>${pc.commentorID}</td>
+                                            <td>${pc.date}</td>
+                                            <td>${pc.content}</td>
+                                            <td>
+                                                <a href="<%=request.getContextPath()%>/user?command=DeleteComment&pID=${postID}&pcID=${pc.ID}">Remove</a>
+                                            </td>-->
+                                        </c:if>
+                                        <c:if test="${thisComment.ID != pc.ID && sessionScope.IsManager != null}">
+<!--                                                    <td>${pc.commentorID}</td>
+                                            <td>${pc.date}</td>
+                                            <td>${pc.content}</td>
+                                            <td>
+                                                <a href="<%=request.getContextPath()%>/user?command=DeleteComment&pID=${postID}&pcID=${pc.ID}">Remove</a>
+                                            </td>-->
+                                        </c:if>
+                                        <c:if test="${thisComment.ID != pc.ID && sessionScope.IsMember != null}">
+<!--                                                    <td>${pc.commentorID}</td>
+                                            <td>${pc.date}</td>
+                                            <td>${pc.content}</td>-->
+                                        </c:if>
+                                        <c:if test="${sessionScope.IsCreator != null || sessionScope.IsManager != null}">
+                                            <c:forEach var="nmc" items="${notMyComments}">
+                                                <tr>
+                                                    <td>${nmc.commentorID}</td>
+                                                    <td>${nmc.date}</td>
+                                                    <td>${nmc.content}</td>
+                                                    <td>
+                                                        <a href="<%=request.getContextPath()%>/user?command=DeleteComment&pID=${postID}&pcID=${nmc.ID}">Remove</a>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                        </c:if>
+                                        <c:if test="${sessionScope.IsMember != null}">
+                                            <c:forEach var="nmc" items="${notMyComments}">
+                                                <tr>
+                                                    <td>${nmc.commentorID}</td>
+                                                    <td>${nmc.date}</td>
+                                                    <td>${nmc.content}</td>
+                                                </tr>
+                                            </c:forEach>
+                                        </c:if>
+                                        <%--</c:forEach>--%>
                                     </tbody>
                                 </table>
                             </div>

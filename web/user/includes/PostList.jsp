@@ -11,7 +11,7 @@
             <thead>
                 <tr>
                     <th>Poster</th>
-                    <th>Post Date</th>
+                    <th>Date</th>
                     <th>Title</th>
                     <th>Description</th>
                     <th></th>
@@ -28,9 +28,16 @@
                         <td>
                             <a href="<%=request.getContextPath()%>/user?command=ViewComment&pID=${p.ID}">View comment</a>
                         </td>
-                        <td>
-                            <a href="<%=request.getContextPath()%>/user?command=PostManage&pID=${p.ID}">Manage post</a>
-                        </td>
+                        <c:if test="${sessionScope.IsCreator != null || sessionScope.IsManager != null}">
+                            <td>
+                                <a href="<%=request.getContextPath()%>/user?command=PostManage&pID=${p.ID}">Manage post</a>
+                            </td>
+                        </c:if>
+                        <c:if test="${sessionScope.IsMember != null && myPost != null}">
+                            <td>
+                                <a href="<%=request.getContextPath()%>/user?command=PostManage&pID=${p.ID}">Manage post</a>
+                            </td>
+                        </c:if>
                     </tr>
                 </c:forEach>
             </tbody>

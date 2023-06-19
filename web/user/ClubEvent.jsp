@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -25,7 +26,9 @@
             <main>
                 <h2 class="dash-title">Events List</h2>
                 <section class="recent">
-                    <h4><a href="#">Create Event</a></h4>
+                    <c:if test="${sessionScope.IsCreator != null}">
+                        <h4><a href="<%=request.getContextPath()%>/user/CreateEvent.jsp">Create Event</a></h4>
+                    </c:if>
                     <div class="activity-grid">
                         <%@ include file="includes/EventList.jsp" %>
                     </div>

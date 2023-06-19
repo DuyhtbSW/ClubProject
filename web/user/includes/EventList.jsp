@@ -1,30 +1,48 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <div class="activity-card">
-    <!--<h3>Events List</h3>-->
+    <c:if test="${event == null}">
+        <h3>No event yet</h3>
+        <!--<h3><%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></h3>-->
+    </c:if>
     <div class="table-responsive">
         <table>
             <thead>
                 <tr>
-                    <th>Event ID</th>
-                    <th>Club of event</th>
+                    <th>Event Name</th>
                     <th>Date</th>
+                    <th>Description</th>
                     <th></th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>App Development</td>
-                    <td>IT Club</td>
-                    <td>22 Aug, 2020</td>
-                    <td>
-                        <a href="#">Event attendees</a>
-                    </td>
-                    <td>
-                        <a href="#">Manage event</a>
-                    </td>
-                </tr>
+                <c:forEach var="e" items="${event}">
+                    <tr>
+                        <td>${e.name}</td>
+                        <td>${e.date}</td>
+                        <td>${e.description}</td>
+                        <td>
+                            <a href="<%=request.getContextPath()%>/user?command=EventAttendeesList&eID=${e.ID}">Event attendees</a>
+                        </td>
+                        <c:if test="${sessionScope.IsCreator != null}">
+                            <td>
+                                <a href="<%=request.getContextPath()%>/user?command=EventManage&eID=${e.ID}">Manage event</a>
+                            </td>
+                        </c:if>
+                        <c:if test="${joinEvent == null && sessionScope.IsManager != null || sessionScope.IsMember != null}">
+                            <td>
+                                <a href="<%=request.getContextPath()%>/user?command=JoinEvent&eID=${e.ID}">Join event</a>
+                            </td>
+                        </c:if>
+                        <c:if test="${joinEvent != null && sessionScope.IsManager != null || sessionScope.IsMember != null}">
+                            <td>
+                                <a href="<%=request.getContextPath()%>/user?command=JoinEvent&eID=${e.ID}">Cancel</a>
+                            </td>
+                        </c:if>
+                    </tr>
+                </c:forEach>
             </tbody>
         </table>
     </div>

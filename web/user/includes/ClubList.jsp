@@ -6,13 +6,23 @@
     <div class="table-responsive">
         <table>
             <thead>
-                <tr>
-                    <th>Club Code</th>
-                    <th>Club Name</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
+                <c:if test="${sessionScope.IsCreator != null || sessionScope.IsManager != null}">
+                    <tr>
+                        <th>Club Code</th>
+                        <th>Club Name</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </c:if>
+                <c:if test="${sessionScope.IsMember != null}">
+                    <tr>
+                        <th>Club Code</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Date Created</th>
+                    </tr>
+                </c:if>
             </thead>
             <tbody>
                 <c:if test="${sessionScope.IsCreator != null}">
@@ -40,6 +50,14 @@
                         <td>
                             <a href="<%=request.getContextPath()%>/user?command=JoinClubRequestList&clubID=${club.ID}">Join club request</a>
                         </td>
+                    </tr>
+                </c:if>
+                <c:if test="${sessionScope.IsMember != null}">
+                    <tr>
+                        <td>${club.code}</td>
+                        <td>${club.name}</td>
+                        <td>${club.description}</td>
+                        <td>${club.dateCreated}</td>
                     </tr>
                 </c:if>
             </tbody>

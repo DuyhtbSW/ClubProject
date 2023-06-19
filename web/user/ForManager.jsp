@@ -6,7 +6,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-        <title>For Club Creator</title>
+        <title>For Club Manager</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
         <style>
             a {
@@ -40,8 +40,8 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Club Code</th>
-                                                <th>Club Name</th>
-                                                <th>Club Founding Date</th>
+                                                <th>Name</th>
+                                                <th>Founding Date</th>
                                                 <th></th>
                                             </tr>
                                         </thead>

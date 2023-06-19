@@ -29,12 +29,30 @@
                     </a>
                 </li>
             </c:if>
-            <li>
-                <a href="<%=request.getContextPath()%>/user?command=ClubManage">
-                    <span class="ti-layout-grid2-thumb"></span>
-                    <span>Club Manage</span>
-                </a>
-            </li>
+            <c:if test="${sessionScope.IsMember != null}">
+                <li>
+                    <a href="<%=request.getContextPath()%>/user?command=IsMember&clubID=${clubID}&clubCreatorID=${clubCreatorID}">
+                        <span class="ti-home"></span>
+                        <span>Overview</span>
+                    </a>
+                </li>
+            </c:if>
+            <c:if test="${sessionScope.IsCreator != null || sessionScope.IsManager != null}">
+                <li>
+                    <a href="<%=request.getContextPath()%>/user?command=ClubManage">
+                        <span class="ti-layout-grid2-thumb"></span>
+                        <span>Club Manage</span>
+                    </a>
+                </li>
+            </c:if>
+            <c:if test="${sessionScope.IsMember != null}">
+                <li>
+                    <a href="<%=request.getContextPath()%>/user?command=ClubManage">
+                        <span class="ti-layout-grid2-thumb"></span>
+                        <span>Club Info</span>
+                    </a>
+                </li>
+            </c:if>
             <li>
                 <a href="<%=request.getContextPath()%>/user?command=ClubManager">
                     <span class="ti-face-smile"></span>
@@ -54,7 +72,7 @@
                 </a>
             </li>
             <li>
-                <a href="<%=request.getContextPath()%>/user/ClubEvent.jsp">
+                <a href="<%=request.getContextPath()%>/user?command=ClubEvent">
                     <span class="ti-gallery"></span>
                     <span>Event</span>
                 </a>
