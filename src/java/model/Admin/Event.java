@@ -21,13 +21,16 @@ public class Event {
     public Event(int eventId) {
         this.eventId = eventId;
     }
-    
-    public Event(int eventId, String eventName, String eventDescription, Date eventDate) {
+
+    public Event(int eventId, int eventStatus, String eventName, String eventDescription, Date eventDate) {
         this.eventId = eventId;
+        this.eventStatus = eventStatus;
         this.eventName = eventName;
         this.eventDescription = eventDescription;
         this.eventDate = eventDate;
     }
+    
+    
     
     public Event(int eventId, int clubId, int eventStatus, String eventName, String eventDescription, Date eventDate) {
         this.eventId = eventId;

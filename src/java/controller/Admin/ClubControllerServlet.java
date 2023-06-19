@@ -127,8 +127,9 @@ public class ClubControllerServlet extends HttpServlet {
     }
 
     private void declineClub(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String clubId = request.getParameter("clubId");
-        new ClubDao().declineClub(clubId);
+        int clubId = Integer.parseInt(request.getParameter("clubId"));
+        Club theClub = new Club(clubId);
+        new ClubDao().declineClub(theClub);
         listClubRequest(request, response);
     }
 

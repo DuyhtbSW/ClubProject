@@ -15,17 +15,12 @@
                         <th>Event Name</th>
                         <th>Date</th>
                         <th></th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <c:forEach var="item" items="${evRe}">
-                        <c:url var="tempLink" value="EventControllerServlet">
-                            <c:param name="command" value="ACCEPT"></c:param>
-                            <c:param name="eventId" value="${item.eventId}"></c:param>    
-                        </c:url>
-                        <c:url var="deleteLink" value="EventControllerServlet">
-                            <c:param name="command" value="DELETE"></c:param>
+                        <c:url var="tempLink" value="NotificationControllerServlet">
+                            <c:param name="command" value="LOADEVENT"></c:param>
                             <c:param name="eventId" value="${item.eventId}"></c:param>    
                         </c:url>
                         <tr>
@@ -33,10 +28,7 @@
                             <td>${item.eventName}</td>
                             <td>${item.eventDate}</td>
                             <td>
-                                <a href="${tempLink}" onclick="if(!(confirm('Sure?'))) return false">Accept</a>
-                            </td>
-                            <td>
-                                <a href="${deleteLink}" onclick="if(!(confirm('Sure?'))) return false">Decline</a>
+                                <a href="${tempLink}">Feedback</a>
                             </td>
                         </tr>
                     </c:forEach>

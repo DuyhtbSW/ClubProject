@@ -4,22 +4,35 @@
  */
 package model.Admin;
 
+import java.util.Date;
+
 /**
  *
  * @author acer
  */
 public class Notification {
-    int notificationId, userId;
-    String title, note;
+    public int notificationId, userId;
+    public String title, note;
+    public Date date;
+    public Boolean view;
 
     public Notification() {
     }
 
-    public Notification(int notificationId, int userId, String title, String note) {
+    public Notification(int userId, String title, String note) {
+        this.userId = userId;
+        this.title = title;
+        this.note = note;
+    }
+
+    
+    public Notification(int notificationId, int userId, String title, String note, Date date, Boolean view) {
         this.notificationId = notificationId;
         this.userId = userId;
         this.title = title;
         this.note = note;
+        this.date = date;
+        this.view = view;
     }
 
     public int getNotificationId() {
@@ -54,10 +67,27 @@ public class Notification {
         this.note = note;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public Boolean getView() {
+        return view;
+    }
+
+    public void setView(Boolean view) {
+        this.view = view;
+    }
+
     @Override
     public String toString() {
-        return "Notification{" + "notificationId=" + notificationId + ", userId=" + userId + ", title=" + title + ", note=" + note + '}';
+        return "Notification{" + "notificationId=" + notificationId + ", userId=" + userId + ", title=" + title + ", note=" + note + ", date=" + date + ", view=" + view + '}';
     }
+
     
     
 }

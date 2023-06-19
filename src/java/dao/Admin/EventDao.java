@@ -127,15 +127,14 @@ public class EventDao {
         }
     }
     
-    public void deleteEvent(String idd) {
+    public void deleteEvent(Event event) {
         ConnectDB db = ConnectDB.getInstance();
         Connection con;
         try {
             String sql = "DELETE FROM Event WHERE EventID = ?";
             con = db.openConnection();
             PreparedStatement statement = con.prepareStatement(sql);
-            int id = Integer.parseInt(idd);
-            statement.setInt(1, id);
+            statement.setInt(1, event.getEventId());
             statement.execute();
             con.close();
             statement.close();

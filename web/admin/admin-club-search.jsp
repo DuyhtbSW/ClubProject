@@ -45,16 +45,16 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <c:if test="${empty The_Club}">
+                                            <c:if test="${empty The_Club}">
                                             <p>No results found.</p> 
                                         </c:if>
-                                            <style>
-                                                p{
-                                                    color: red;
-                                                    font-style: italic;
-                                                    margin: 10px;
-                                                }
-                                            </style>
+                                        <style>
+                                            p{
+                                                color: red;
+                                                font-style: italic;
+                                                margin: 10px;
+                                            }
+                                        </style>
                                         <c:forEach var="item" items="${The_Club}">
                                             <c:url var="tempLink" value="ClubControllerServlet">
                                                 <c:param name="command" value="LOAD"></c:param>
@@ -64,11 +64,11 @@
                                                 <td>${item.clubId}</td>
                                                 <td>${item.clubName}</td>
                                                 <td><c:out value="${MemberDao.countMemberOfClub(item.clubId)}" /></td>
-                                            <td>${item.joinRequest == false ? "Not required" : "Required"}</td>
-                                            <td>${UserDao.getUserName(item.clubCreatorId)}</td>
-                                            <td>
-                                                <a href="${tempLink}">View detail</a>
-                                            </td>
+                                                <td>${UserDao.getUserName(item.clubCreatorId)}</td>
+                                                <td>${item.joinRequest == false ? "Not required" : "Required"}</td>
+                                                <td>
+                                                    <a href="${tempLink}">View detail</a>
+                                                </td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>

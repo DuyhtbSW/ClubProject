@@ -93,6 +93,7 @@ public class EventControllerServlet extends HttpServlet {
         String eventName = request.getParameter("eventName");
         String eventDescription = request.getParameter("eventDescription");
         String eventDateStr = request.getParameter("eventDate");
+        int eventStatus = Integer.parseInt(request.getParameter("eventStatus"));
         Date eventDate = null;
         if (eventDateStr != null && !eventDateStr.isEmpty()) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -103,14 +104,15 @@ public class EventControllerServlet extends HttpServlet {
             }
         }
 
-        Event theEvent = new Event(eventId, eventName, eventDescription, eventDate);
+        Event theEvent = new Event(eventId, eventStatus, eventName, eventDescription, eventDate);
         new EventDao().updateEvent(theEvent);
         loadEvent(request, response);
     }
 
     private void deleteEvent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String eventId = request.getParameter("eventId");
-        new EventDao().deleteEvent(eventId);
+        int eventId = Integer.parseInt(request.getParameter("eventId"));
+        Event event = new Event(eventId);
+        new EventDao().deleteEvent(event);
         listAllEvent(request, response);
     }
 

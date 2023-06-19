@@ -388,7 +388,7 @@ tbody tr:nth-child(even) {
         left: 60px;
         width: calc(100% - 60px);
     }
-    
+
     #sidebar-toggle:checked ~ .sidebar {
         width: 240px;
     }
@@ -402,7 +402,7 @@ tbody tr:nth-child(even) {
         display: flex;
         justify-content: space-between;
     }
-    
+
     #sidebar-toggle:checked ~ .sidebar li {
         display: block;
     }
@@ -420,15 +420,15 @@ tbody tr:nth-child(even) {
     .dash-cards {
         grid-template-columns: repeat(2,1fr);
     }
-    
+
     .card-single {
         margin-bottom: 1rem;
     }
-    
+
     .activity-grid {
         display: block;
     }
-    
+
     .summary {
         margin-top: 1.5rem;
     }
@@ -448,37 +448,41 @@ tbody tr:nth-child(even) {
 }
 
 .activity-card {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
-  box-sizing: border-box;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .table-responsive table {
-  border-collapse: collapse;
-  width: 100%;
+    border-collapse: collapse;
+    width: 100%;
 }
 
 .table-responsive th, td {
-  padding: 10px;
-  text-align: left;
+    padding: 10px;
+    text-align: left;
 }
 
 .table-responsive th {
-  background-color: #ffe678;
-  font-weight: bold;
+    background-color: #ffe678;
+    font-weight: bold;
 }
 
 .table-responsive tr:nth-child(even) {
-  background-color: #f2f2f2;
+    background-color: #f2f2f2;
 }
 
 a {
-  color: #0066cc;
-  text-decoration: none;
+    color: #0066cc;
+    text-decoration: none;
 }
 
 a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
+}
+
+.activity-notification.hidden{
+    display: none;
 }

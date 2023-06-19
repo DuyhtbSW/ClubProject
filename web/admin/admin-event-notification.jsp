@@ -1,5 +1,9 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%-- 
+    Document   : admin-event-notification
+    Created on : Jun 18, 2023, 10:39:15 AM
+    Author     : acer
+--%>
+
 <html lang="vi">
     <head>
         <%@ include file="includes/admin-conditionlogin.jsp" %>
@@ -7,7 +11,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
-        <title>Admin - Club Page</title>
+        <title>Admin - Event Page</title>
     </head>
     <body>
 
@@ -22,7 +26,7 @@
 
                 <section class="recent">
                     <div class="activity-grid">
-                        <%@ include file="includes/club-create.jsp" %>
+                        <%@ include file="includes/notificationEvent.jsp" %>
                         <%@ include file="includes/admin-summary.jsp" %>
                     </div>
                 </section>

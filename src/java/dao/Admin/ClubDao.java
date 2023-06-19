@@ -225,15 +225,14 @@ public class ClubDao {
         return cl;
     }
 
-    public void declineClub(String idd) {
+    public void declineClub(Club club) {
         ConnectDB db = ConnectDB.getInstance();
         Connection con;
         try {
             String sql = "DELETE FROM Clubs WHERE ClubId = ?";
             con = db.openConnection();
             PreparedStatement statement = con.prepareStatement(sql);
-            int id = Integer.parseInt(idd);
-            statement.setInt(1, id);
+            statement.setInt(1, club.getClubId());
             statement.execute();
             con.close();
             statement.close();
@@ -279,5 +278,30 @@ public class ClubDao {
             Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return cl;
+    }
+    
+    public static int getManagerId(int clubId){
+        ConnectDB db = ConnectDB.getInstance();
+        String sql = "Select ClubCreatorID as id from Clubs where clubId = ?";
+        Connection con = null;
+        int id = 0;
+        try {
+            con = db.openConnection();
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setInt(1, clubId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                id = rs.getInt("id");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return id;
     }
 }

@@ -1,5 +1,9 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%-- 
+    Document   : admin-club-notification
+    Created on : Jun 17, 2023, 11:20:35 PM
+    Author     : acer
+--%>
+
 <html lang="vi">
     <head>
         <%@ include file="includes/admin-conditionlogin.jsp" %>
@@ -22,7 +26,7 @@
 
                 <section class="recent">
                     <div class="activity-grid">
-                        <%@ include file="includes/club-create.jsp" %>
+                        <%@ include file="includes/notification.jsp" %>
                         <%@ include file="includes/admin-summary.jsp" %>
                     </div>
                 </section>
