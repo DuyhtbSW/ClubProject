@@ -70,12 +70,12 @@
 
                                     <c:choose>
                                         <c:when test="${currentPage > 1}">
-                                            <a href="<%=request.getContextPath()%>/user?command=ForManager&page=1"><<</a>
-                                            <a href="<%=request.getContextPath()%>/user?command=ForManager&page=${previousPage}"><</a>
+                                            <a href="<%=request.getContextPath()%>/user?command=ForMember&page=1"><<</a>
+                                            <a href="<%=request.getContextPath()%>/user?command=ForMember&page=${previousPage}"><</a>
                                         </c:when>
                                         <c:otherwise>
-                                            <a href="<%=request.getContextPath()%>/user?command=ForManager&page=1"><<</a>
-                                            <a href="<%=request.getContextPath()%>/user?command=ForManager&page=${currentPage}"><</a>
+                                            <a href="<%=request.getContextPath()%>/user?command=ForMember&page=1"><<</a>
+                                            <a href="<%=request.getContextPath()%>/user?command=ForMember&page=${currentPage}"><</a>
                                         </c:otherwise>
                                     </c:choose>
 
@@ -92,12 +92,12 @@
 
                                     <c:choose>
                                         <c:when test="${currentPage < totalPages}">
-                                            <a href="<%=request.getContextPath()%>/user?command=ForManager&page=${nextPage}">></a>
-                                            <a href="<%=request.getContextPath()%>/user?command=ForManager&page=${totalPagess + 1}">>></a>
+                                            <a href="<%=request.getContextPath()%>/user?command=ForMember&page=${nextPage}">></a>
+                                            <a href="<%=request.getContextPath()%>/user?command=ForMember&page=${totalPagess + 1}">>></a>
                                         </c:when>
                                         <c:otherwise>
-                                            <a href="<%=request.getContextPath()%>/user?command=ForManager&page=${currentPage}">></a>
-                                            <a href="<%=request.getContextPath()%>/user?command=ForManager&page=${totalPagess + 1}">>></a>
+                                            <a href="<%=request.getContextPath()%>/user?command=ForMember&page=${currentPage}">></a>
+                                            <a href="<%=request.getContextPath()%>/user?command=ForMember&page=${totalPagess + 1}">>></a>
                                         </c:otherwise>
                                     </c:choose>
                                 </center>

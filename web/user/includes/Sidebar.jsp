@@ -29,7 +29,7 @@
                 <li>
                     <a href="<%=request.getContextPath()%>/user?command=ForCreator">
                         <span class="ti-layout-grid2-thumb"></span>
-                        <span>Club Manager</span>
+                        <span>Club Manager<h6>for Creator</h6></span>
                     </a>
                 </li>
             </c:if>
@@ -37,7 +37,15 @@
                 <li>
                     <a href="<%=request.getContextPath()%>/user?command=ForManager">
                         <span class="ti-layout-grid2-thumb"></span>
-                        <span>Club Manager</span>
+                        <span>Club Manager<h6>for Manager</h6></span>
+                    </a>
+                </li>
+            </c:if>
+            <c:if test="${sessionScope.clubMember != null}">
+                <li>
+                    <a href="<%=request.getContextPath()%>/user?command=ForMember">
+                        <span class="ti-layout-grid2-thumb"></span>
+                        <span>My Club</span>
                     </a>
                 </li>
             </c:if>

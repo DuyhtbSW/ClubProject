@@ -1,11 +1,22 @@
 package model.User;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 public class Member {
 
     private int ID;
     private String userID, clubID, isClubManager, joinDate, status;
 
     public Member() {
+    }
+
+    public Member(int ID, String userID, String clubID, String joinDate) {
+        this.ID = ID;
+        this.userID = userID;
+        this.clubID = clubID;
+        this.joinDate = joinDate;
     }
 
     public Member(int ID, String userID, String clubID, String isClubManager, String joinDate) {
@@ -58,7 +69,16 @@ public class Member {
     }
 
     public String getJoinDate() {
-        return joinDate;
+        String dateStr = joinDate;
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        try {
+            LocalDate localDate = LocalDate.parse(dateStr, inputFormatter);
+            String formattedDate = localDate.format(outputFormatter);
+            return formattedDate;
+        } catch (DateTimeParseException e) {
+            return null;
+        }
     }
 
     public void setJoinDate(String joinDate) {

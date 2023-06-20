@@ -78,7 +78,7 @@
                                 <span class="ti-check-box"></span>
                                 <div>
                                     <h5>Join club request</h5>
-                                    <h4>${totalEvent}</h4>
+                                    <h4>${totalJoinClubRequest}</h4>
                                 </div>
                             </div>
                             <div class="card-footer">
@@ -91,11 +91,11 @@
                                 <span class="ti-reload"></span>
                                 <div>
                                     <h5>Post club request</h5>
-                                    <h4>${totalEvent}</h4>
+                                    <h4>${totalPostClubRequest}</h4>
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <a href="<%=request.getContextPath()%>/user/ClubEvent.jsp">View all</a>
+                                <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&clubID=${club.ID}">View all</a>
                             </div>
                         </div>
                     </div>

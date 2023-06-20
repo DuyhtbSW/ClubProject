@@ -41,20 +41,20 @@
                 <c:if test="${sessionScope.IsCreator != null}">
                     <c:forEach var="m" items="${member}">
                         <tr>
-                            <td>${m.name}</td>
-                            <td>${m.DOB}</td>
-                            <td>${m.gender}</td>
-                            <c:if test="${m.gender == 'Male'}">
+                            <td>${m.clubID}</td>
+                            <td>${m.joinDate}</td>
+                            <td>${m.isClubManager}</td>
+                            <c:if test="${m.isClubManager == 'Male'}">
                                 <td>
                                     <a href="#">Chat with him</a>
                                 </td>
                             </c:if>
-                            <c:if test="${m.gender == 'Female'}">
+                            <c:if test="${m.isClubManager == 'Female'}">
                                 <td>
                                     <a href="#">Chat with her</a>
                                 </td>
                             </c:if>
-                            <c:if test="${m.gender != 'Male' && m.gender != 'Female'}">
+                            <c:if test="${m.isClubManager != 'Male' && m.isClubManager != 'Female'}">
                                 <td>
                                     <a href="#">Chat with ...</a>
                                 </td>
@@ -71,20 +71,20 @@
                 <c:if test="${sessionScope.IsManager != null}">
                     <c:forEach var="m" items="${member}">
                         <tr>
-                            <td>${m.name}</td>
-                            <td>${m.DOB}</td>
-                            <td>${m.gender}</td>
-                            <c:if test="${m.gender == 'Male'}">
+                            <td>${m.clubID}</td>
+                            <td>${m.joinDate}</td>
+                            <td>${m.isClubManager}</td>
+                            <c:if test="${m.isClubManager == 'Male'}">
                                 <td>
                                     <a href="#">Chat with him</a>
                                 </td>
                             </c:if>
-                            <c:if test="${m.gender == 'Female'}">
+                            <c:if test="${m.isClubManager == 'Female'}">
                                 <td>
                                     <a href="#">Chat with her</a>
                                 </td>
                             </c:if>
-                            <c:if test="${m.gender != 'Male' && m.gender != 'Female'}">
+                            <c:if test="${m.isClubManager != 'Male' && m.isClubManager != 'Female'}">
                                 <td>
                                     <a href="#">Chat with ...</a>
                                 </td>
@@ -101,20 +101,20 @@
                 <c:if test="${sessionScope.IsMember != null}">
                     <c:forEach var="m" items="${member}">
                         <tr>
-                            <td>${m.name}</td>
-                            <td>${m.DOB}</td>
-                            <td>${m.gender}</td>
-                            <c:if test="${m.gender == 'Male'}">
+                            <td>${m.clubID}</td>
+                            <td>${m.joinDate}</td>
+                            <td>${m.isClubManager}</td>
+                            <c:if test="${m.isClubManager == 'Male'}">
                                 <td>
                                     <a href="#">Chat with him</a>
                                 </td>
                             </c:if>
-                            <c:if test="${m.gender == 'Female'}">
+                            <c:if test="${m.isClubManager == 'Female'}">
                                 <td>
                                     <a href="#">Chat with her</a>
                                 </td>
                             </c:if>
-                            <c:if test="${m.gender != 'Male' && m.gender != 'Female'}">
+                            <c:if test="${m.isClubManager != 'Male' && m.isClubManager != 'Female'}">
                                 <td>
                                     <a href="#">Chat with ...</a>
                                 </td>

@@ -19,7 +19,7 @@
                 <tr><td>Email:</td><td><input type="email" name="acc" value="${Acc}"></td></tr>
                 <tr><td>Password:</td><td><input type="password" name="pass" value=""></td></tr>
                 <tr><td>Repassword:</td><td><input type="password" name="repass" value=""></td></tr>
-                <tr><td><a href="<%=request.getContextPath()%>/user/Login.jsp">Login</a></td><td><input type="submit" value="Register"/><br>
+                <tr><td><a href="<%=request.getContextPath()%>/user?command=rLogin">Login</a></td><td><input type="submit" value="Register"/><br>
                         <%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></td></tr>
             </table>
         </form>

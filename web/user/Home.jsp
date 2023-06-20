@@ -63,7 +63,7 @@
         <li><a href="<%=request.getContextPath()%>/user?command=Logout">Logout</a></li>
         </c:if>
         <c:if test="${sessionScope.account == null}">
-        <li><a href="<%=request.getContextPath()%>/user/Login.jsp">Login</a></li>
+        <li><a href="<%=request.getContextPath()%>/user?command=rLogin">Login</a></li>
         </c:if>
     <!--<a href="Login.jsp">Login</a>-->
 </body>

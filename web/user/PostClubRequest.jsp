@@ -5,7 +5,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-        <title>Join Club Request - Club</title>
+        <title>Post Club Request - Club</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
         <style>
             a {
@@ -24,7 +24,7 @@
         <div class="main-content">
             <%@ include file="includes/ClubHeader.jsp" %>
             <main>
-                <h2 class="dash-title">Join Club Request</h2>
+                <h2 class="dash-title">Post Club Request</h2>
                 <section class="recent">
                     <h4><a href="<%=request.getContextPath()%>/user?command=ClubManage">Back</a></h4>
                     <div class="activity-grid">
@@ -34,29 +34,28 @@
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Request Date</th>
-                                            <th></th>
+                                            <th>Poster</th>
+                                            <th>Date</th>
+                                            <th>Title</th>
+                                            <th>Description</th>
                                             <th></th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="jr" items="${joinRequest}">
+                                        <c:forEach var="pr" items="${postRequest}">
                                             <tr>
-                                                <td>${jr.userID}</td>
-                                                <td>${jr.joinDate}</td>
+                                                <td>${pr.memberID}</td>
+                                                <td>${pr.date}</td>
+                                                <td>${pr.title}</td>
+                                                <td>${pr.description}</td>
                                                 <td>
-                                                    <a href="<%=request.getContextPath()%>/user?command=JoinRequestAccept&clubID=${clubID}&memberID=${jr.ID}">Accept</a>
+                                                    <a href="<%=request.getContextPath()%>/user?command=PostRequestAccept&pID=${pr.ID}">Accept</a>
                                                 </td>
                                                 <td>
-                                                    <a href="<%=request.getContextPath()%>/user?command=JoinRequestDecline&clubID=${clubID}&memberID=${jr.ID}">Decline</a>
+                                                    <a href="<%=request.getContextPath()%>/user?command=PostRequestDecline&pID=${pr.ID}">Decline</a>
                                                 </td>
-<!--                                                <td>
-                                                    <a href="<%=request.getContextPath()%>/user?command=ClubManage">Back</a>
-                                                </td>-->
-                                            </tr>
-                                        </c:forEach>
+                                            </c:forEach>
                                     </tbody>
                                 </table>
                             </div>

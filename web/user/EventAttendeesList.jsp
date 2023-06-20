@@ -29,6 +29,10 @@
                     <h4><a href="<%=request.getContextPath()%>/user?command=ClubEvent">Back</a></h4>
                     <div class="activity-grid">
                         <div class="activity-card">
+                            <c:if test="${eventAttendees == null}">
+                                <h3>No attendees this event</h3>
+                                <!--<h3><%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></h3>-->
+                            </c:if>
                             <div class="table-responsive">
                                 <table>
                                     <thead>

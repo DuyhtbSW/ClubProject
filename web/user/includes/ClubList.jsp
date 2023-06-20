@@ -13,6 +13,7 @@
                         <th></th>
                         <th></th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </c:if>
                 <c:if test="${sessionScope.IsMember != null}">
@@ -36,6 +37,9 @@
                             <a href="<%=request.getContextPath()%>/user?command=JoinClubRequestList&clubID=${club.ID}">Join club request</a>
                         </td>
                         <td>
+                            <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&clubID=${club.ID}">Post club request</a>
+                        </td>
+                        <td>
                             <a href="#">Remove</a>
                         </td>
                     </tr>
@@ -49,6 +53,9 @@
                         </td>
                         <td>
                             <a href="<%=request.getContextPath()%>/user?command=JoinClubRequestList&clubID=${club.ID}">Join club request</a>
+                        </td>
+                        <td>
+                            <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&clubID=${club.ID}">Post club request</a>
                         </td>
                     </tr>
                 </c:if>
