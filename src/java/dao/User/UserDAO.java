@@ -99,6 +99,20 @@ public class UserDAO {
         }
     }
 
+    public void changePassword(String email, String newPass) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "update Users\n"
+                    + "set UserPassword = ?\n"
+                    + "where UserEmail = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, newPass);
+            ps.setString(2, email);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
     public User getUserByID(int ID) {
         try {
             con = new DBConnect().getConnection();
@@ -695,7 +709,7 @@ public class UserDAO {
         }
         return post;
     }
-    
+
     public void postRequestAccept(String postID) {
         try {
             con = new DBConnect().getConnection();
@@ -1046,14 +1060,14 @@ public class UserDAO {
         }
     }
 
-    public void joinClubSuccess(String clubID, int userID, Date requestDate) {
+    public void joinClubSuccess(int userID, String clubID, Date joinDate) {
         try {
             con = new DBConnect().getConnection();
             String query = "insert into Member values (?, ?, 0, ?, 1)";
             PreparedStatement ps = con.prepareStatement(query);
-            ps.setString(1, clubID);
-            ps.setInt(2, userID);
-            ps.setDate(3, requestDate);
+            ps.setInt(1, userID);
+            ps.setString(2, clubID);
+            ps.setDate(3, joinDate);
             ps.executeUpdate();
         } catch (Exception e) {
         }

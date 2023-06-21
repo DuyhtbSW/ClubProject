@@ -24,7 +24,7 @@
             <input type="hidden" name="command" value="Profile">
             <a href="<%=request.getContextPath()%>/user?command=Home">Home</a>
             <c:if test="${sessionScope.account != null}">
-                <a href="user/CreateClub.jsp">Create Club</a>
+                <a href="<%=request.getContextPath()%>/user?command=rCreateClub">Create Club</a>
             </c:if><br><br>
             <table border="1" width="700">
                 <thead>
@@ -56,7 +56,7 @@
                                 <td>Private</td>
                             </c:if>
                             <td>
-                                <a href="<%=request.getContextPath()%>/user?command=ViewDetailsClub&cID=${c.ID}&cCreatorID=${c.creatorID}">View Details</a>
+                                <a href="<%=request.getContextPath()%>/user?command=ViewDetailsClub&cID=${c.ID}&cCID=${c.creatorID}">View Details</a>
                             </td>
                         </tr>
                     </c:forEach>

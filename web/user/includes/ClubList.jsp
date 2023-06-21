@@ -34,10 +34,12 @@
                             <a href="<%=request.getContextPath()%>/user?command=ViewClubDetails">View detail</a>
                         </td>
                         <td>
-                            <a href="<%=request.getContextPath()%>/user?command=JoinClubRequestList&clubID=${club.ID}">Join club request</a>
+                            <a href="<%=request.getContextPath()%>/user?command=JoinClubRequestList">Join club request</a>
+                            <!--<a href="<%=request.getContextPath()%>/user?command=JoinClubRequestList&cID=${club.ID}">Join club request</a>-->
                         </td>
                         <td>
-                            <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&clubID=${club.ID}">Post club request</a>
+                            <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList">Post club request</a>
+                            <!--<a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&cID=${club.ID}">Post club request</a>-->
                         </td>
                         <td>
                             <a href="#">Remove</a>

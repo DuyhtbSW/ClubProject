@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -52,24 +53,67 @@
                                 </table>
                             </div><br>
                             <div class="table-responsive">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th></th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach var="ea" items="${eventAttendees}">
+                                <center>
+                                    <table>
+                                        <thead>
                                             <tr>
-                                                <td>${ea.name}</td>
-                                                <td></td>
-                                                <td></td>
+                                                <th>Name</th>
+                                                <th></th>
+                                                <th></th>
                                             </tr>
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            <c:set var="pageSize" value="5" />
+                                            <c:set var="currentPage" value="${param.page eq null ? 1 : param.page}" />
+                                            <c:set var="startIndex" value="${(currentPage - 1) * pageSize}" />
+                                            <c:set var="endIndex" value="${(currentPage * pageSize) - 1}" />
+                                            <c:forEach var="ea" items="${eventAttendees}" begin="${startIndex}" end="${endIndex}">
+                                                <tr>
+                                                    <td>${ea.name}</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table><br>
+                                    <c:set var="totalPages" value="${eventAttendeess div pageSize}" />
+                                    <fmt:parseNumber var="totalPagess" value="${totalPages}" type="number" integerOnly="true"/>
+                                    <c:set var="previousPage" value="${currentPage - 1}" />
+                                    <c:set var="nextPage" value="${currentPage + 1}" />
+
+                                    <c:choose>
+                                        <c:when test="${currentPage > 1}">
+                                            <a href="<%=request.getContextPath()%>/user?command=EventAttendeesList&eID=${eventID}&page=1"><<</a>
+                                            <a href="<%=request.getContextPath()%>/user?command=EventAttendeesList&eID=${eventID}&page=${previousPage}"><</a>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <a href="<%=request.getContextPath()%>/user?command=EventAttendeesList&eID=${eventID}&page=1"><<</a>
+                                            <a href="<%=request.getContextPath()%>/user?command=EventAttendeesList&eID=${eventID}&page=${currentPage}"><</a>
+                                        </c:otherwise>
+                                    </c:choose>
+
+                                    <c:forEach var="page" begin="1" end="${totalPagess + 1}">
+                                        <c:choose>
+                                            <c:when test="${page == currentPage}">
+                                                <b>${page}</b>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <!--<a href="<%=request.getContextPath()%>/user?command=EventAttendeesList&page=${page}">${page}</a>-->
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+
+                                    <c:choose>
+                                        <c:when test="${currentPage < totalPages}">
+                                            <a href="<%=request.getContextPath()%>/user?command=EventAttendeesList&eID=${eventID}&page=${nextPage}">></a>
+                                            <a href="<%=request.getContextPath()%>/user?command=EventAttendeesList&eID=${eventID}&page=${totalPagess + 1}">>></a>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <a href="<%=request.getContextPath()%>/user?command=EventAttendeesList&eID=${eventID}&page=${currentPage}">></a>
+                                            <a href="<%=request.getContextPath()%>/user?command=EventAttendeesList&eID=${eventID}&page=${totalPagess + 1}">>></a>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </center>
                             </div>
                         </div>
                     </div>

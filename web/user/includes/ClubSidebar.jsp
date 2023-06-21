@@ -15,7 +15,7 @@
         <ul>
             <c:if test="${sessionScope.IsCreator != null}">
                 <li>
-                    <a href="<%=request.getContextPath()%>/user?command=IsCreator&clubID=${clubID}&clubCreatorID=${clubCreatorID}">
+                    <a href="<%=request.getContextPath()%>/user?command=IsCreator&cID=${clubID}&cCID=${clubCreatorID}">
                         <span class="ti-home"></span>
                         <span>Overview</span>
                     </a>
@@ -23,7 +23,7 @@
             </c:if>
             <c:if test="${sessionScope.IsManager != null}">
                 <li>
-                    <a href="<%=request.getContextPath()%>/user?command=IsManager&clubID=${clubID}&clubCreatorID=${clubCreatorID}">
+                    <a href="<%=request.getContextPath()%>/user?command=IsManager&cID=${clubID}&cCID=${clubCreatorID}">
                         <span class="ti-home"></span>
                         <span>Overview</span>
                     </a>
@@ -31,7 +31,7 @@
             </c:if>
             <c:if test="${sessionScope.IsMember != null}">
                 <li>
-                    <a href="<%=request.getContextPath()%>/user?command=IsMember&clubID=${clubID}&clubCreatorID=${clubCreatorID}">
+                    <a href="<%=request.getContextPath()%>/user?command=IsMember&cID=${clubID}&cCID=${clubCreatorID}">
                         <span class="ti-home"></span>
                         <span>Overview</span>
                     </a>

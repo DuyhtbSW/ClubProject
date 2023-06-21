@@ -19,7 +19,7 @@
                 <tr><td>Email:</td><td><input type="email" name="acc" value="${cAcc != null ? cAcc : ""}"></td></tr>
                 <tr><td>Password:</td><td><input type="password" name="pass" value="${cPass != null ? cPass : ""}"></td></tr>
                 <tr><td><a href="<%=request.getContextPath()%>/user?command=Home">Home</a></td><td><input type="checkbox" name="remember">Remember me</td></tr>
-                <tr><td><a href="<%=request.getContextPath()%>/user?command=Regist">Register</a></td><td><input type="submit" value="Login"/><br>
+                <tr><td><a href="<%=request.getContextPath()%>/user?command=Regist">Register</a></td><td><input type="submit" value="Login"/>   <a href="<%=request.getContextPath()%>/user?command=rForgotPass">Forgot password?</a><br>
                         <%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></td></tr>
             </table>
         </form>

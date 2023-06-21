@@ -57,7 +57,7 @@
                                                     <td>${c.name}</td>
                                                     <td>${c.dateCreated}</td>
                                                     <td>
-                                                        <a href="<%=request.getContextPath()%>/user?command=IsCreator&clubID=${c.ID}&clubCreatorID=${c.creatorID}">Manage</a>
+                                                        <a href="<%=request.getContextPath()%>/user?command=IsCreator&cID=${c.ID}&cCID=${c.creatorID}">Manage</a>
                                                     </td>
                                                 </tr>
                                             </c:forEach>

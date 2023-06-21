@@ -25,7 +25,7 @@
             <main>
                 <h2 class="dash-title">Posts List</h2>
                 <section class="recent">
-                    <h4><a href="<%=request.getContextPath()%>/user/CreatePost.jsp">Create Post</a></h4>
+                    <h4><a href="<%=request.getContextPath()%>/user?command=rCreatePost">Create Post</a></h4>
                     <div class="activity-grid">
                         <%@ include file="includes/PostList.jsp" %>
                     </div>

@@ -15,7 +15,6 @@
         <div class="main-content">
             <%@ include file="includes/ClubHeader.jsp" %>
             <main>
-
                 <h2 class="dash-title">Overview</h2>
                 <c:if test="${sessionScope.IsCreator != null || sessionScope.IsManager != null}">
                     <div class="dash-cards">
@@ -82,7 +81,7 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <a href="<%=request.getContextPath()%>/user?command=JoinClubRequestList&clubID=${clubID}">View all</a>
+                                <a href="<%=request.getContextPath()%>/user?command=JoinClubRequestList">View all</a>
                             </div>
                         </div>
 
@@ -95,7 +94,7 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&clubID=${club.ID}">View all</a>
+                                <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList">View all</a>
                             </div>
                         </div>
                     </div>
