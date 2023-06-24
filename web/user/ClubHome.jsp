@@ -20,7 +20,8 @@
                     <div class="dash-cards">
                         <div class="card-single">
                             <div class="card-body">
-                                <span class="ti-briefcase"></span>
+                                <!--<span class="ti-briefcase"></span>-->
+                                <span class="ti-face-smile"></span>
                                 <div>
                                     <h5>Managers</h5>
                                     <h4>${totalManager}</h4>
@@ -33,7 +34,8 @@
 
                         <div class="card-single">
                             <div class="card-body">
-                                <span class="ti-check-box"></span>
+                                <!--<span class="ti-check-box"></span>-->
+                                <span class="ti-comments-smiley"></span>
                                 <div>
                                     <h5>Members</h5>
                                     <h4>${totalMember}</h4>
@@ -46,7 +48,8 @@
 
                         <div class="card-single">
                             <div class="card-body">
-                                <span class="ti-reload"></span>
+                                <!--<span class="ti-reload"></span>-->
+                                <span class="ti-layout-list-thumb-alt"></span>
                                 <div>
                                     <h5>Posts</h5>
                                     <h4>${totalPost}</h4>
@@ -61,7 +64,8 @@
                     <div class="dash-cards">
                         <div class="card-single">
                             <div class="card-body">
-                                <span class="ti-briefcase"></span>
+                                <!--<span class="ti-briefcase"></span>-->
+                                <span class="ti-gallery"></span>
                                 <div>
                                     <h5>Events</h5>
                                     <h4>${totalEvent}</h4>
@@ -74,7 +78,8 @@
 
                         <div class="card-single">
                             <div class="card-body">
-                                <span class="ti-check-box"></span>
+                                <!--<span class="ti-check-box"></span>-->
+                                <span class="ti-reload"></span>
                                 <div>
                                     <h5>Join club request</h5>
                                     <h4>${totalJoinClubRequest}</h4>

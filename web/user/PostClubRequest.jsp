@@ -56,10 +56,10 @@
                                                     <td>${pr.title}</td>
                                                     <td>${pr.description}</td>
                                                     <td>
-                                                        <a href="<%=request.getContextPath()%>/user?command=PostRequestAccept&pID=${pr.ID}">Accept</a>
+                                                        <a href="<%=request.getContextPath()%>/user?command=PostRequestAccept&pID=${pr.ID}&mID=${pr.clubID}">Accept</a>
                                                     </td>
                                                     <td>
-                                                        <a href="<%=request.getContextPath()%>/user?command=PostRequestDecline&pID=${pr.ID}">Decline</a>
+                                                        <a href="<%=request.getContextPath()%>/user?command=PostRequestDecline&pID=${pr.ID}&mID=${pr.clubID}">Decline</a>
                                                     </td>
                                                 </c:forEach>
                                         </tbody>

@@ -18,7 +18,7 @@ public class SendEmail {
         return String.format("%06d", number);
     }
 
-    public void sendEmail(String email, String OTP) {
+    public void sendEmail(String email, String OTP, String content) {
 
         final String fromEmail = "student.club.management105@gmail.com";
         final String password = "jdbuffoudhhnhcbq";
@@ -48,7 +48,8 @@ public class SendEmail {
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
             msg.setSubject("OTP Verification Code [" + System.currentTimeMillis() + "]");
 //            msg.setReplyTo(InternetAddress.parse(fromEmail, false));
-            String emailContent = "<h1>OTP code to reset your password is: " + OTP + "</h1>";
+            String emailContent = "<h1>" + content + " is: " + OTP + "</h1>";
+//            String emailContent = "<h1>OTP code to reset your password is: " + OTP + "</h1>";
             msg.setContent(emailContent, "text/html");
             Transport.send(msg);
         } catch (Exception e) {

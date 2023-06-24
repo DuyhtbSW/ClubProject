@@ -50,9 +50,9 @@
                                             <c:set var="currentPage" value="${param.page eq null ? 1 : param.page}" />
                                             <c:set var="startIndex" value="${(currentPage - 1) * pageSize}" />
                                             <c:set var="endIndex" value="${(currentPage * pageSize) - 1}" />
-                                            <c:forEach var="c" items="${clubManager}" begin="${startIndex}" end="${endIndex}">
+                                            <c:forEach var="c" items="${clubManager}" begin="${startIndex}" end="${endIndex}" varStatus="loop">
                                                 <tr>
-                                                    <td>${c.ID}</td>
+                                                    <td>${loop.index + 1}</td>
                                                     <td>${c.code}</td>
                                                     <td>${c.name}</td>
                                                     <td>${c.dateCreated}</td>

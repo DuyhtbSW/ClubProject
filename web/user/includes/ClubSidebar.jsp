@@ -78,6 +78,12 @@
                 </a>
             </li>
             <li>
+                <a href="<%=request.getContextPath()%>/user?command=ClubRating">
+                    <span class="ti-check-box"></span>
+                    <span>Rating</span>
+                </a>
+            </li>
+            <li>
                 <a href="<%=request.getContextPath()%>/user?command=ExitClub">
                     <span class="ti-unlink"></span>
                     <span>Exit</span>

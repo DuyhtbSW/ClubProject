@@ -13,7 +13,7 @@
     <body>
     <center>
         <h1>Profile</h1>
-        <form action="user" method="get">
+        <form action="<%=request.getContextPath()%>/user" method="get">
             <input type="hidden" name="command" value="LoadEditProfile">
             <table border="1" width="200">
                 <tr><td>Name:</td><td><input type="text" name="name" value="${user.name}" readonly=""></td></tr>

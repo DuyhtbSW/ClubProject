@@ -19,8 +19,9 @@
         <h1>Club Details</h1>
         <form action="user" method="get">
             <input type="hidden" name="command" value="JoinClub">
-            <input type="hidden" name="clubID" value="${club.ID}">
-            <input type="hidden" name="clubCreatorID" value="${club.creatorID}">
+            <input type="hidden" name="cID" value="${club.ID}">
+            <input type="hidden" name="cN" value="${club.name}">
+            <input type="hidden" name="cCID" value="${club.creatorID}">
             <table border="1" width="300">
                 <tr><td>Club Code:</td><td><input type="text" name="" value="${club.code}" readonly=""></td></tr>
                 <tr><td>Club Name:</td><td><textarea rows="2" cols="21" readonly="">${club.name}</textarea></td></tr>

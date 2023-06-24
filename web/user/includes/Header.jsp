@@ -8,8 +8,11 @@
     </div>
 
     <div class="social-icons">
-        <span class="ti-bell"></span>
-        <span class="ti-comment"></span>
-        <div></div>
+        <a href="<%=request.getContextPath()%>/user?command=Notification">
+            <span class="ti-bell"></span>
+        </a>
+        <div>1</div>
+        <!--<span class="ti-comment"></span>-->
+        <!--<div></div>-->
     </div>
 </header>

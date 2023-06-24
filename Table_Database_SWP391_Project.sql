@@ -72,7 +72,7 @@ PostCommentID int identity(1,1) NOT NULL,
 CommentContent nvarchar(255) NOT NULL,
 CommentDate date,
 PostID int NOT NULL,
-CommenterID int NOT NULL,
+CommentorID int NOT NULL,
 primary key(PostCommentID),
 foreign key (PostID) references Post (PostID),
 foreign key (CommenterID) references Member (MemberID)

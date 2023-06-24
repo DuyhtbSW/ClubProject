@@ -12,8 +12,10 @@ import model.User.Member;
 import model.User.Event;
 import model.User.Club;
 import model.User.EventAttendees;
+import model.User.Notification;
 import model.User.Post;
 import model.User.PostComment;
+import model.User.Rating;
 import model.User.User;
 
 public class UserDAO {
@@ -26,6 +28,8 @@ public class UserDAO {
     private ArrayList<PostComment> postComment;
     private ArrayList<Event> event;
     private ArrayList<EventAttendees> eventAttendees;
+    private ArrayList<Rating> rating;
+    private ArrayList<Notification> notification;
 
     public User checkUserLogin(String acc, String pass) {
         try {
@@ -135,6 +139,26 @@ public class UserDAO {
             con = new DBConnect().getConnection();
             String query = "select * from Clubs\n" + "where ClubStatus = 1";
             PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                club.add(new Club(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8)));
+            }
+        } catch (Exception e) {
+        }
+        return club;
+    }
+
+    public ArrayList<Club> searchClub(String search) {
+        try {
+            club = new ArrayList<>();
+            con = new DBConnect().getConnection();
+            String query = "select * from Clubs\n"
+                    + "where ClubCode like ? or ClubName like ? or DateCreated like ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, "%" + search + "%");
+            ps.setString(2, "%" + search + "%");
+            ps.setString(3, "%" + search + "%");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 club.add(new Club(rs.getInt(1), rs.getString(2), rs.getString(3),
@@ -703,7 +727,7 @@ public class UserDAO {
                 String memberID = rs.getString(5);
                 String sClubID = rs.getString(6);
                 String posterName = getNameFromMemberID(memberID);
-                post.add(new Post(postID, postTitle, postDescription, postDate, posterName, sClubID));
+                post.add(new Post(postID, postTitle, postDescription, postDate, posterName, memberID));
             }
         } catch (Exception e) {
         }
@@ -744,6 +768,23 @@ public class UserDAO {
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, userID);
             ps.setString(2, clubID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+        return 0;
+    }
+
+    public int getUserID(int memberID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "SELECT UserID\n"
+                    + "FROM Member\n"
+                    + "WHERE MemberID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, memberID);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 return rs.getInt(1);
@@ -1378,6 +1419,127 @@ public class UserDAO {
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, eventID);
             ps.setInt(2, memberID);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public ArrayList<Rating> getRatingFromClubID(String clubID) {
+        try {
+            rating = new ArrayList<>();
+            con = new DBConnect().getConnection();
+            String query = "select * from Rating\n" + "where ClubID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, clubID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                rating.add(new Rating(rs.getInt(1), rs.getString(2),
+                        rs.getString(3), rs.getString(4), rs.getString(5)));
+            }
+        } catch (Exception e) {
+        }
+        return rating;
+    }
+
+    public Rating getMyRating(int memberID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "select * from Rating\n" + "where MemberID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, memberID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return new Rating(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), rs.getString(5));
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    public Rating getRating(String rID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "select * from Rating\n" + "where RatingID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, rID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return new Rating(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), rs.getString(5));
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    public void insertRating(String vote, String note, int memberID, String clubID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "insert into Rating values (?, ?, ?, ?)";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, vote);
+            ps.setString(2, note);
+            ps.setInt(3, memberID);
+            ps.setString(4, clubID);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void editRating(String rVote, String rNote, String ratingID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "update Rating\n"
+                    + "set Vote = ?,\n"
+                    + "Note = ?\n"
+                    + "where RatingID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, rVote);
+            ps.setString(2, rNote);
+            ps.setString(3, ratingID);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void deleteRating(String ratingID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "delete Rating\n" + "where RatingID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, ratingID);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public ArrayList<Notification> getAllNotification(int userID) {
+        try {
+            notification = new ArrayList<>();
+            con = new DBConnect().getConnection();
+            String query = "select * from [Notification]\n" + "where UserID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                notification.add(new Notification(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), rs.getString(5), rs.getString(5)));
+            }
+        } catch (Exception e) {
+        }
+        return notification;
+    }
+
+    public void insertNotification(String title, String note, int userID, Date date) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "insert into [Notification] values (?, ?, ?, ?, 0)";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, title);
+            ps.setString(2, note);
+            ps.setInt(3, userID);
+            ps.setDate(4, date);
             ps.executeUpdate();
         } catch (Exception e) {
         }

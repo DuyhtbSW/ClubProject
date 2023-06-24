@@ -49,6 +49,7 @@
             <c:if test="${sessionScope.account.name != null}">
             <li><a href="<%=request.getContextPath()%>/user?command=LoadProfile">Hello ${sessionScope.account.name}</a></li>
             </c:if>
+            <li><a href="<%=request.getContextPath()%>/user?command=Notification">Notification</a></li>
             <%--<c:if test="${sessionScope.account.name == null}">--%>
             <!--<li><a href="user?command=LoadProfile">Hello ${sessionScope.account.email}</a></li>-->
         <%--</c:if>--%>

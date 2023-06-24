@@ -89,7 +89,7 @@
                                                         <td>${pc.postID}</td>
                                                         <td>${pc.date}</td>
                                                         <td>
-                                                            <form action="user" method="get">
+                                                            <form action="<%=request.getContextPath()%>/user" method="get">
                                                                 <input type="hidden" name="command" value="EditComment">
                                                                 <!--<input type="hidden" name="comment" value="${comment}">-->
                                                                 <input type="hidden" name="pID" value="${postID}">
@@ -119,7 +119,7 @@
                                                                     <a href="<%=request.getContextPath()%>/user?command=LoadEditComment&pID=${postID}&pcID=${pc.ID}">Edit</a>
                                                                 </td>
                                                                 <td>
-                                                                    <a href="<%=request.getContextPath()%>/user?command=DeleteComment&pID=${postID}&pcID=${pc.ID}">Remove</a>
+                                                                    <a href="<%=request.getContextPath()%>/user?command=DeleteComment&pID=${postID}&pcID=${pc.ID}&cmtID=${pc.commentorID}">Remove</a>
                                                                 </td>
                                                             </c:when>
                                                             <c:when test="${sessionScope.IsCreator != null || sessionScope.IsManager != null}">
@@ -128,7 +128,7 @@
                                                                 <td>${pc.content}</td>
                                                                 <td></td>
                                                                 <td>
-                                                                    <a href="<%=request.getContextPath()%>/user?command=DeleteComment&pID=${postID}&pcID=${pc.ID}">Remove</a>
+                                                                    <a href="<%=request.getContextPath()%>/user?command=DeleteComment&pID=${postID}&pcID=${pc.ID}&cmtID=${pc.commentorID}">Remove</a>
                                                                 </td>
                                                             </c:when>
                                                             <c:otherwise>
