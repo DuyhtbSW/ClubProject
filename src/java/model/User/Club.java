@@ -7,7 +7,7 @@ import java.time.format.DateTimeParseException;
 public class Club {
 
     private int ID;
-    private String code, name, description, creatorID, dateCreated, status, joinRequest;
+    private String code, name, description, creatorID, dateCreated, status, joinRequest, createRequest, createStatus, removeStatus, img;
 
     public Club() {
     }
@@ -30,6 +30,21 @@ public class Club {
         this.dateCreated = dateCreated;
         this.status = status;
         this.joinRequest = joinRequest;
+    }
+
+    public Club(int ID, String code, String name, String description, String creatorID, String dateCreated, String status, String joinRequest, String createRequest, String createStatus, String removeStatus, String img) {
+        this.ID = ID;
+        this.code = code;
+        this.name = name;
+        this.description = description;
+        this.creatorID = creatorID;
+        this.dateCreated = dateCreated;
+        this.status = status;
+        this.joinRequest = joinRequest;
+        this.createRequest = createRequest;
+        this.createStatus = createStatus;
+        this.removeStatus = removeStatus;
+        this.img = img;
     }
 
     public int getID() {
@@ -105,8 +120,40 @@ public class Club {
         this.joinRequest = joinRequest;
     }
 
+    public String getCreateRequest() {
+        return createRequest;
+    }
+
+    public void setCreateRequest(String createRequest) {
+        this.createRequest = createRequest;
+    }
+
+    public String getCreateStatus() {
+        return createStatus;
+    }
+
+    public void setCreateStatus(String createStatus) {
+        this.createStatus = createStatus;
+    }
+
+    public String getRemoveStatus() {
+        return removeStatus;
+    }
+
+    public void setRemoveStatus(String removeStatus) {
+        this.removeStatus = removeStatus;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
     @Override
     public String toString() {
-        return "Club{" + "ID=" + ID + ", code=" + code + ", name=" + name + ", description=" + description + ", creatorID=" + creatorID + ", dateCreated=" + dateCreated + ", status=" + status + ", joinRequest=" + joinRequest + '}';
+        return "Club{" + "ID=" + ID + ", code=" + code + ", name=" + name + ", description=" + description + ", creatorID=" + creatorID + ", dateCreated=" + dateCreated + ", status=" + status + ", joinRequest=" + joinRequest + ", createRequest=" + createRequest + ", createStatus=" + createStatus + ", removeStatus=" + removeStatus + ", img=" + img + '}';
     }
 }

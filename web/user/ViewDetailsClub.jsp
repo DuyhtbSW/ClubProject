@@ -31,7 +31,19 @@
                 <tr><td>Club Creator:</td><td><input type="text" name="" value="${clubCreatorName}" readonly=""></td></tr>
                 <tr><td>Date Created:</td><td><input type="text" name="" value="${club.dateCreated}" readonly=""></td></tr>
                 <tr><td><a href="user?command=ClubsList">Back</a></td><td><input type="submit" value="Join"/><br>
-                        <%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></td></tr>
+                        <%--<%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%>--%>
+                        <%
+                            String warning = (String) request.getSession().getAttribute("warning");
+                            if (warning != null && !warning.isEmpty()) {
+                        %>
+                        <div class="warning-message">
+                            <%=warning%>
+                        </div>
+                        <%
+                            // Xóa thông báo sau khi hiển thị
+                            request.getSession().removeAttribute("warning");
+                        }
+                        %></td></tr>
             </table>
         </form>
     </center>

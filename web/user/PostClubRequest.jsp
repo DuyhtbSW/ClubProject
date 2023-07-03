@@ -68,39 +68,74 @@
                                     <fmt:parseNumber var="totalPagess" value="${totalPages}" type="number" integerOnly="true"/>
                                     <c:set var="previousPage" value="${currentPage - 1}" />
                                     <c:set var="nextPage" value="${currentPage + 1}" />
-
-                                    <c:choose>
-                                        <c:when test="${currentPage > 1}">
-                                            <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=1"><<</a>
-                                            <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${previousPage}"><</a>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=1"><<</a>
-                                            <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${currentPage}"><</a>
-                                        </c:otherwise>
-                                    </c:choose>
-
-                                    <c:forEach var="page" begin="1" end="${totalPagess + 1}">
+                                    <c:if test="${totalPages % 2 == 0}">
                                         <c:choose>
-                                            <c:when test="${page == currentPage}">
-                                                <b>${page}</b>
+                                            <c:when test="${currentPage > 1}">
+                                                <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=1"><<</a>
+                                                <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${previousPage}"><</a>
                                             </c:when>
                                             <c:otherwise>
-                                                <!--<a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${page}">${page}</a>-->
+                                                <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=1"><<</a>
+                                                <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${currentPage}"><</a>
                                             </c:otherwise>
                                         </c:choose>
-                                    </c:forEach>
 
-                                    <c:choose>
-                                        <c:when test="${currentPage < totalPages}">
-                                            <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${nextPage}">></a>
-                                            <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${totalPagess + 1}">>></a>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${currentPage}">></a>
-                                            <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${totalPagess + 1}">>></a>
-                                        </c:otherwise>
-                                    </c:choose>
+                                        <c:forEach var="page" begin="1" end="${totalPagess}">
+                                            <c:choose>
+                                                <c:when test="${page == currentPage}">
+                                                    <b>${page}</b>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <!--<a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${page}">${page}</a>-->
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>
+
+                                        <c:choose>
+                                            <c:when test="${currentPage < totalPages}">
+                                                <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${nextPage}">></a>
+                                                <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${totalPagess}">>></a>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${currentPage}">></a>
+                                                <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${totalPagess}">>></a>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:if>
+                                    <c:if test="${totalPages % 2 != 0}">
+                                        <c:choose>
+                                            <c:when test="${currentPage > 1}">
+                                                <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=1"><<</a>
+                                                <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${previousPage}"><</a>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=1"><<</a>
+                                                <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${currentPage}"><</a>
+                                            </c:otherwise>
+                                        </c:choose>
+
+                                        <c:forEach var="page" begin="1" end="${totalPagess + 1}">
+                                            <c:choose>
+                                                <c:when test="${page == currentPage}">
+                                                    <b>${page}</b>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <!--<a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${page}">${page}</a>-->
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>
+
+                                        <c:choose>
+                                            <c:when test="${currentPage < totalPages}">
+                                                <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${nextPage}">></a>
+                                                <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${totalPagess + 1}">>></a>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${currentPage}">></a>
+                                                <a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&page=${totalPagess + 1}">>></a>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:if>
                                 </center>
                             </div>
                         </div>

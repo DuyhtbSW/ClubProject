@@ -31,7 +31,19 @@
                     <div class="activity-grid">
                         <div class="activity-card">
                             <c:if test="${warning != null}">
-                                <h3><%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></h3>
+                                <!--<h3><%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></h3>-->
+                                <%
+                                    String warning = (String) request.getSession().getAttribute("warning");
+                                    if (warning != null && !warning.isEmpty()) {
+                                %>
+                                <div class="warning-message">
+                                    <h3><%=warning%></h3>
+                                </div>
+                                <%
+                                    // Xóa thông báo sau khi hiển thị
+                                    request.getSession().removeAttribute("warning");
+                                }
+                                %>
                             </c:if>
                             <div class="table-responsive">
                                 <table>
@@ -48,8 +60,18 @@
                                         <input type="hidden" name="command" value="EditPost">
                                         <input type="hidden" name="pID" value="${postID}">
                                         <tr>
-                                            <td><textarea rows="3" cols="27" name="title">${post.title}</textarea></td>
-                                            <td><textarea rows="3" cols="30" name="description">${post.description}</textarea></td>
+                                            <c:if test="${title == null}">
+                                                <td><textarea rows="3" cols="27" name="title">${post.title}</textarea></td>
+                                                </c:if>
+                                                <c:if test="${title != null}">
+                                                <td><textarea rows="3" cols="27" name="title"></textarea></td>
+                                                </c:if>
+                                                <c:if test="${description == null}">
+                                                <td><textarea rows="3" cols="30" name="description">${post.description}</textarea></td>
+                                                </c:if>
+                                                <c:if test="${description != null}">
+                                                <td><textarea rows="3" cols="30" name="description"></textarea></td>
+                                                </c:if>
                                             <td>
                                                 <input type="submit" value="Save"/>
                                             </td>

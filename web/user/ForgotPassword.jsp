@@ -20,8 +20,20 @@
                     <input type="hidden" name="command" value="NextForgotPass">
                     <table border="1" width="200">
                         <tr><td>Email:</td><td><input type="email" name="email" value="" placeholder="Enter email"></td></tr>
-                        <tr><td><a href="<%=request.getContextPath()%>/user?command=rLogin">Back</a></td><td><input type="submit" value="Next"/><br>
-                                <%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></td></tr>
+                        <tr><td><a href="<%=request.getContextPath()%>/user?command=${fr}">Back</a></td><td><input type="submit" value="Next"/><br>
+                                <%--<%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%>--%>
+                            <%
+                            String warning = (String) request.getSession().getAttribute("warning");
+                            if (warning != null && !warning.isEmpty()) {
+                        %>
+                        <div class="warning-message">
+                            <%=warning%>
+                        </div>
+                        <%
+                            // Xóa thông báo sau khi hiển thị
+                            request.getSession().removeAttribute("warning");
+                        }
+                        %></td></tr>
                     </table>
                 </form>
             </c:if>
@@ -31,7 +43,19 @@
                     <table border="1" width="200">
                         <tr><td>OTP:</td><td><input type="text" name="otp" value="" placeholder="Enter OTP"></td></tr>
                         <tr><td><a href="<%=request.getContextPath()%>/user?command=rForgotPass">Back</a></td><td><input type="submit" value="Next"/><br>
-                                <%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></td></tr>
+                                <%--<%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%>--%>
+                            <%
+                            String warning = (String) request.getSession().getAttribute("warning");
+                            if (warning != null && !warning.isEmpty()) {
+                        %>
+                        <div class="warning-message">
+                            <%=warning%>
+                        </div>
+                        <%
+                            // Xóa thông báo sau khi hiển thị
+                            request.getSession().removeAttribute("warning");
+                        }
+                        %></td></tr>
                     </table>
                 </form>
             </c:if>
@@ -42,8 +66,20 @@
                 <table border="1" width="309">
                     <tr><td>New Password:</td><td><input type="text" name="nPass" value="" placeholder="Enter new password"></td></tr>
                     <tr><td>Confirm Password:</td><td><input type="text" name="cfPass" value="" placeholder="Confirm new password"></td></tr>
-                    <tr><td><a href="<%=request.getContextPath()%>/user?command=NextForgotPass">Back</a></td><td><input type="submit" value="Change"/><br>
-                            <%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></td></tr>
+                    <tr><td><a href="<%=request.getContextPath()%>/user?command=rForgotsPass">Back</a></td><td><input type="submit" value="Change"/><br>
+                            <%--<%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%>--%>
+                        <%
+                            String warning = (String) request.getSession().getAttribute("warning");
+                            if (warning != null && !warning.isEmpty()) {
+                        %>
+                        <div class="warning-message">
+                            <%=warning%>
+                        </div>
+                        <%
+                            // Xóa thông báo sau khi hiển thị
+                            request.getSession().removeAttribute("warning");
+                        }
+                        %></td></tr>
                 </table>
             </form>
         </c:if>

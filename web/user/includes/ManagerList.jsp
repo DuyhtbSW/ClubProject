@@ -51,17 +51,17 @@
                                 <td>${m.isClubManager}</td>
                                 <c:if test="${m.isClubManager == 'Male'}">
                                     <td>
-                                        <a href="#">Chat with him</a>
+                                        <a href="<%=request.getContextPath()%>/user?command=LoadChat&mID=${m.ID}">Chat with him</a>
                                     </td>
                                 </c:if>
                                 <c:if test="${m.isClubManager == 'Female'}">
                                     <td>
-                                        <a href="#">Chat with her</a>
+                                        <a href="<%=request.getContextPath()%>/user?command=LoadChat&mID=${m.ID}">Chat with her</a>
                                     </td>
                                 </c:if>
                                 <c:if test="${m.isClubManager != 'Male' && m.isClubManager != 'Female'}">
                                     <td>
-                                        <a href="#">Chat with ...</a>
+                                        <a href="<%=request.getContextPath()%>/user?command=LoadChat&mID=${m.ID}">Chat with ...</a>
                                     </td>
                                 </c:if>
                                 <td>

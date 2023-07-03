@@ -42,7 +42,7 @@
                             <!--<a href="<%=request.getContextPath()%>/user?command=PostClubRequestList&cID=${club.ID}">Post club request</a>-->
                         </td>
                         <td>
-                            <a href="#">Remove</a>
+                            <a href="<%=request.getContextPath()%>/user?command=rVerification">Remove</a>
                         </td>
                     </tr>
                 </c:if>

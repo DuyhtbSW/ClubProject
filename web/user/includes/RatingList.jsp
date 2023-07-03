@@ -7,6 +7,21 @@
         <h3>No rating yet</h3>
         <!--<h3><%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></h3>-->
     </c:if>
+    <c:if test="${warning != null}">
+        <!--<h3><%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></h3>-->
+        <%
+            String warning = (String) request.getSession().getAttribute("warning");
+            if (warning != null && !warning.isEmpty()) {
+        %>
+        <div class="warning-message">
+            <h3><%=warning%></h3>
+        </div>
+        <%
+            // Xóa thông báo sau khi hiển thị
+            request.getSession().removeAttribute("warning");
+        }
+        %>
+    </c:if>
     <div class="table-responsive">
         <center>
             <table>
@@ -48,12 +63,12 @@
                                                 <option>5 stars</option>
                                             </select>
                                         </td>
-                                        <c:if test="${comments == null}">
+                                        <c:if test="${note == null}">
                                             <td>
                                                 <textarea rows="2" cols="30" name="note">${thisRating.note}</textarea>
                                             </td>
                                         </c:if>
-                                        <c:if test="${comments != null}">
+                                        <c:if test="${note != null}">
                                             <td>
                                                 <textarea rows="2" cols="30" name="note"></textarea>
                                             </td>

@@ -47,19 +47,28 @@
                     <c:forEach var="c" items="${club}" begin="${startIndex}" end="${endIndex}" varStatus="loop">
                         <!--<input type="hidden" name="cCreatorID" value="${c.creatorID}">-->
                         <tr>
-                            <td>${loop.index + 1}</td>
-                            <td>${c.code}</td>   
-                            <td>${c.name}</td>
-                            <td>${c.dateCreated}</td>
-                            <c:if test="${c.joinRequest == 0}">
-                                <td>Public</td>
+                            <c:if test="${notfound == null}">
+                                <td>${loop.index + 1}</td>
+                                <td>${c.code}</td>   
+                                <td>${c.name}</td>
+                                <td>${c.dateCreated}</td>
+                                <c:if test="${c.joinRequest == 0}">
+                                    <td>Public</td>
+                                </c:if>
+                                <c:if test="${c.joinRequest == 1}">
+                                    <td>Private</td>
+                                </c:if>
+                                <td>
+                                    <a href="<%=request.getContextPath()%>/user?command=ViewDetailsClub&cID=${c.ID}&cCID=${c.creatorID}">View Details</a>
+                                </td>
                             </c:if>
-                            <c:if test="${c.joinRequest == 1}">
-                                <td>Private</td>
+                            <c:if test="${notfound != null}">
+                                <td></td>
+                                <td></td>   
+                                <td><h2>Club not found</h2></td>
+                                <td></td>
+                                <td></td>
                             </c:if>
-                            <td>
-                                <a href="<%=request.getContextPath()%>/user?command=ViewDetailsClub&cID=${c.ID}&cCID=${c.creatorID}">View Details</a>
-                            </td>
                         </tr>
                     </c:forEach>
                 </tbody>

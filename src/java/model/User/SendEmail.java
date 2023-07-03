@@ -55,4 +55,55 @@ public class SendEmail {
         } catch (Exception e) {
         }
     }
+
+//    private void sendOTP(String recipientEmail, String OTP) {
+//        // Thông tin tài khoản email của bạn
+//        final String fromEmail = "student.club.management105@gmail.com";
+//        final String password = "jdbuffoudhhnhcbq";
+//        final String toEmail = recipientEmail;
+//
+//        // Cấu hình SMTP server và cổng
+//        String smtpHost = "smtp.gmail.com";
+//        int smtpPort = 587;
+//
+//        // Cấu hình các thuộc tính của email
+//        Properties props = new Properties();
+//        props.put("mail.smtp.auth", "true");
+//        props.put("mail.smtp.starttls.enable", "true");
+//        props.put("mail.smtp.host", smtpHost);
+//        props.put("mail.smtp.port", smtpPort);
+//
+//        // Tạo session để xác thực tài khoản email và gửi email
+//        Session session = Session.getInstance(props, new Authenticator() {
+//            @Override
+//            protected PasswordAuthentication getPasswordAuthentication() {
+//                return new PasswordAuthentication(fromEmail, password);
+//            }
+//        });
+//
+//        try {
+//            // Tạo đối tượng MimeMessage
+//            Message message = new MimeMessage(session);
+//
+//            // Thiết lập thông tin người gửi
+//            message.setFrom(new InternetAddress(fromEmail));
+//
+//            // Thiết lập thông tin người nhận
+//            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
+//
+//            // Thiết lập tiêu đề email
+//            message.setSubject("OTP Verification");
+//
+//            // Thiết lập nội dung email
+//            String emailContent = "Your OTP is: " + OTP;
+//            message.setText(emailContent);
+//
+//            // Gửi email
+//            Transport.send(message);
+//
+//            System.out.println("Email sent successfully!");
+//        } catch (MessagingException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

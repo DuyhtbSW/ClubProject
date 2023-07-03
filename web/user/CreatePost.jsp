@@ -14,7 +14,7 @@
             th, td {
                 text-align: center;
             }
-            
+
             textarea {
                 resize: none;
             }
@@ -32,7 +32,19 @@
                     <div class="activity-grid">
                         <div class="activity-card">
                             <c:if test="${warning != null}">
-                                <h3><%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></h3>
+                                <!--<h3><%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></h3>-->
+                                <%
+                                    String warning = (String) request.getSession().getAttribute("warning");
+                                    if (warning != null && !warning.isEmpty()) {
+                                %>
+                                <div class="warning-message">
+                                    <h3><%=warning%></h3>
+                                </div>
+                                <%
+                                    // Xóa thông báo sau khi hiển thị
+                                    request.getSession().removeAttribute("warning");
+                                }
+                                %>
                             </c:if>
                             <div class="table-responsive">
                                 <table>

@@ -7,7 +7,7 @@ import java.time.format.DateTimeParseException;
 public class Post {
 
     private int ID;
-    private String title, description, date, memberID, clubID, status;
+    private String title, description, date, memberID, clubID, status, createRequest, createStatus, removeStatus, img;
 
     public Post() {
     }
@@ -29,6 +29,20 @@ public class Post {
         this.memberID = memberID;
         this.clubID = clubID;
         this.status = status;
+    }
+
+    public Post(int ID, String title, String description, String date, String memberID, String clubID, String status, String createRequest, String createStatus, String removeStatus, String img) {
+        this.ID = ID;
+        this.title = title;
+        this.description = description;
+        this.date = date;
+        this.memberID = memberID;
+        this.clubID = clubID;
+        this.status = status;
+        this.createRequest = createRequest;
+        this.createStatus = createStatus;
+        this.removeStatus = removeStatus;
+        this.img = img;
     }
 
     public int getID() {
@@ -96,8 +110,40 @@ public class Post {
         this.status = status;
     }
 
+    public String getCreateRequest() {
+        return createRequest;
+    }
+
+    public void setCreateRequest(String createRequest) {
+        this.createRequest = createRequest;
+    }
+
+    public String getCreateStatus() {
+        return createStatus;
+    }
+
+    public void setCreateStatus(String createStatus) {
+        this.createStatus = createStatus;
+    }
+
+    public String getRemoveStatus() {
+        return removeStatus;
+    }
+
+    public void setRemoveStatus(String removeStatus) {
+        this.removeStatus = removeStatus;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
     @Override
     public String toString() {
-        return "Post{" + "ID=" + ID + ", title=" + title + ", description=" + description + ", date=" + date + ", memberID=" + memberID + ", clubID=" + clubID + ", status=" + status + '}';
+        return "Post{" + "ID=" + ID + ", title=" + title + ", description=" + description + ", date=" + date + ", memberID=" + memberID + ", clubID=" + clubID + ", status=" + status + ", createRequest=" + createRequest + ", createStatus=" + createStatus + ", removeStatus=" + removeStatus + ", img=" + img + '}';
     }
 }

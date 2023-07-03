@@ -7,13 +7,19 @@ import java.time.format.DateTimeParseException;
 public class Member {
 
     private int ID;
-    private String userID, clubID, isClubManager, joinDate, status;
+    private String userID, clubID, isClubManager, joinDate, status, joinStatus, kickStatus;
 
     public Member() {
     }
 
     public Member(int ID, String userID, String clubID, String joinDate) {
         this.ID = ID;
+        this.userID = userID;
+        this.clubID = clubID;
+        this.joinDate = joinDate;
+    }
+
+    public Member(String userID, String clubID, String joinDate) {
         this.userID = userID;
         this.clubID = clubID;
         this.joinDate = joinDate;
@@ -34,6 +40,27 @@ public class Member {
         this.isClubManager = isClubManager;
         this.joinDate = joinDate;
         this.status = status;
+    }
+
+    public Member(int ID, String userID, String clubID, String joinDate, String status, String joinStatus, String kickStatus) {
+        this.ID = ID;
+        this.userID = userID;
+        this.clubID = clubID;
+        this.joinDate = joinDate;
+        this.status = status;
+        this.joinStatus = joinStatus;
+        this.kickStatus = kickStatus;
+    }
+
+    public Member(int ID, String userID, String clubID, String isClubManager, String joinDate, String status, String joinStatus, String kickStatus) {
+        this.ID = ID;
+        this.userID = userID;
+        this.clubID = clubID;
+        this.isClubManager = isClubManager;
+        this.joinDate = joinDate;
+        this.status = status;
+        this.joinStatus = joinStatus;
+        this.kickStatus = kickStatus;
     }
 
     public int getID() {
@@ -93,8 +120,24 @@ public class Member {
         this.status = status;
     }
 
+    public String getJoinStatus() {
+        return joinStatus;
+    }
+
+    public void setJoinStatus(String joinStatus) {
+        this.joinStatus = joinStatus;
+    }
+
+    public String getKickStatus() {
+        return kickStatus;
+    }
+
+    public void setKickStatus(String kickStatus) {
+        this.kickStatus = kickStatus;
+    }
+
     @Override
     public String toString() {
-        return "Member{" + "ID=" + ID + ", userID=" + userID + ", clubID=" + clubID + ", isClubManager=" + isClubManager + ", joinDate=" + joinDate + ", status=" + status + '}';
+        return "Member{" + "ID=" + ID + ", userID=" + userID + ", clubID=" + clubID + ", isClubManager=" + isClubManager + ", joinDate=" + joinDate + ", status=" + status + ", joinStatus=" + joinStatus + ", kickStatus=" + kickStatus + '}';
     }
 }

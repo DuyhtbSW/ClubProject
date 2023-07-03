@@ -6,17 +6,21 @@ import java.time.format.DateTimeParseException;
 
 public class Notification {
 
-    private int ID;
-    private String title, note, userID, date, view;
+    private int ID;//generalID
+    private String title, note, userID, clubID, memberID, postID, eventID, date, view;
 
     public Notification() {
     }
 
-    public Notification(int ID, String title, String note, String userID, String date, String view) {
+    public Notification(int ID, String title, String note, String userID, String clubID, String memberID, String postID, String eventID, String date, String view) {
         this.ID = ID;
         this.title = title;
         this.note = note;
         this.userID = userID;
+        this.clubID = clubID;
+        this.memberID = memberID;
+        this.postID = postID;
+        this.eventID = eventID;
         this.date = date;
         this.view = view;
     }
@@ -53,6 +57,38 @@ public class Notification {
         this.userID = userID;
     }
 
+    public String getClubID() {
+        return clubID;
+    }
+
+    public void setClubID(String clubID) {
+        this.clubID = clubID;
+    }
+
+    public String getMemberID() {
+        return memberID;
+    }
+
+    public void setMemberID(String memberID) {
+        this.memberID = memberID;
+    }
+
+    public String getPostID() {
+        return postID;
+    }
+
+    public void setPostID(String postID) {
+        this.postID = postID;
+    }
+
+    public String getEventID() {
+        return eventID;
+    }
+
+    public void setEventID(String eventID) {
+        this.eventID = eventID;
+    }
+
     public String getDate() {
         String dateStr = date;
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -80,6 +116,6 @@ public class Notification {
 
     @Override
     public String toString() {
-        return "Notification{" + "ID=" + ID + ", title=" + title + ", note=" + note + ", userID=" + userID + ", date=" + date + ", view=" + view + '}';
+        return "Notification{" + "ID=" + ID + ", title=" + title + ", note=" + note + ", userID=" + userID + ", clubID=" + clubID + ", memberID=" + memberID + ", postID=" + postID + ", eventID=" + eventID + ", date=" + date + ", view=" + view + '}';
     }
 }

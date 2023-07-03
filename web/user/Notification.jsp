@@ -21,18 +21,19 @@
     <center>
         <h1>Notifications</h1>
         <form action="<%=request.getContextPath()%>/user" method="get">
-            <input type="hidden" name="command" value="SearchClub">
+            <!--<input type="hidden" name="command" value="SearchClub">-->
             <a href="<%=request.getContextPath()%>/user?command=Home">Home</a>
-            <a href="<%=request.getHeader("referer")%>">Back</a>
+            <!--<a href="<%=request.getHeader("referer")%>">Back</a>-->
             <!--<input type="text" name="search" value="${search}" oninput=""><input type="submit" value="Search">-->
             <br><br>
-            <table border="1" width="500">
+            <table border="1" width="600">
                 <thead>
                     <tr>
                         <th>No</th>
                         <th>Title</th>
                         <th>Status / Note</th>
                         <th>Date</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,10 +43,40 @@
                     <c:set var="endIndex" value="${(currentPage * pageSize) - 1}" />
                     <c:forEach var="n" items="${notification}" begin="${startIndex}" end="${endIndex}" varStatus="loop">
                         <tr>
-                            <td>${loop.index + 1}</td>
-                            <td>${n.title}</td>   
-                            <td>${n.note}</td>
-                            <td>${n.date}</td>
+                            <c:if test="${n.title == 'Register Success'}">
+                                <td>${loop.index + 1}</td>
+                                <td>${n.title}</td>   
+                                <td>${n.note}</td>
+                                <td>${n.date}</td>
+                            </c:if>
+                            <c:if test="${n.title == 'Create Club'}">
+                                <td>${loop.index + 1}</td>
+                                <td>${n.title}</td>   
+                                <td>${n.note}</td>
+                                <td>${n.date}</td>
+                                <td><a href="<%=request.getContextPath()%>/user?command=ViewDetailsClubs&cID=${n.clubID}">View details</a></td>
+                            </c:if>
+                            <c:if test="${n.title == 'Join Club'}">
+                                <td>${loop.index + 1}</td>
+                                <td>${n.title}</td>   
+                                <td>${n.note}</td>
+                                <td>${n.date}</td>
+                                <td><a href="<%=request.getContextPath()%>/user?command=ViewDetailsJoins&mID=${n.memberID}">View details</a></td>
+                            </c:if>
+                            <c:if test="${n.title == 'Create Post'}">
+                                <td>${loop.index + 1}</td>
+                                <td>${n.title}</td>   
+                                <td>${n.note}</td>
+                                <td>${n.date}</td>
+                                <td><a href="<%=request.getContextPath()%>/user?command=ViewDetailsPosts&pID=${n.postID}">View details</a></td>
+                            </c:if>
+                            <c:if test="${n.title == 'Create Event'}">
+                                <td>${loop.index + 1}</td>
+                                <td>${n.title}</td>   
+                                <td>${n.note}</td>
+                                <td>${n.date}</td>
+                                <td><a href="<%=request.getContextPath()%>/user?command=ViewDetailsEvents&eID=${n.eventID}">View details</a></td>
+                            </c:if>
                         </tr>
                     </c:forEach>
                 </tbody>

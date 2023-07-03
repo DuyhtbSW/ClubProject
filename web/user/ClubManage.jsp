@@ -32,9 +32,12 @@
                 </c:if>
                 <section class="recent">
                     <c:if test="${sessionScope.IsCreator != null}">
-                        <table>
-                            <td><h3><a href="#">Public</a></h3></td><td><h3><a href="#">Private</a></h3></td>
-                        </table>
+                        <c:if test="${joinRequest == 1}">
+                            <h3><a href="<%=request.getContextPath()%>/user?command=SetToPublic">Set to Public</a></h3>
+                        </c:if>
+                        <c:if test="${joinRequest != 1}">
+                            <h3><a href="<%=request.getContextPath()%>/user?command=SetToPrivate">Set to Private</a></h3>
+                        </c:if>
                     </c:if>
                     <div class="activity-grid">
                         <%@ include file="includes/ClubList.jsp" %>

@@ -19,8 +19,21 @@
                 <tr><td>Current Password:</td><td><input type="text" name="crPass" value=""></td></tr>
                 <tr><td>New Password:</td><td><input type="text" name="nPass" value=""></td></tr>
                 <tr><td>Confirm Password:</td><td><input type="text" name="cfPass" value=""></td></tr>
-                    <tr><td><a href="<%=request.getContextPath()%>/user?command=LoadProfile">Back</a></td><td><input type="submit" value="Change"/><br><a href="<%=request.getContextPath()%>/user?command=rForgotPass">Forgot password?</a>
-                        <br><%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></td></tr>
+                <tr><td><a href="<%=request.getContextPath()%>/user?command=LoadProfile">Back</a></td><td><input type="submit" value="Change"/><br><a href="<%=request.getContextPath()%>/user?command=rForgotPass&fr=FCP">Forgot password?</a>
+                        <br>
+                        <%--<%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%>--%>
+                        <%
+                            String warning = (String) request.getSession().getAttribute("warning");
+                            if (warning != null && !warning.isEmpty()) {
+                        %>
+                        <div class="warning-message">
+                            <%=warning%>
+                        </div>
+                        <%
+                            // Xóa thông báo sau khi hiển thị
+                            request.getSession().removeAttribute("warning");
+                        }
+                        %></td></tr>
             </table>
         </form>
     </center>
