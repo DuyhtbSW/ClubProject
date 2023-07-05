@@ -24,23 +24,24 @@ import model.Admin.User;
  */
 public class MemberDao {
 
-    public Member getMember(String idd) {
+    public Member getMember(String idd, String clubIdd) {
         int memberId = Integer.parseInt(idd);
+        int clubId = Integer.parseInt(clubIdd);
         ConnectDB db = ConnectDB.getInstance();
         Member member = null;
         try {
-            String sql = " Select * from Member where memberID = ?";
+            String sql = " Select * from Member where UserID = ? AND ClubID =?";
             Connection con = db.openConnection();
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setInt(1, memberId);
+            statement.setInt(2, clubId);
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
                 int userId = rs.getInt("userID");
-                int clubId = rs.getInt("ClubID");
                 int isClubManager = rs.getInt("IsClubManager");
                 Date joinDate = rs.getDate("JoinDate");
                 int memberStatus = rs.getInt("memberStatus");
-                member = new Member(userId, userId, clubId, isClubManager, joinDate, memberStatus);
+                member = new Member(userId, memberId, clubId, isClubManager, joinDate, memberStatus);
             }
             rs.close();
             statement.close();
@@ -61,7 +62,7 @@ public class MemberDao {
         ResultSet rs = null;
         try {
             con = db.openConnection();
-            String sql = "Select * from Member";
+            String sql = "Select * from Member where MemberStatus = 1";
             statement = con.prepareStatement(sql);
             rs = statement.executeQuery();
             while (rs.next()) {
@@ -87,7 +88,7 @@ public class MemberDao {
 
     public static int countMember() {
         ConnectDB db = ConnectDB.getInstance();
-        String sql = "Select count(*) as count from Member";
+        String sql = "Select count(*) as count from Member where memberstatus = 1";
         Connection con = null;
         int count = 0;
         try {
@@ -197,5 +198,7 @@ public class MemberDao {
         }
         return userName;
     }
+    
+    
 
 }

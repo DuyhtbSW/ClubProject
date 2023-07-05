@@ -20,11 +20,37 @@
                 <tr>
                     <TH>Date Created</TH><TD>${The_Club.dateCreated}</TD><TD> <input type="text" name="dateCreated" value="${The_Club.dateCreated}"></TD>
                 <tr>
-                    <TH>Club Status</TH><TD>${The_Club.clubStatus == true ? "Accepted":"Waiting"}</TD><TD><input type="text" name="clubStatus" value="${The_Club.clubStatus}" placeholder="Input: true or false"></TD>
+                    <TH>Club Status</TH><TD>${The_Club.clubStatus == true ? "Accepted":"Waiting"}</TD>
+                    <TD>
+                        <select class="js-select" name="clubStatus">
+                            <option value="${The_Club.clubStatus}">
+                            <span class="option-text">Select an option</span>
+                            </option>
+                            <option value="true">
+                            <span class="option-text">Accepted</span>
+                            </option>
+                            <option value="false" >
+                            <span class="option-text">Waiting</span>
+                            </option>
+                        </select>
+                    </TD>
                 <tr>
-                    <TH>Join Request</TH><TD>${The_Club.joinRequest == false ? "Not required" : "Required"}</TD><TD><input type="text" name="joinRequest" value="${The_Club.joinRequest}" placeholder="Input: true or false"></TD>
+                    <TH>Join Request</TH><TD>${The_Club.joinRequest == false ? "Not required" : "Required"}</TD>
+                    <TD>
+                        <select class="js-select" name="joinRequest">
+                            <option value="${The_Club.joinRequest}">
+                            <span class="option-text">Select an option</span>
+                            </option>
+                            <option value="true">
+                            <span class="option-text">Required</span>
+                            </option>
+                            <option value="false" >
+                            <span class="option-text">Not required</span>
+                            </option>
+                        </select>
+                    </TD>
                 <tr>
-                    <TH></TH><TH><a href="javascript:history.back()"> Back to the List</a></TH>
+                    <TH></TH><TH><a href="ClubControllerServlet"> Back to the List</a></TH>
                     <TH>
                         <input type="submit" value="UPDATE" class="save" onclick="alert('Update success')"/>
                     </TH>

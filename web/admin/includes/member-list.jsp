@@ -14,7 +14,6 @@
                         <th>Member ID</th>
                         <th>Member Name</th>
                         <th>Club Name</th>
-                        <th>REMOVE</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -22,19 +21,20 @@
                     <c:forEach var="item" items="${mb}">
                         <c:url var="tempLink" value="MemberControllerServlet">
                             <c:param name="command" value="LOAD"></c:param>
-                            <c:param name="userId" value="${item.userId}"></c:param>    
+                            <c:param name="userId" value="${item.userId}"></c:param>   
+                            <c:param name="clubId" value="${item.clubId}"></c:param>   
                         </c:url>
-                        <c:url var="deleteLink" value="MemberControllerServlet">
-                            <c:param name="command" value="DELETE"></c:param>
-                            <c:param name="userId" value="${item.userId}"></c:param>    
-                        </c:url>
+                        <%--<c:url var="deleteLink" value="MemberControllerServlet">--%>
+                            <%--<c:param name="command" value="DELETE"></c:param>--%>
+                            <%--<c:param name="userId" value="${item.userId}"></c:param>--%>    
+                        <%--</c:url>--%>
                         <tr>
                             <td>${item.memberId}</td>
                             <td>${UserDao.getUserName(item.userId)}</td>
                             <td>${ClubDao.getClubName(item.clubId)}</td>
-                            <td>
+<!--                            <td>
                                 <a href="${deleteLink}" onclick="if(!(confirm('Sure?'))) return false">Remove</a>
-                            </td>
+                            </td>-->
                             <td>
                                 <a href="${tempLink}">View detail</a>
                             </td>

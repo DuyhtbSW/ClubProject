@@ -136,19 +136,11 @@ public class UserDao {
         ConnectDB db = ConnectDB.getInstance();
         Connection con;
         try {
-            String sql = "DELETE FROM Member WHERE UserId = ?;\n"
-                    + "DELETE FROM Rating WHERE UserId = ?;\n"
-                    + "DELETE FROM Post WHERE UserId = ?;\n"
-                    + "DELETE FROM EventAttendees WHERE UserId = ?;\n"
-                    + "DELETE FROM Users WHERE UserId = ?;";
+            String sql = "Update Users set UserStatus = 1 WHERE UserId = ?;";
             con = db.openConnection();
             PreparedStatement statement = con.prepareStatement(sql);
             int id = Integer.parseInt(idd);
             statement.setInt(1, id);
-            statement.setInt(2, id);
-            statement.setInt(3, id);
-            statement.setInt(4, id);
-            statement.setInt(5, id);
             statement.execute();
             con.close();
             statement.close();

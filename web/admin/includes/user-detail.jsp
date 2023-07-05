@@ -20,7 +20,7 @@
                 <tr>
                     <TH>User Gender</TH><TD>${The_User.userGender}</TD><TD> <input type="text" name="userGender" value="${The_User.userGender}"></TD>
                 <tr>
-                    <TH></TH><TH><a href="javascript:history.back()"> Back to the List</a></TH>
+                    <TH></TH><TH><a href="UserControllerServlet"> Back to the List</a></TH>
                     <TH>
                         <input type="submit" value="UPDATE" class="save" onclick="alert('Update success')"/>
                     </TH>

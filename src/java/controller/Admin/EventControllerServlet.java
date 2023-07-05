@@ -27,7 +27,7 @@ public class EventControllerServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("loggedIn") == null) {
             // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
-            response.sendRedirect(request.getContextPath() + "/admin-login.jsp");
+            response.sendRedirect(request.getContextPath() + "/admin/admin-login.jsp");
             return;
         }
         String theCommand = request.getParameter("command");

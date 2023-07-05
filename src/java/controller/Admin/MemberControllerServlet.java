@@ -27,7 +27,7 @@ public class MemberControllerServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("loggedIn") == null) {
             // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
-            response.sendRedirect(request.getContextPath() + "/admin-login.jsp");
+            response.sendRedirect(request.getContextPath() + "/admin/admin-login.jsp");
             return;
         }
         String theCommand = request.getParameter("command");
@@ -67,7 +67,8 @@ public class MemberControllerServlet extends HttpServlet {
 
     private void loadMember(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userId = request.getParameter("userId");
-        Member theMember = new MemberDao().getMember(userId);
+        String clubId = request.getParameter("clubId");
+        Member theMember = new MemberDao().getMember(userId, clubId);
         request.setAttribute("The_Member", theMember);
         RequestDispatcher dispathcher = request.getRequestDispatcher("admin/admin-member-detail.jsp");
         dispathcher.forward(request, response);

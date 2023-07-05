@@ -8,6 +8,10 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import model.Admin.Admin;
 import dao.Admin.AdminDao;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AdminControllerServlet extends HttpServlet {
 
@@ -20,7 +24,7 @@ public class AdminControllerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String theCommand = request.getParameter("command");
-         if (theCommand == null) {
+        if (theCommand == null) {
             theCommand = "HOME";
         }
         switch (theCommand) {
@@ -48,9 +52,25 @@ public class AdminControllerServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("adminLogin", ad);
             session.setAttribute("loggedIn", true);
+            
+//            request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+//
+//            session = request.getSession();
+//            String prevUrl = request.getHeader("Referer");
+//
+//            session.setAttribute("prevUrl", prevUrl);
+//            session = request.getSession(false);
+//            if (session != null) {
+//                prevUrl = (String) session.getAttribute("prevUrl");
+//                if (prevUrl != null) {
+//                    // Chuyển hướng người dùng về trang trước đó đã xem
+//                    response.sendRedirect(prevUrl);
+//                }
+//            }
+
             response.sendRedirect("AdminControllerServlet");
         } else {
-            request.setAttribute("loginFail", "ID or Password is incorrect");
+            request.setAttribute("loginFail", "Email or password is incorrect");
             request.getRequestDispatcher("admin/admin-login.jsp").forward(request, response);
         }
     }

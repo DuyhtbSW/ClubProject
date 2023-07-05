@@ -16,7 +16,20 @@
                 <tr>
                     <TH>Event Date</TH><TD>${The_Event.eventDate}</TD><TD> <input type="text" name="eventDate" value="${The_Event.eventDate}"></TD>
                 <tr>
-                    <TH>Event Status</TH><TD>${The_Event.eventStatus == 1 ? "Accepted" : "Waiting to accept"}</TD><TD><input type="text" name="eventStatus" value="${The_Event.eventStatus}" placeholder="0: Waiting, 1: Accepted"></TD>
+                    <TH>Event Status</TH><TD>${The_Event.eventStatus == 1 ? "Accepted" : "Waiting to accept"}</TD>
+                    <TD>
+                        <select class="js-select" name="eventStatus">
+                            <option value="${The_Event.eventStatus}">
+                            <span class="option-text">Select an option</span>
+                            </option>
+                            <option value="1">
+                            <span class="option-text">Accepted</span>
+                            </option>
+                            <option value="0" >
+                            <span class="option-text">Waiting to accept</span>
+                            </option>
+                        </select>
+                    </TD>
                 <tr>
                     <TH></TH><TH><a href="EventControllerServlet"> Back to the List</a></TH>
                     <TH>

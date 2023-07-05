@@ -6,6 +6,7 @@ package dao.Admin;
 
 import model.Admin.Notification;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -19,15 +20,13 @@ public class NotificationDao {
 
     public void sentNotification(Notification notification) {
     ConnectDB db = ConnectDB.getInstance();
-    String sql = "Insert into Notification(UserID, Title, Note, Date)\n"
-            + "Values (?, ?, ?, CONVERT(date, GETDATE()));";
+    String sql = "Update Notification Set Note = ?, Date = CONVERT(date, GETDATE()) where NotificationID = ?";
     Connection con = null;
     try {
         con = db.openConnection();
         PreparedStatement statement = con.prepareStatement(sql);
-        statement.setInt(1, notification.getUserId());
-        statement.setString(2, notification.getTitle());
-        statement.setString(3, notification.getNote());
+        statement.setString(1, notification.getNote());
+        statement.setInt(2, notification.getNotificationId());
         statement.executeUpdate();
         statement.close();
     } catch (ClassNotFoundException ex) {

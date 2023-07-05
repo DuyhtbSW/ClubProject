@@ -24,6 +24,11 @@ public class Club {
         this.clubId = clubId;
     }
 
+    public Club(int clubId, int clubCreatorId) {
+        this.clubId = clubId;
+        this.clubCreatorId = clubCreatorId;
+    }
+
     public Club(int clubId, String clubCode, String clubName, String clubDescription, Date dateCreated, boolean clubStatus, boolean joinRequest) {
         this.clubId = clubId;
         this.clubCode = clubCode;

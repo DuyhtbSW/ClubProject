@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Admin.Club;
+import model.Admin.Notification;
 
 public class ClubDao {
 
@@ -176,7 +177,7 @@ public class ClubDao {
     }
 
     public void createClub(Club club) {
-        String sql = "Update Clubs Set ClubStatus = 1 WHERE clubId = ?";
+        String sql = "Update Clubs Set ClubStatus = 1, CreateRequest = 0 WHERE clubId = ?";
         ConnectDB db = ConnectDB.getInstance();
         Connection con;
         try {
@@ -199,7 +200,7 @@ public class ClubDao {
         ResultSet rs = null;
         try {
             con = db.openConnection();
-            String sql = "Select * from Clubs Where clubStatus = 0";
+            String sql = "Select * from Clubs Where CreateRequest = 1";
             statement = con.prepareStatement(sql);
             rs = statement.executeQuery();
             while (rs.next()) {
@@ -229,7 +230,7 @@ public class ClubDao {
         ConnectDB db = ConnectDB.getInstance();
         Connection con;
         try {
-            String sql = "DELETE FROM Clubs WHERE ClubId = ?";
+            String sql = "Update Clubs Set CreateRequest = 0 WHERE clubId = ?";
             con = db.openConnection();
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setInt(1, club.getClubId());
@@ -279,8 +280,8 @@ public class ClubDao {
         }
         return cl;
     }
-    
-    public static int getManagerId(int clubId){
+
+    public static int getManagerId(int clubId) {
         ConnectDB db = ConnectDB.getInstance();
         String sql = "Select ClubCreatorID as id from Clubs where clubId = ?";
         Connection con = null;
@@ -304,4 +305,92 @@ public class ClubDao {
         }
         return id;
     }
+
+    public void insertCreatorToMember(Club club) {
+        try {
+            ConnectDB db = ConnectDB.getInstance();
+            String sql = "INSERT INTO Member (UserID, ClubID, IsClubManager, JoinDate, MemberStatus)\n"
+                    + "SELECT c.ClubCreatorID, c.ClubID, 1, CONVERT(date, GETDATE()), 1\n"
+                    + "FROM Clubs c\n"
+                    + "WHERE ClubID = ? AND ClubCreatorID = ?";
+            Connection con = null;
+            con = db.openConnection();
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setInt(1, club.getClubId());
+            statement.setInt(2, club.getClubCreatorId());
+            statement.execute();
+            con.close();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public Notification getNotifromClubId(String idd){
+        int clubId = Integer.parseInt(idd);
+        ConnectDB db = ConnectDB.getInstance();
+        Notification noti = null;
+        try {
+            String sql = " Select * from Notification where clubID = ?";
+            Connection con = db.openConnection();
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setInt(1, clubId);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                int notificationId = rs.getInt("notificationId");
+                String title = rs.getString("title");
+                String note = rs.getString("note");
+                int userId = rs.getInt("userId");
+                int memberId = rs.getInt("memberId");
+                int postId = rs.getInt("postId");
+                int eventId = rs.getInt("eventId");
+                Date date = rs.getDate("date");
+                boolean view = rs.getBoolean("view");
+                noti = new Notification(notificationId, userId, clubId, title, note, date, view);
+            }
+            rs.close();
+            statement.close();
+            con.close();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return noti;
+    }
+    
+    public Notification getNotifromEventId(String idd){
+        int eventId = Integer.parseInt(idd);
+        ConnectDB db = ConnectDB.getInstance();
+        Notification noti = null;
+        try {
+            String sql = " Select * from Notification where EventId = ?";
+            Connection con = db.openConnection();
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setInt(1, eventId);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                int notificationId = rs.getInt("notificationId");
+                String title = rs.getString("title");
+                String note = rs.getString("note");
+                int userId = rs.getInt("userId");
+                int memberId = rs.getInt("memberId");
+                int postId = rs.getInt("postId");
+                int clubId = rs.getInt("clubId");
+                Date date = rs.getDate("date");
+                boolean view = rs.getBoolean("view");
+                noti = new Notification(notificationId, userId, clubId, title, note, date, view);
+            }
+            rs.close();
+            statement.close();
+            con.close();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ClubDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return noti;
+    }
+
 }

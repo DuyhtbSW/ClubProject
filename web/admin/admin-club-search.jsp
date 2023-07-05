@@ -14,7 +14,8 @@
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
 
-        <title>Admin - Club Page</title>
+        <title>Admin | Club Page</title>
+        
     </head>
     <body>
 

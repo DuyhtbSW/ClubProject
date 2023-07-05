@@ -11,7 +11,7 @@ import java.util.Date;
  * @author acer
  */
 public class Notification {
-    public int notificationId, userId;
+    public int notificationId, userId, clubId;
     public String title, note;
     public Date date;
     public Boolean view;
@@ -19,16 +19,15 @@ public class Notification {
     public Notification() {
     }
 
-    public Notification(int userId, String title, String note) {
-        this.userId = userId;
-        this.title = title;
+    public Notification(int notificationId, String note) {
+        this.notificationId = notificationId;
         this.note = note;
     }
-
     
-    public Notification(int notificationId, int userId, String title, String note, Date date, Boolean view) {
+    public Notification(int notificationId, int userId, int clubId, String title, String note, Date date, Boolean view) {
         this.notificationId = notificationId;
         this.userId = userId;
+        this.clubId = clubId;
         this.title = title;
         this.note = note;
         this.date = date;
@@ -49,6 +48,14 @@ public class Notification {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public int getClubId() {
+        return clubId;
+    }
+
+    public void setClubId(int clubId) {
+        this.clubId = clubId;
     }
 
     public String getTitle() {
@@ -85,9 +92,8 @@ public class Notification {
 
     @Override
     public String toString() {
-        return "Notification{" + "notificationId=" + notificationId + ", userId=" + userId + ", title=" + title + ", note=" + note + ", date=" + date + ", view=" + view + '}';
+        return "Notification{" + "notificationId=" + notificationId + ", userId=" + userId + ", clubId=" + clubId + ", title=" + title + ", note=" + note + ", date=" + date + ", view=" + view + '}';
     }
 
-    
     
 }

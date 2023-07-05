@@ -131,10 +131,14 @@ public class EventDao {
         ConnectDB db = ConnectDB.getInstance();
         Connection con;
         try {
-            String sql = "DELETE FROM Event WHERE EventID = ?";
+            String sql = "DELETE FROM Notification WHERE EventID = ?\n"+ 
+                    "DELETE FROM EventAttendees WHERE EventID = ?\n"+
+                    "DELETE FROM Event WHERE EventID = ?";
             con = db.openConnection();
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setInt(1, event.getEventId());
+             statement.setInt(2, event.getEventId());
+             statement.setInt(3, event.getEventId());
             statement.execute();
             con.close();
             statement.close();
@@ -207,7 +211,7 @@ public class EventDao {
         ResultSet rs = null;
         try {
             con = db.openConnection();
-            String sql = "Select * from Event Where EventStatus = 0";
+            String sql = "Select * from Event Where CreateRequest = 1";
             statement = con.prepareStatement(sql);
             rs = statement.executeQuery();
             while (rs.next()) {
@@ -232,7 +236,23 @@ public class EventDao {
     }
 
     public void acceptEvent(Event event) {
-        String sql = "Update Event Set EventStatus = 1 WHERE EventID = ?";
+        String sql = "Update Event Set EventStatus = 1, CreateRequest = 0 WHERE EventID = ?";
+        ConnectDB db = ConnectDB.getInstance();
+        Connection con;
+        try {
+            con = db.openConnection();
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setInt(1, event.getEventId());
+            statement.execute();
+            statement.close();
+            con.close();
+        } catch (Exception ex) {
+            Logger.getLogger(EventDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void declineEvent(Event event) {
+        String sql = "Update Event Set CreateRequest = 0 WHERE EventID = ?";
         ConnectDB db = ConnectDB.getInstance();
         Connection con;
         try {
