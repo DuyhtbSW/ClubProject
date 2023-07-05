@@ -39,7 +39,7 @@
                                     <a href="<%=request.getContextPath()%>/user?command=PostManage&pID=${p.ID}">Manage post</a>
                                 </td>
                             </c:if>
-                            <c:if test="${sessionScope.IsMember != null && myPost != null}">
+                            <c:if test="${sessionScope.IsMember != null && myPost.ID == p.ID}">
                                 <td>
                                     <a href="<%=request.getContextPath()%>/user?command=PostManage&pID=${p.ID}">Manage post</a>
                                 </td>

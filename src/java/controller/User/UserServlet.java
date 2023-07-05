@@ -1801,6 +1801,7 @@ public class UserServlet extends HttpServlet {
         session.removeAttribute("clubCreatorID");
         session.removeAttribute("IsCreator");
         session.removeAttribute("IsManager");
+        session.removeAttribute("IsMember");
         User user = (User) session.getAttribute("account");
 
         if (user == null) {
@@ -1826,6 +1827,7 @@ public class UserServlet extends HttpServlet {
         session.removeAttribute("clubCreatorID");
         session.removeAttribute("IsCreator");
         session.removeAttribute("IsManager");
+        session.removeAttribute("IsMember");
         User user = (User) session.getAttribute("account");
 
         if (user == null) {

@@ -100,6 +100,20 @@
                                                 </td>
                                             </tr>
                                         </c:if>
+                                        <c:if test="${sessionScope.IsMember != null}">
+                                            <tr>
+                                                <td>${post.memberID}</td>
+                                                <td>${post.date}</td>
+                                                <td>${post.title}</td>
+                                                <td>${post.description}</td>
+                                                <td>
+                                                    <a href="<%=request.getContextPath()%>/user?command=LoadEditPost&pID=${postID}">Edit</a>
+                                                </td>
+                                                <td>
+                                                    <a href="<%=request.getContextPath()%>/user?command=DeletePost&pID=${postID}">Remove</a>
+                                                </td>
+                                            </tr>
+                                        </c:if>
                                     </tbody>
                                 </table>
                             </div>
