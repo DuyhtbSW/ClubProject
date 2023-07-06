@@ -11,7 +11,7 @@
             <table border="1" id="table">
                 <thead>
                     <tr>
-                        <th>Event ID</th>
+                        <!--<th>Event ID</th>-->
                         <th>Event Name</th>
                         <th>Date</th>
                         <th></th>
@@ -24,8 +24,9 @@
                             <c:param name="eventId" value="${item.eventId}"></c:param>    
                         </c:url>
                         <tr>
-                            <td>${item.eventId}</td>
+                            <!--<td>${item.eventId}</td>-->
                             <td>${item.eventName}</td>
+                            <td>${item.eventDescription}</td>
                             <td>${item.eventDate}</td>
                             <td>
                                 <a href="${tempLink}">Feedback</a>

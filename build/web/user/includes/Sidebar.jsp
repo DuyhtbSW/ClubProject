@@ -20,24 +20,32 @@
                 </a>
             </li>
             <li>
-                <a href="<%=request.getContextPath()%>/user/ClubHome.jsp">
+                <a href="<%=request.getContextPath()%>/user?command=ClubsList">
                     <span class="ti-unlink"></span>
                     <span>Clubs List</span>
                 </a>
             </li>
             <c:if test="${sessionScope.clubCreator != null}">
                 <li>
-                    <a href="<%=request.getContextPath()%>/user/ClubHome.jsp">
+                    <a href="<%=request.getContextPath()%>/user?command=ForCreator">
                         <span class="ti-layout-grid2-thumb"></span>
-                        <span>Club Manager</span>
+                        <span>Club Manager<h6>for Creator</h6></span>
                     </a>
                 </li>
             </c:if>
             <c:if test="${sessionScope.clubManager != null}">
                 <li>
-                    <a href="<%=request.getContextPath()%>/user?command=Home">
+                    <a href="<%=request.getContextPath()%>/user?command=ForManager">
                         <span class="ti-layout-grid2-thumb"></span>
-                        <span>Club Manager</span>
+                        <span>Club Manager<h6>for Manager</h6></span>
+                    </a>
+                </li>
+            </c:if>
+            <c:if test="${sessionScope.clubMember != null}">
+                <li>
+                    <a href="<%=request.getContextPath()%>/user?command=ForMember">
+                        <span class="ti-layout-grid2-thumb"></span>
+                        <span>My Club</span>
                     </a>
                 </li>
             </c:if>

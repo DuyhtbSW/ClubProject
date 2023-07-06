@@ -8,6 +8,10 @@
             a {
                 text-decoration: none;
             }
+
+            textarea {
+                resize: none;
+            }
         </style>
     </head>
     <body>
@@ -20,7 +24,19 @@
                 <tr><td>Club Name:</td><td><textarea rows="2" cols="21" name="cName"></textarea></td></tr>
                 <tr><td>Club Description:</td><td><textarea rows="6" cols="21" name="cDescription"></textarea></td></tr>
                 <tr><td><a href="<%=request.getContextPath()%>/user?command=ClubsList">Back</a></td><td><input type="submit" value="Create"/><br>
-                        <%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></td></tr>
+                        <%--<%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%>--%>
+                        <%
+                            String warning = (String) request.getSession().getAttribute("warning");
+                            if (warning != null && !warning.isEmpty()) {
+                        %>
+                        <div class="warning-message">
+                            <%=warning%>
+                        </div>
+                        <%
+                            // Xóa thông báo sau khi hiển thị
+                            request.getSession().removeAttribute("warning");
+                        }
+                        %></td></tr>
             </table>
         </form>
     </center>

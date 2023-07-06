@@ -8,6 +8,10 @@
             a {
                 text-decoration: none;
             }
+            
+            textarea {
+                resize: none;
+            }
         </style>
     </head> 
     <body>
@@ -15,8 +19,9 @@
         <h1>Club Details</h1>
         <form action="user" method="get">
             <input type="hidden" name="command" value="JoinClub">
-            <input type="hidden" name="clubID" value="${club.ID}">
-            <input type="hidden" name="clubCreatorID" value="${club.creatorID}">
+            <input type="hidden" name="cID" value="${club.ID}">
+            <input type="hidden" name="cN" value="${club.name}">
+            <input type="hidden" name="cCID" value="${club.creatorID}">
             <table border="1" width="300">
                 <tr><td>Club Code:</td><td><input type="text" name="" value="${club.code}" readonly=""></td></tr>
                 <tr><td>Club Name:</td><td><textarea rows="2" cols="21" readonly="">${club.name}</textarea></td></tr>
@@ -26,7 +31,19 @@
                 <tr><td>Club Creator:</td><td><input type="text" name="" value="${clubCreatorName}" readonly=""></td></tr>
                 <tr><td>Date Created:</td><td><input type="text" name="" value="${club.dateCreated}" readonly=""></td></tr>
                 <tr><td><a href="user?command=ClubsList">Back</a></td><td><input type="submit" value="Join"/><br>
-                        <%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></td></tr>
+                        <%--<%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%>--%>
+                        <%
+                            String warning = (String) request.getSession().getAttribute("warning");
+                            if (warning != null && !warning.isEmpty()) {
+                        %>
+                        <div class="warning-message">
+                            <%=warning%>
+                        </div>
+                        <%
+                            // Xóa thông báo sau khi hiển thị
+                            request.getSession().removeAttribute("warning");
+                        }
+                        %></td></tr>
             </table>
         </form>
     </center>
