@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <div class="activity-card">
     <form action="EventControllerServlet" method="GET">
-        <h3>Event List</h3>
+        <h3>Event Today List</h3>
         <div class="table-responsive">
             <table border="1" id="table">
                 <thead>
@@ -30,10 +30,10 @@
                             <td>${item.eventName}</td>
                             <td>${item.eventDate}</td>
                             <td>
-                                <a href="${deleteLink}" onclick="if(!(confirm('Sure?'))) return false">Remove</a>
+                                <a href="<%=request.getContextPath()%>/${deleteLink}" onclick="if(!(confirm('Sure?'))) return false">Remove</a>
                             </td>
                             <td>
-                                <a href="${tempLink}">View detail</a>
+                                <a href="<%=request.getContextPath()%>/${tempLink}">View detail</a>
                             </td>
                         </tr>
                     </c:forEach>

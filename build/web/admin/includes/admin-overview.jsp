@@ -41,7 +41,7 @@
                 <span class="ti-briefcase"></span>
                 <div>
                     <h5>Clubs</h5>
-                    <h4><c:out value="${ ClubDao.countClub()}" /></h4>
+                    <h4><%= ClubDao.countClub()%></h4>
                 </div>
             </div>
             <div class="card-footer">

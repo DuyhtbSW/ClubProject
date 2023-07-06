@@ -181,7 +181,7 @@ public class EventDao {
     
     public static int countEventRequest() {
         ConnectDB db = ConnectDB.getInstance();
-        String sql = "Select count(*) as count from Event where EventStatus = 0";
+        String sql = "Select count(*) as count from Event where CreateRequest = 1";
         Connection con = null;
         int count = 0;
         try {

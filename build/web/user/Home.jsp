@@ -37,15 +37,19 @@
         <a href="<%=request.getContextPath()%>/user?command=Home">Home</a>
         <a href="<%=request.getContextPath()%>/user?command=ClubsList">Clubs List</a>
         <c:if test="${sessionScope.clubCreator != null}">
-        <li><a href="<%=request.getContextPath()%>/user/ClubHome.jsp">Club Manager</a></li>
+        <li><a href="<%=request.getContextPath()%>/user?command=ForCreator">Club Manager<h6>for Creator</h6></a></li>
         </c:if>
         <c:if test="${sessionScope.clubManager != null}">
-        <li><a href="<%=request.getContextPath()%>/user?command=Home">Club Manager</a></li>
+        <li><a href="<%=request.getContextPath()%>/user?command=ForManager">Club Manager<h6>for Manager</h6></a></li>
+        </c:if>
+        <c:if test="${sessionScope.clubMember != null}">
+        <li><a href="<%=request.getContextPath()%>/user?command=ForMember">My Club</a></li>
         </c:if>
         <c:if test="${sessionScope.account != null}">
             <c:if test="${sessionScope.account.name != null}">
             <li><a href="<%=request.getContextPath()%>/user?command=LoadProfile">Hello ${sessionScope.account.name}</a></li>
             </c:if>
+            <li><a href="<%=request.getContextPath()%>/user?command=Notification">Notification</a></li>
             <%--<c:if test="${sessionScope.account.name == null}">--%>
             <!--<li><a href="user?command=LoadProfile">Hello ${sessionScope.account.email}</a></li>-->
         <%--</c:if>--%>
@@ -60,7 +64,7 @@
         <li><a href="<%=request.getContextPath()%>/user?command=Logout">Logout</a></li>
         </c:if>
         <c:if test="${sessionScope.account == null}">
-        <li><a href="<%=request.getContextPath()%>/user/Login.jsp">Login</a></li>
+        <li><a href="<%=request.getContextPath()%>/user?command=rLogin">Login</a></li>
         </c:if>
     <!--<a href="Login.jsp">Login</a>-->
 </body>

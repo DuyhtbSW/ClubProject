@@ -7,7 +7,7 @@
             <table border="1">
                 <thead>
                     <tr>
-                        <th>Club ID</th>
+                        <!--<th>Club ID</th>-->
                         <th>Club Name</th>
                         <th>Club Description</th>
                         <th>Manager</th>
@@ -22,7 +22,7 @@
                             <c:param name="clubId" value="${item.clubId}"></c:param>    
                         </c:url>
                         <tr>
-                            <td>${item.clubId}</td>
+                            <!--<td>${item.clubId}</td>-->
                             <td>${item.clubName}</td>
                             <td>${item.clubDescription}</td>
                             <td>${UserDao.getUserName(item.clubCreatorId)}</td>
