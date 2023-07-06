@@ -14,7 +14,7 @@
     <div class="sidebar-menu">
         <ul>
             <li>
-                <a href="<%=request.getContextPath()%>/admin/admin-home.jsp">
+                <a href="<%=request.getContextPath()%>/AdminControllerServlet">
                     <span class="ti-home"></span>
                     <span>Home</span>
                 </a>

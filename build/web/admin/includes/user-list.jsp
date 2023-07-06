@@ -11,7 +11,7 @@
                         <th>User ID</th>
                         <th>User Name</th>
                         <th>User Gender</th>
-                        <th>REMOVE</th>
+                        <th>BLOCK</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -30,7 +30,8 @@
                             <td>${item.userName}</td>
                             <td>${item.userGender}</td>
                             <td>
-                                <a href="${deleteLink}" onclick="if(!(confirm('Sure?'))) return false">Remove</a>
+                                <a href="${deleteLink}" onclick="if (!(confirm('Sure?')))
+                                            return false">Block</a>
                             </td>
                             <td>
                                 <a href="${tempLink}">View detail</a>

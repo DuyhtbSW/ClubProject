@@ -13,6 +13,7 @@
                     <tr>
                         <!--<th>Event ID</th>-->
                         <th>Event Name</th>
+                        <th>Event Description</th>
                         <th>Date</th>
                         <th></th>
                     </tr>

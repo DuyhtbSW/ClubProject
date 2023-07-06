@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="dao.Admin.MemberDao" %>
-<!DOCTYPE html>
+<%@ page import="dao.Admin.UserDao" %>
 <div class="activity-card">
     <form action="ClubControllerServlet" method="GET">
         <h3>Clubs List</h3>
@@ -9,10 +9,11 @@
             <table border="1">
                 <thead>
                     <tr>
-                        <th>CLub ID</th>
+                        <th>Club ID</th>
                         <th>Club Name</th>
                         <th>Number of member</th>
                         <th>Manager</th>
+                        <th>Join Request</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -26,7 +27,8 @@
                             <td>${item.clubId}</td>
                             <td>${item.clubName}</td>
                             <td><c:out value="${MemberDao.countMemberOfClub(item.clubId)}" /></td>
-                            <td>${item.clubCreatorId}</td>
+                            <td>${UserDao.getUserName(item.clubCreatorId)}</td>
+                            <td>${item.joinRequest == false ? "Not required" : "Required"}</td>
                             <td>
                                 <a href="${tempLink}">View detail</a>
                             </td>
