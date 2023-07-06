@@ -21,6 +21,16 @@ public class Event {
         this.status = status;
     }
 
+    public Event(int ID, String name, String description, String date, String clubID, String status, String removeStatus) {
+        this.ID = ID;
+        this.name = name;
+        this.description = description;
+        this.date = date;
+        this.clubID = clubID;
+        this.status = status;
+        this.removeStatus = removeStatus;
+    }
+
     public Event(int ID, String name, String description, String date, String clubID, String status, String createRequest, String createStatus, String removeStatus, String img) {
         this.ID = ID;
         this.name = name;

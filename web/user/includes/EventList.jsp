@@ -40,7 +40,8 @@
                                 </td>
                             </c:if>
                             <c:choose>
-                                <c:when test="${e.clubID != joinEvent && e.status == 'Upcoming'}">
+                                <%--<c:when test="${e.clubID != joinEvent && e.status == 'Upcoming'}">--%>
+                                <c:when test="${e.removeStatus == 1 && e.status == 'Upcoming'}">
                                     <c:if test="${sessionScope.IsManager != null || sessionScope.IsMember != null}">
                                         <td>
                                             <a href="<%=request.getContextPath()%>/user?command=JoinEvent&eID=${e.ID}">Join event</a>

@@ -1539,7 +1539,7 @@ public class UserDAO {
             event = new ArrayList<>();
             con = new DBConnect().getConnection();
 //            String query = "select * from [Event]\n" + "where ClubID = ? and EventStatus = 1";
-            String query = "SELECT e.EventID, e.EventName, e.EventDescription, e.EventDate, ea.MemberID, e.EventDate\n"
+            String query = "SELECT e.EventID, e.EventName, e.EventDescription, e.EventDate, ea.MemberID, e.EventDate, ea.RemoveStatus\n"
                     + "FROM [Event] e\n"
                     + "LEFT JOIN EventAttendees ea ON e.EventID = ea.EventID AND ea.MemberID = ?\n"
                     + "WHERE e.ClubID = ? AND e.EventStatus = 1 AND e.RemoveStatus = 0";
@@ -1550,7 +1550,7 @@ public class UserDAO {
             while (rs.next()) {
                 String statusEvent = checkDate(rs.getString(6));
                 event.add(new Event(rs.getInt(1), rs.getString(2), rs.getString(3),
-                        rs.getString(4), rs.getString(5), statusEvent));
+                        rs.getString(4), rs.getString(5), statusEvent, rs.getString(7)));
             }
         } catch (Exception e) {
         }
