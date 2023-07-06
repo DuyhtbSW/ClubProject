@@ -5,12 +5,12 @@ import java.sql.DriverManager;
 
 public class DBConnect {
 
-    private final String serverName = "LAPTOP-D3FL5ICO";
-    private final String dbName = "FPTClub";
+    private final String serverName = "DESKTOP-C792B10";
+    private final String dbName = "SWP391_Project";
     private final String portNumber = "1433";
     private final String instance = "";
     private final String userID = "sa";
-    private final String password = "Sy23112001";
+    private final String password = "sa";
 
     public Connection getConnection() throws Exception {
         String url = "jdbc:sqlserver://" + serverName + ":" + portNumber + "\\" + instance + ";databaseName=" + dbName;
