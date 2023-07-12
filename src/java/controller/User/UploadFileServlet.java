@@ -94,27 +94,34 @@ public class UploadFileServlet extends HttpServlet {
                 }
             }
 
+            String dateStr = user.getDOB();
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate localDate = LocalDate.parse(dateStr, inputFormatter);
+            String formattedDate = localDate.format(outputFormatter);
             if (dob == null || dob.isBlank()) {
-                newDOB = user.getDOB();
+                newDOB = formattedDate;
+                request.getSession().setAttribute("warning", newDOB);
             } else if (user.getDOB().equals(dob)) {
-                newDOB = user.getDOB();
+                newDOB = formattedDate;
             } else if (!user.getDOB().equals(dob)) {
-                if (!isValidDate(dob, "dd/MM/yyyy")) {
-                    newDOB = user.getDOB();
-                    request.getSession().setAttribute("warning", "Please enter correct date format!\nEx: dd/MM/yyyy");
+//                if (!isValidDate(dob, "dd/MM/yyyy")) {
+//                    newDOB = user.getDOB();
+//                    request.getSession().setAttribute("warning", "Please enter correct date format!\nEx: dd/MM/yyyy");
+//                } else {
+//                String dateStr = dob;
+//                DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//                DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//                LocalDate localDate = LocalDate.parse(dateStr, inputFormatter);
+//                String formattedDate = localDate.format(outputFormatter);
+//                if (!isValidDOB(formattedDate) || !isValidYear(formattedDate, 1995, 2006)) {
+                if (!isValidDOB(dob) || !isValidYear(dob, 1995, 2006)) {
+                    newDOB = formattedDate;
+                    request.getSession().setAttribute("warning", "Please enter correct birthDay and birthYear must be before 2005 and after 1995!");
                 } else {
-                    String dateStr = dob;
-                    DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                    DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                    LocalDate localDate = LocalDate.parse(dateStr, inputFormatter);
-                    String formattedDate = localDate.format(outputFormatter);
-                    if (!isValidDOB(formattedDate) || !isValidYear(formattedDate, 1995, 2006)) {
-                        newDOB = user.getDOB();
-                        request.getSession().setAttribute("warning", "Please enter correct birthDay and birthYear must be before 2005 and after 1995!");
-                    } else {
-                        newDOB = dob;
-                    }
+                    newDOB = dob;
                 }
+//                }
             }
 
             if (gender == null || gender.isBlank()) {

@@ -21,7 +21,8 @@
                 <tr><td>Email:</td><td><input type="email" name="email" value="${user.email}" placeholder="Enter email"></td></tr>
                 <tr><td>Phone:</td><td><input type="text" name="phone" value="${user.phone}" placeholder="Enter phone Ex: 0[35789]12345678"></td></tr>
                 <tr><td>Gender:</td><td><input type="text" name="gender" value="${user.gender}" placeholder="Enter gender Ex: 'Male' 'Female' 'Other'"></td></tr>
-                <tr><td>Date of birth:</td><td><input type="text" name="dob" value="${user.DOB}" placeholder="Enter dob Ex: 01/01/1999"></td></tr>
+                <tr><td>Date of birth:</td><td><input type="text" name="" value="${user.DOB}" placeholder="Enter dob Ex: 01/01/1999" readonly=""><br>
+                        <input type="date" name="dob" value="${user.DOB}" placeholder="Enter dob Ex: 01/01/1999"></td></tr>
                 <tr><td></td><td><input type="submit" name="save" value="Save"/><a href="user?command=LoadProfile">Cancel</a><br>
                 <!--<tr><td><a href="<%=request.getContextPath()%>/user?command=Home">Home</a></td><td><input type="submit" name="save" value="Save"/><a href="user?command=LoadProfile">Cancel</a><br>-->
                         <%--<%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%>--%>

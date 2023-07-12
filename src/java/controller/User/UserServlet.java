@@ -1092,7 +1092,7 @@ public class UserServlet extends HttpServlet {
             }
         } else {
             if (!checkClubID.equals(clubID)) {
-                response.sendRedirect("user?command=Notification");
+                response.sendRedirect("user?command=ViewDetailsClubs&cID=" + checkClubID);
             } else {
                 if (user == null) {
                     response.sendRedirect("user?command=rLogin");
@@ -1236,7 +1236,7 @@ public class UserServlet extends HttpServlet {
             }
         } else {
             if (!checkMemberID.equals(memberID)) {
-                response.sendRedirect("user?command=Notification");
+                response.sendRedirect("user?command=ViewDetailsJoins&mID=" + checkMemberID);
             } else {
                 if (user == null) {
                     response.sendRedirect("user?command=rLogin");
@@ -1311,7 +1311,7 @@ public class UserServlet extends HttpServlet {
             }
         } else {
             if (!checkPostID.equals(postID)) {
-                response.sendRedirect("user?command=Notification");
+                response.sendRedirect("user?command=ViewDetailsPosts&pID=" + checkPostID);
             } else {
                 if (user == null) {
                     response.sendRedirect("user?command=rLogin");
@@ -1441,7 +1441,7 @@ public class UserServlet extends HttpServlet {
             }
         } else {
             if (!checkEventID.equals(eventID)) {
-                response.sendRedirect("user?command=Notification");
+                response.sendRedirect("user?command=ViewDetailsEvents&eID=" + checkEventID);
             } else {
                 if (user == null) {
                     response.sendRedirect("user?command=rLogin");
@@ -1568,6 +1568,8 @@ public class UserServlet extends HttpServlet {
         session.removeAttribute("IsManager");
         session.removeAttribute("IsMember");
         session.removeAttribute("notfound");
+        session.removeAttribute("cClubID");
+        session.removeAttribute("cClubCreatorID");
 
         UserDAO userDAO = new UserDAO();
         ArrayList<Club> club = userDAO.getAllClub();
@@ -1591,18 +1593,41 @@ public class UserServlet extends HttpServlet {
         session.removeAttribute("IsManager");
         session.removeAttribute("IsMember");
         User user = (User) session.getAttribute("account");
+        String checkClubID = (String) session.getAttribute("cClubID");
+        String checkClubCreatorID = (String) session.getAttribute("cClubCreatorID");
+
         UserDAO userDAO = new UserDAO();
 
-        if (user == null) {
-            response.sendRedirect("user?command=rLogin");
-        } else if (clubID == null || clubID.isBlank() || clubCreatorID == null || clubCreatorID.isBlank()) {
-            response.sendRedirect("user?command=ClubsList");
+        if (checkClubID == null || checkClubID.isBlank() || checkClubCreatorID == null || checkClubCreatorID.isBlank()) {
+            if (user == null) {
+                response.sendRedirect("user?command=rLogin");
+            } else if (clubID == null || clubID.isBlank() || clubCreatorID == null || clubCreatorID.isBlank()) {
+                response.sendRedirect("user?command=ClubsList");
+            } else {
+                Club club = userDAO.getClubByID(clubID);
+                String ClubCreatorName = userDAO.getClubCreatorName(clubCreatorID);
+                request.setAttribute("club", club);
+                request.setAttribute("clubCreatorName", ClubCreatorName);
+                session.setAttribute("cClubID", clubID);
+                session.setAttribute("cClubCreatorID", clubCreatorID);
+                request.getRequestDispatcher("user/ViewDetailsClub.jsp").forward(request, response);
+            }
         } else {
-            Club club = userDAO.getClubByID(clubID);
-            String ClubCreatorName = userDAO.getClubCreatorName(clubCreatorID);
-            request.setAttribute("club", club);
-            request.setAttribute("clubCreatorName", ClubCreatorName);
-            request.getRequestDispatcher("user/ViewDetailsClub.jsp").forward(request, response);
+            if (!checkClubID.equals(clubID) || !checkClubCreatorID.equals(clubCreatorID)) {
+                response.sendRedirect("user?command=ViewDetailsClub&cID=" + checkClubID + "&cCID=" + checkClubCreatorID);
+            } else {
+                if (user == null) {
+                    response.sendRedirect("user?command=rLogin");
+                } else if (clubID == null || clubID.isBlank() || clubCreatorID == null || clubCreatorID.isBlank()) {
+                    response.sendRedirect("user?command=ClubsList");
+                } else {
+                    Club club = userDAO.getClubByID(clubID);
+                    String ClubCreatorName = userDAO.getClubCreatorName(clubCreatorID);
+                    request.setAttribute("club", club);
+                    request.setAttribute("clubCreatorName", ClubCreatorName);
+                    request.getRequestDispatcher("user/ViewDetailsClub.jsp").forward(request, response);
+                }
+            }
         }
     }
 
@@ -1776,6 +1801,8 @@ public class UserServlet extends HttpServlet {
         session.removeAttribute("IsCreator");
         session.removeAttribute("IsManager");
         session.removeAttribute("IsMember");
+        session.removeAttribute("cClubID");
+        session.removeAttribute("cClubCreatorID");
         User user = (User) session.getAttribute("account");
 
         if (user == null) {
@@ -1802,6 +1829,8 @@ public class UserServlet extends HttpServlet {
         session.removeAttribute("IsCreator");
         session.removeAttribute("IsManager");
         session.removeAttribute("IsMember");
+        session.removeAttribute("cClubID");
+        session.removeAttribute("cClubCreatorID");
         User user = (User) session.getAttribute("account");
 
         if (user == null) {
@@ -1828,6 +1857,8 @@ public class UserServlet extends HttpServlet {
         session.removeAttribute("IsCreator");
         session.removeAttribute("IsManager");
         session.removeAttribute("IsMember");
+        session.removeAttribute("cClubID");
+        session.removeAttribute("cClubCreatorID");
         User user = (User) session.getAttribute("account");
 
         if (user == null) {
@@ -1853,31 +1884,66 @@ public class UserServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("account");
+        String checkClubID = (String) session.getAttribute("cClubID");
+        String checkClubCreatorID = (String) session.getAttribute("cClubCreatorID");
 
-        if (user == null) {
-            response.sendRedirect("user?command=Home");
-        } else if (clubID == null || clubID.isBlank() || clubCreatorID == null || clubCreatorID.isBlank()) {
-            response.sendRedirect("user?command=Home");
-        } else {
-            UserDAO userDAO = new UserDAO();
-            int totalManager = userDAO.getTotalManager(clubID, clubCreatorID);
-            int totalMember = userDAO.getTotalMember(clubID);
-            int totalPost = userDAO.getTotalPost(clubID);
-            int totalEvent = userDAO.getTotalEvent(clubID);
-            int totalJoinClubRequest = userDAO.getTotalJoinClubRequest(clubID);
-            int totalPostClubRequest = userDAO.getTotalPostClubRequest(clubID);
+        if (checkClubID == null || checkClubID.isBlank() || checkClubCreatorID == null || checkClubCreatorID.isBlank()) {
+            if (user == null) {
+                response.sendRedirect("user?command=Home");
+            } else if (clubID == null || clubID.isBlank() || clubCreatorID == null || clubCreatorID.isBlank()) {
+                response.sendRedirect("user?command=Home");
+            } else {
+                UserDAO userDAO = new UserDAO();
+                int totalManager = userDAO.getTotalManager(clubID, clubCreatorID);
+                int totalMember = userDAO.getTotalMember(clubID);
+                int totalPost = userDAO.getTotalPost(clubID);
+                int totalEvent = userDAO.getTotalEvent(clubID);
+                int totalJoinClubRequest = userDAO.getTotalJoinClubRequest(clubID);
+                int totalPostClubRequest = userDAO.getTotalPostClubRequest(clubID);
 //            request.setAttribute("clubID", clubID);
-            request.setAttribute("totalManager", totalManager);
-            request.setAttribute("totalMember", totalMember);
-            request.setAttribute("totalPost", totalPost);
-            request.setAttribute("totalEvent", totalEvent);
-            request.setAttribute("totalJoinClubRequest", totalJoinClubRequest);
-            request.setAttribute("totalPostClubRequest", totalPostClubRequest);
-            session.setAttribute("clubID", clubID);
-            session.setAttribute("clubCreatorID", clubCreatorID);
-            session.setAttribute("IsCreator", "IsCreator");
-            session.setMaxInactiveInterval(999999);
-            request.getRequestDispatcher("user/ClubHome.jsp").forward(request, response);
+                request.setAttribute("totalManager", totalManager);
+                request.setAttribute("totalMember", totalMember);
+                request.setAttribute("totalPost", totalPost);
+                request.setAttribute("totalEvent", totalEvent);
+                request.setAttribute("totalJoinClubRequest", totalJoinClubRequest);
+                request.setAttribute("totalPostClubRequest", totalPostClubRequest);
+                session.setAttribute("clubID", clubID);
+                session.setAttribute("clubCreatorID", clubCreatorID);
+                session.setAttribute("IsCreator", "IsCreator");
+                session.setAttribute("cClubID", clubID);
+                session.setAttribute("cClubCreatorID", clubCreatorID);
+                session.setMaxInactiveInterval(999999);
+                request.getRequestDispatcher("user/ClubHome.jsp").forward(request, response);
+            }
+        } else {
+            if (!checkClubID.equals(clubID) || !checkClubCreatorID.equals(clubCreatorID)) {
+                response.sendRedirect("user?command=IsCreator&cID=" + checkClubID + "&cCID=" + checkClubCreatorID);
+            } else {
+                if (user == null) {
+                    response.sendRedirect("user?command=Home");
+                } else if (clubID == null || clubID.isBlank() || clubCreatorID == null || clubCreatorID.isBlank()) {
+                    response.sendRedirect("user?command=Home");
+                } else {
+                    UserDAO userDAO = new UserDAO();
+                    int totalManager = userDAO.getTotalManager(clubID, clubCreatorID);
+                    int totalMember = userDAO.getTotalMember(clubID);
+                    int totalPost = userDAO.getTotalPost(clubID);
+                    int totalEvent = userDAO.getTotalEvent(clubID);
+                    int totalJoinClubRequest = userDAO.getTotalJoinClubRequest(clubID);
+                    int totalPostClubRequest = userDAO.getTotalPostClubRequest(clubID);
+                    request.setAttribute("totalManager", totalManager);
+                    request.setAttribute("totalMember", totalMember);
+                    request.setAttribute("totalPost", totalPost);
+                    request.setAttribute("totalEvent", totalEvent);
+                    request.setAttribute("totalJoinClubRequest", totalJoinClubRequest);
+                    request.setAttribute("totalPostClubRequest", totalPostClubRequest);
+                    session.setAttribute("clubID", clubID);
+                    session.setAttribute("clubCreatorID", clubCreatorID);
+                    session.setAttribute("IsCreator", "IsCreator");
+                    session.setMaxInactiveInterval(999999);
+                    request.getRequestDispatcher("user/ClubHome.jsp").forward(request, response);
+                }
+            }
         }
     }
 
@@ -1890,31 +1956,66 @@ public class UserServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("account");
+        String checkClubID = (String) session.getAttribute("cClubID");
+        String checkClubCreatorID = (String) session.getAttribute("cClubCreatorID");
 
-        if (user == null) {
-            response.sendRedirect("user?command=Home");
-        } else if (clubID == null || clubID.isBlank() || clubCreatorID == null || clubCreatorID.isBlank()) {
-            response.sendRedirect("user?command=Home");
-        } else {
-            UserDAO userDAO = new UserDAO();
-            int totalManager = userDAO.getTotalManager(clubID, clubCreatorID);
-            int totalMember = userDAO.getTotalMember(clubID);
-            int totalPost = userDAO.getTotalPost(clubID);
-            int totalEvent = userDAO.getTotalEvent(clubID);
-            int totalJoinClubRequest = userDAO.getTotalJoinClubRequest(clubID);
-            int totalPostClubRequest = userDAO.getTotalPostClubRequest(clubID);
+        if (checkClubID == null || checkClubID.isBlank() || checkClubCreatorID == null || checkClubCreatorID.isBlank()) {
+            if (user == null) {
+                response.sendRedirect("user?command=Home");
+            } else if (clubID == null || clubID.isBlank() || clubCreatorID == null || clubCreatorID.isBlank()) {
+                response.sendRedirect("user?command=Home");
+            } else {
+                UserDAO userDAO = new UserDAO();
+                int totalManager = userDAO.getTotalManager(clubID, clubCreatorID);
+                int totalMember = userDAO.getTotalMember(clubID);
+                int totalPost = userDAO.getTotalPost(clubID);
+                int totalEvent = userDAO.getTotalEvent(clubID);
+                int totalJoinClubRequest = userDAO.getTotalJoinClubRequest(clubID);
+                int totalPostClubRequest = userDAO.getTotalPostClubRequest(clubID);
 //            request.setAttribute("clubID", clubID);
-            request.setAttribute("totalManager", totalManager);
-            request.setAttribute("totalMember", totalMember);
-            request.setAttribute("totalPost", totalPost);
-            request.setAttribute("totalEvent", totalEvent);
-            request.setAttribute("totalJoinClubRequest", totalJoinClubRequest);
-            request.setAttribute("totalPostClubRequest", totalPostClubRequest);
-            session.setAttribute("clubID", clubID);
-            session.setAttribute("clubCreatorID", clubCreatorID);
-            session.setAttribute("IsManager", "IsManager");
-            session.setMaxInactiveInterval(999999);
-            request.getRequestDispatcher("user/ClubHome.jsp").forward(request, response);
+                request.setAttribute("totalManager", totalManager);
+                request.setAttribute("totalMember", totalMember);
+                request.setAttribute("totalPost", totalPost);
+                request.setAttribute("totalEvent", totalEvent);
+                request.setAttribute("totalJoinClubRequest", totalJoinClubRequest);
+                request.setAttribute("totalPostClubRequest", totalPostClubRequest);
+                session.setAttribute("clubID", clubID);
+                session.setAttribute("clubCreatorID", clubCreatorID);
+                session.setAttribute("IsManager", "IsManager");
+                session.setAttribute("cClubID", clubID);
+                session.setAttribute("cClubCreatorID", clubCreatorID);
+                session.setMaxInactiveInterval(999999);
+                request.getRequestDispatcher("user/ClubHome.jsp").forward(request, response);
+            }
+        } else {
+            if (!checkClubID.equals(clubID) || !checkClubCreatorID.equals(clubCreatorID)) {
+                response.sendRedirect("user?command=IsManager&cID=" + checkClubID + "&cCID=" + checkClubCreatorID);
+            } else {
+                if (user == null) {
+                    response.sendRedirect("user?command=Home");
+                } else if (clubID == null || clubID.isBlank() || clubCreatorID == null || clubCreatorID.isBlank()) {
+                    response.sendRedirect("user?command=Home");
+                } else {
+                    UserDAO userDAO = new UserDAO();
+                    int totalManager = userDAO.getTotalManager(clubID, clubCreatorID);
+                    int totalMember = userDAO.getTotalMember(clubID);
+                    int totalPost = userDAO.getTotalPost(clubID);
+                    int totalEvent = userDAO.getTotalEvent(clubID);
+                    int totalJoinClubRequest = userDAO.getTotalJoinClubRequest(clubID);
+                    int totalPostClubRequest = userDAO.getTotalPostClubRequest(clubID);
+                    request.setAttribute("totalManager", totalManager);
+                    request.setAttribute("totalMember", totalMember);
+                    request.setAttribute("totalPost", totalPost);
+                    request.setAttribute("totalEvent", totalEvent);
+                    request.setAttribute("totalJoinClubRequest", totalJoinClubRequest);
+                    request.setAttribute("totalPostClubRequest", totalPostClubRequest);
+                    session.setAttribute("clubID", clubID);
+                    session.setAttribute("clubCreatorID", clubCreatorID);
+                    session.setAttribute("IsManager", "IsManager");
+                    session.setMaxInactiveInterval(999999);
+                    request.getRequestDispatcher("user/ClubHome.jsp").forward(request, response);
+                }
+            }
         }
     }
 
@@ -1927,31 +2028,66 @@ public class UserServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("account");
+        String checkClubID = (String) session.getAttribute("cClubID");
+        String checkClubCreatorID = (String) session.getAttribute("cClubCreatorID");
 
-        if (user == null) {
-            response.sendRedirect("user?command=Home");
-        } else if (clubID == null || clubID.isBlank() || clubCreatorID == null || clubCreatorID.isBlank()) {
-            response.sendRedirect("user?command=Home");
-        } else {
-            UserDAO userDAO = new UserDAO();
-            int totalManager = userDAO.getTotalManager(clubID, clubCreatorID);
-            int totalMember = userDAO.getTotalMember(clubID);
-            int totalPost = userDAO.getTotalPost(clubID);
-            int totalEvent = userDAO.getTotalEvent(clubID);
-            int totalJoinClubRequest = userDAO.getTotalJoinClubRequest(clubID);
-            int totalPostClubRequest = userDAO.getTotalPostClubRequest(clubID);
+        if (checkClubID == null || checkClubID.isBlank() || checkClubCreatorID == null || checkClubCreatorID.isBlank()) {
+            if (user == null) {
+                response.sendRedirect("user?command=Home");
+            } else if (clubID == null || clubID.isBlank() || clubCreatorID == null || clubCreatorID.isBlank()) {
+                response.sendRedirect("user?command=Home");
+            } else {
+                UserDAO userDAO = new UserDAO();
+                int totalManager = userDAO.getTotalManager(clubID, clubCreatorID);
+                int totalMember = userDAO.getTotalMember(clubID);
+                int totalPost = userDAO.getTotalPost(clubID);
+                int totalEvent = userDAO.getTotalEvent(clubID);
+                int totalJoinClubRequest = userDAO.getTotalJoinClubRequest(clubID);
+                int totalPostClubRequest = userDAO.getTotalPostClubRequest(clubID);
 //            request.setAttribute("clubID", clubID);
-            request.setAttribute("totalManager", totalManager);
-            request.setAttribute("totalMember", totalMember);
-            request.setAttribute("totalPost", totalPost);
-            request.setAttribute("totalEvent", totalEvent);
-            request.setAttribute("totalJoinClubRequest", totalJoinClubRequest);
-            request.setAttribute("totalPostClubRequest", totalPostClubRequest);
-            session.setAttribute("clubID", clubID);
-            session.setAttribute("clubCreatorID", clubCreatorID);
-            session.setAttribute("IsMember", "IsMember");
-            session.setMaxInactiveInterval(999999);
-            request.getRequestDispatcher("user/ClubHome.jsp").forward(request, response);
+                request.setAttribute("totalManager", totalManager);
+                request.setAttribute("totalMember", totalMember);
+                request.setAttribute("totalPost", totalPost);
+                request.setAttribute("totalEvent", totalEvent);
+                request.setAttribute("totalJoinClubRequest", totalJoinClubRequest);
+                request.setAttribute("totalPostClubRequest", totalPostClubRequest);
+                session.setAttribute("clubID", clubID);
+                session.setAttribute("clubCreatorID", clubCreatorID);
+                session.setAttribute("IsMember", "IsMember");
+                session.setAttribute("cClubID", clubID);
+                session.setAttribute("cClubCreatorID", clubCreatorID);
+                session.setMaxInactiveInterval(999999);
+                request.getRequestDispatcher("user/ClubHome.jsp").forward(request, response);
+            }
+        } else {
+            if (!checkClubID.equals(clubID) || !checkClubCreatorID.equals(clubCreatorID)) {
+                response.sendRedirect("user?command=IsMember&cID=" + checkClubID + "&cCID=" + checkClubCreatorID);
+            } else {
+                if (user == null) {
+                    response.sendRedirect("user?command=Home");
+                } else if (clubID == null || clubID.isBlank() || clubCreatorID == null || clubCreatorID.isBlank()) {
+                    response.sendRedirect("user?command=Home");
+                } else {
+                    UserDAO userDAO = new UserDAO();
+                    int totalManager = userDAO.getTotalManager(clubID, clubCreatorID);
+                    int totalMember = userDAO.getTotalMember(clubID);
+                    int totalPost = userDAO.getTotalPost(clubID);
+                    int totalEvent = userDAO.getTotalEvent(clubID);
+                    int totalJoinClubRequest = userDAO.getTotalJoinClubRequest(clubID);
+                    int totalPostClubRequest = userDAO.getTotalPostClubRequest(clubID);
+                    request.setAttribute("totalManager", totalManager);
+                    request.setAttribute("totalMember", totalMember);
+                    request.setAttribute("totalPost", totalPost);
+                    request.setAttribute("totalEvent", totalEvent);
+                    request.setAttribute("totalJoinClubRequest", totalJoinClubRequest);
+                    request.setAttribute("totalPostClubRequest", totalPostClubRequest);
+                    session.setAttribute("clubID", clubID);
+                    session.setAttribute("clubCreatorID", clubCreatorID);
+                    session.setAttribute("IsMember", "IsMember");
+                    session.setMaxInactiveInterval(999999);
+                    request.getRequestDispatcher("user/ClubHome.jsp").forward(request, response);
+                }
+            }
         }
     }
 
@@ -2033,6 +2169,7 @@ public class UserServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         HttpSession session = request.getSession();
+        session.removeAttribute("postID");
         User user = (User) session.getAttribute("account");
         String clubID = (String) session.getAttribute("clubID");
 
@@ -2041,7 +2178,7 @@ public class UserServlet extends HttpServlet {
         if (clubID != null) {
             int memberID = userDAO.getMemberID(user.getID(), clubID);
             ArrayList<Post> post = userDAO.getPostFromClubID(clubID);
-            Post myPost = userDAO.getMyPost(memberID);
+            ArrayList<Post> myPost = userDAO.getMyPost(memberID);
             if (post == null) {
                 request.setAttribute("warning", "No post yet");
                 request.getRequestDispatcher("user/ClubPost.jsp").forward(request, response);
@@ -2062,6 +2199,7 @@ public class UserServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         HttpSession session = request.getSession();
+        session.removeAttribute("eventID");
         User user = (User) session.getAttribute("account");
         String clubID = (String) session.getAttribute("clubID");
 
@@ -2093,6 +2231,7 @@ public class UserServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         HttpSession session = request.getSession();
+        session.removeAttribute("ratingID");
         User user = (User) session.getAttribute("account");
         String clubID = (String) session.getAttribute("clubID");
 
@@ -2537,35 +2676,71 @@ public class UserServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("account");
         String clubID = (String) session.getAttribute("clubID");
+        String checkPostID = (String) session.getAttribute("postID");
 
         UserDAO userDAO = new UserDAO();
 
-        if (clubID != null) {
-            int memberID = userDAO.getMemberID(user.getID(), clubID);
-            int clubCreatorID = userDAO.getClubCreatorID(clubID);
-            int isClubCreatorID = userDAO.getMemberID(clubCreatorID, clubID);
-            Post post = userDAO.getPost(clubID, postID);
-            Post myPost = userDAO.getMyPost(postID, memberID);
-            Post postOfClubCreator = userDAO.getPostOfClubCreator(postID, isClubCreatorID);
-            if (post == null) {
-                request.setAttribute("warning", "No post yet");
-                request.getRequestDispatcher("user/PostManage.jsp").forward(request, response);
-            } else if (postID == null || postID.isBlank()) {
-                request.getSession().removeAttribute("title");
-                request.getSession().removeAttribute("description");
-                response.sendRedirect("user?command=ClubPost");
+        if (checkPostID == null || checkPostID.isBlank()) {
+            if (clubID != null) {
+                int memberID = userDAO.getMemberID(user.getID(), clubID);
+                int clubCreatorID = userDAO.getClubCreatorID(clubID);
+                int isClubCreatorID = userDAO.getMemberID(clubCreatorID, clubID);
+                Post post = userDAO.getPost(clubID, postID);
+                Post myPost = userDAO.getMyPost(postID, memberID);
+                Post postOfClubCreator = userDAO.getPostOfClubCreator(postID, isClubCreatorID);
+                if (post == null) {
+                    request.setAttribute("warning", "No post yet");
+                    request.getRequestDispatcher("user/PostManage.jsp").forward(request, response);
+                } else if (postID == null || postID.isBlank()) {
+                    request.getSession().removeAttribute("title");
+                    request.getSession().removeAttribute("description");
+                    response.sendRedirect("user?command=ClubPost");
+                } else {
+                    request.setAttribute("post", post);
+                    request.setAttribute("postID", postID);
+                    request.setAttribute("clubID", clubID);
+                    request.setAttribute("myPost", myPost);
+                    request.setAttribute("postOfClubCreator", postOfClubCreator);
+                    request.getSession().removeAttribute("title");
+                    request.getSession().removeAttribute("description");
+                    session.setAttribute("postID", postID);
+                    request.getRequestDispatcher("user/PostManage.jsp").forward(request, response);
+                }
             } else {
-                request.setAttribute("post", post);
-                request.setAttribute("postID", postID);
-                request.setAttribute("clubID", clubID);
-                request.setAttribute("myPost", myPost);
-                request.setAttribute("postOfClubCreator", postOfClubCreator);
-                request.getSession().removeAttribute("title");
-                request.getSession().removeAttribute("description");
-                request.getRequestDispatcher("user/PostManage.jsp").forward(request, response);
+                response.sendRedirect("user?command=Home");
             }
         } else {
-            response.sendRedirect("user?command=Home");
+            if (!checkPostID.equals(postID)) {
+                response.sendRedirect("user?command=PostManage&pID=" + checkPostID);
+            } else {
+                if (clubID != null) {
+                    int memberID = userDAO.getMemberID(user.getID(), clubID);
+                    int clubCreatorID = userDAO.getClubCreatorID(clubID);
+                    int isClubCreatorID = userDAO.getMemberID(clubCreatorID, clubID);
+                    Post post = userDAO.getPost(clubID, postID);
+                    Post myPost = userDAO.getMyPost(postID, memberID);
+                    Post postOfClubCreator = userDAO.getPostOfClubCreator(postID, isClubCreatorID);
+                    if (post == null) {
+                        request.setAttribute("warning", "No post yet");
+                        request.getRequestDispatcher("user/PostManage.jsp").forward(request, response);
+                    } else if (postID == null || postID.isBlank()) {
+                        request.getSession().removeAttribute("title");
+                        request.getSession().removeAttribute("description");
+                        response.sendRedirect("user?command=ClubPost");
+                    } else {
+                        request.setAttribute("post", post);
+                        request.setAttribute("postID", postID);
+                        request.setAttribute("clubID", clubID);
+                        request.setAttribute("myPost", myPost);
+                        request.setAttribute("postOfClubCreator", postOfClubCreator);
+                        request.getSession().removeAttribute("title");
+                        request.getSession().removeAttribute("description");
+                        request.getRequestDispatcher("user/PostManage.jsp").forward(request, response);
+                    }
+                } else {
+                    response.sendRedirect("user?command=Home");
+                }
+            }
         }
     }
 
@@ -2577,26 +2752,53 @@ public class UserServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         String clubID = (String) session.getAttribute("clubID");
+        String checkPostID = (String) session.getAttribute("postID");
 
         UserDAO userDAO = new UserDAO();
 
-        if (clubID != null) {
-            Post post = userDAO.getPost(clubID, postID);
-            if (post == null) {
-                request.setAttribute("warning", "No post yet");
-                request.getRequestDispatcher("user/EditPost.jsp").forward(request, response);
-            } else if (postID == null || postID.isBlank()) {
-                request.getSession().removeAttribute("title");
-                request.getSession().removeAttribute("description");
-                response.sendRedirect("user?command=ClubPost");
+        if (checkPostID == null || checkPostID.isBlank()) {
+            if (clubID != null) {
+                Post post = userDAO.getPost(clubID, postID);
+                if (post == null) {
+                    request.setAttribute("warning", "No post yet");
+                    request.getRequestDispatcher("user/EditPost.jsp").forward(request, response);
+                } else if (postID == null || postID.isBlank()) {
+                    request.getSession().removeAttribute("title");
+                    request.getSession().removeAttribute("description");
+                    response.sendRedirect("user?command=ClubPost");
+                } else {
+                    request.setAttribute("post", post);
+                    request.setAttribute("postID", postID);
+                    request.setAttribute("clubID", clubID);
+                    session.setAttribute("postID", postID);
+                    request.getRequestDispatcher("user/EditPost.jsp").forward(request, response);
+                }
             } else {
-                request.setAttribute("post", post);
-                request.setAttribute("postID", postID);
-                request.setAttribute("clubID", clubID);
-                request.getRequestDispatcher("user/EditPost.jsp").forward(request, response);
+                response.sendRedirect("user?command=Home");
             }
         } else {
-            response.sendRedirect("user?command=Home");
+            if (!checkPostID.equals(postID)) {
+                response.sendRedirect("user?command=LoadEditPost&pID=" + checkPostID);
+            } else {
+                if (clubID != null) {
+                    Post post = userDAO.getPost(clubID, postID);
+                    if (post == null) {
+                        request.setAttribute("warning", "No post yet");
+                        request.getRequestDispatcher("user/EditPost.jsp").forward(request, response);
+                    } else if (postID == null || postID.isBlank()) {
+                        request.getSession().removeAttribute("title");
+                        request.getSession().removeAttribute("description");
+                        response.sendRedirect("user?command=ClubPost");
+                    } else {
+                        request.setAttribute("post", post);
+                        request.setAttribute("postID", postID);
+                        request.setAttribute("clubID", clubID);
+                        request.getRequestDispatcher("user/EditPost.jsp").forward(request, response);
+                    }
+                } else {
+                    response.sendRedirect("user?command=Home");
+                }
+            }
         }
     }
 
@@ -2729,40 +2931,73 @@ public class UserServlet extends HttpServlet {
         String postID = request.getParameter("pID");
 
         HttpSession session = request.getSession();
+        session.removeAttribute("postCommentID");
         User user = (User) session.getAttribute("account");
         String clubID = (String) session.getAttribute("clubID");
+        String checkPostID = (String) session.getAttribute("postID");
 
         UserDAO userDAO = new UserDAO();
 
-        if (clubID != null) {
-            int memberID = userDAO.getMemberID(user.getID(), clubID);
-            Post post = userDAO.getPost(clubID, postID);
-            ArrayList<PostComment> postComment = userDAO.getPostComment(postID);
+        if (checkPostID == null || checkPostID.isBlank()) {
+            if (clubID != null) {
+                int memberID = userDAO.getMemberID(user.getID(), clubID);
+                Post post = userDAO.getPost(clubID, postID);
+                ArrayList<PostComment> postComment = userDAO.getPostComment(postID);
 //            PostComment myComment = userDAO.getMyComment(memberID);
 //            ArrayList<PostComment> postComment = userDAO.getPostCommentTest(postID);
 //            ArrayList<PostComment> myComments = userDAO.getMyComments(postID, memberID);
 //            ArrayList<PostComment> notMyComments = userDAO.getNotMyComments(postID, memberID);
-            if (postComment == null) {
-                request.setAttribute("warning", "No comment yet");
-                request.getRequestDispatcher("user/ViewComment.jsp").forward(request, response);
-            } else if (postID == null || postID.isBlank()) {
-                request.getSession().removeAttribute("comments");
-                response.sendRedirect("user?command=ClubPost");
-            } else {
-                request.setAttribute("post", post);
-                request.setAttribute("postID", postID);
-                request.setAttribute("postComment", postComment);
-                request.setAttribute("postComments", postComment.size());
-                request.setAttribute("clubID", clubID);
-                request.setAttribute("commenterID", memberID);
-                request.getSession().removeAttribute("comments");
+                if (postComment == null) {
+                    request.setAttribute("warning", "No comment yet");
+                    request.getRequestDispatcher("user/ViewComment.jsp").forward(request, response);
+                } else if (postID == null || postID.isBlank()) {
+                    request.getSession().removeAttribute("comments");
+                    response.sendRedirect("user?command=ClubPost");
+                } else {
+                    request.setAttribute("post", post);
+                    request.setAttribute("postID", postID);
+                    request.setAttribute("postComment", postComment);
+                    request.setAttribute("postComments", postComment.size());
+                    request.setAttribute("clubID", clubID);
+                    request.setAttribute("commenterID", memberID);
+                    request.getSession().removeAttribute("comments");
+                    session.setAttribute("postID", postID);
 //                request.setAttribute("myComment", myComment);
 //                request.setAttribute("myComments", myComments);
 //                request.setAttribute("notMyComments", notMyComments);
-                request.getRequestDispatcher("user/ViewComment.jsp").forward(request, response);
+                    request.getRequestDispatcher("user/ViewComment.jsp").forward(request, response);
+                }
+            } else {
+                response.sendRedirect("user?command=Home");
             }
         } else {
-            response.sendRedirect("user?command=Home");
+            if (!checkPostID.equals(postID)) {
+                response.sendRedirect("user?command=ViewComment&pID=" + checkPostID);
+            } else {
+                if (clubID != null) {
+                    int memberID = userDAO.getMemberID(user.getID(), clubID);
+                    Post post = userDAO.getPost(clubID, postID);
+                    ArrayList<PostComment> postComment = userDAO.getPostComment(postID);
+                    if (postComment == null) {
+                        request.setAttribute("warning", "No comment yet");
+                        request.getRequestDispatcher("user/ViewComment.jsp").forward(request, response);
+                    } else if (postID == null || postID.isBlank()) {
+                        request.getSession().removeAttribute("comments");
+                        response.sendRedirect("user?command=ClubPost");
+                    } else {
+                        request.setAttribute("post", post);
+                        request.setAttribute("postID", postID);
+                        request.setAttribute("postComment", postComment);
+                        request.setAttribute("postComments", postComment.size());
+                        request.setAttribute("clubID", clubID);
+                        request.setAttribute("commenterID", memberID);
+                        request.getSession().removeAttribute("comments");
+                        request.getRequestDispatcher("user/ViewComment.jsp").forward(request, response);
+                    }
+                } else {
+                    response.sendRedirect("user?command=Home");
+                }
+            }
         }
     }
 
@@ -2775,28 +3010,54 @@ public class UserServlet extends HttpServlet {
         HttpSession session = request.getSession();
 //        User user = (User) session.getAttribute("account");
         String clubID = (String) session.getAttribute("clubID");
+        String checkPostID = (String) session.getAttribute("postID");
 
         UserDAO userDAO = new UserDAO();
 
-        if (clubID != null) {
+        if (checkPostID == null || checkPostID.isBlank()) {
+            if (clubID != null) {
 //            int memberID = userDAO.getMemberID(user.getID(), clubID);
-            Post post = userDAO.getPost(clubID, postID);
-            ArrayList<PostComment> postComment = userDAO.getPostComment(postID);
+                Post post = userDAO.getPost(clubID, postID);
+                ArrayList<PostComment> postComment = userDAO.getPostComment(postID);
 //            PostComment myComment = userDAO.getMyComment(memberID);
-            if (postComment == null) {
-                request.setAttribute("warning", "No comment yet");
-                request.getRequestDispatcher("user/ViewComment.jsp").forward(request, response);
-            } else {
-                request.setAttribute("post", post);
-                request.setAttribute("postID", postID);
-                request.setAttribute("clubID", clubID);
-                request.setAttribute("postComment", postComment);
-                request.setAttribute("comment", "comment");
+                if (postComment == null) {
+                    request.setAttribute("warning", "No comment yet");
+                    request.getRequestDispatcher("user/ViewComment.jsp").forward(request, response);
+                } else {
+                    request.setAttribute("post", post);
+                    request.setAttribute("postID", postID);
+                    request.setAttribute("clubID", clubID);
+                    request.setAttribute("postComment", postComment);
+                    request.setAttribute("comment", "comment");
+                    session.setAttribute("postID", postID);
 //                request.setAttribute("myComment", myComment);
-                ViewComment(request, response);
+                    ViewComment(request, response);
+                }
+            } else {
+                response.sendRedirect("user?command=Home");
             }
         } else {
-            response.sendRedirect("user?command=Home");
+            if (!checkPostID.equals(postID)) {
+                response.sendRedirect("user?command=SetToComment&pID=" + checkPostID);
+            } else {
+                if (clubID != null) {
+                    Post post = userDAO.getPost(clubID, postID);
+                    ArrayList<PostComment> postComment = userDAO.getPostComment(postID);
+                    if (postComment == null) {
+                        request.setAttribute("warning", "No comment yet");
+                        request.getRequestDispatcher("user/ViewComment.jsp").forward(request, response);
+                    } else {
+                        request.setAttribute("post", post);
+                        request.setAttribute("postID", postID);
+                        request.setAttribute("clubID", clubID);
+                        request.setAttribute("postComment", postComment);
+                        request.setAttribute("comment", "comment");
+                        ViewComment(request, response);
+                    }
+                } else {
+                    response.sendRedirect("user?command=Home");
+                }
+            }
         }
     }
 
@@ -2853,37 +3114,70 @@ public class UserServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("account");
         String clubID = (String) session.getAttribute("clubID");
+        String checkPostID = (String) session.getAttribute("postID");
+        String checkPostCommentID = (String) session.getAttribute("postCommentID");
 
         UserDAO userDAO = new UserDAO();
 
-        if (clubID != null) {
-            int memberID = userDAO.getMemberID(user.getID(), clubID);
-            Post post = userDAO.getPost(clubID, postID);
-            ArrayList<PostComment> postComment = userDAO.getPostComment(postID);
+        if (checkPostID == null || checkPostID.isBlank() || checkPostCommentID == null || checkPostCommentID.isBlank()) {
+            if (clubID != null) {
+                int memberID = userDAO.getMemberID(user.getID(), clubID);
+                Post post = userDAO.getPost(clubID, postID);
+                ArrayList<PostComment> postComment = userDAO.getPostComment(postID);
 //            PostComment myComment = userDAO.getMyComment(memberID);
 //            ArrayList<PostComment> postComment = userDAO.getPostCommentTest(postID);
 //            ArrayList<PostComment> myComments = userDAO.getMyComments(postID, memberID);
 //            ArrayList<PostComment> notMyComments = userDAO.getNotMyComments(postID, memberID);
-            if (postComment == null) {
-                request.setAttribute("warning", "No comment yet");
-                request.getRequestDispatcher("user/ViewComment.jsp").forward(request, response);
-            } else if (pcID == null || pcID.isBlank() || postID == null || postID.isBlank()) {
-                response.sendRedirect("user?command=ClubPost");
-            } else {
-                PostComment comment = userDAO.getComment(pcID);
-                request.setAttribute("post", post);
-                request.setAttribute("postID", postID);
-                request.setAttribute("postComment", postComment);
-                request.setAttribute("thisComment", comment);
-                request.setAttribute("clubID", clubID);
+                if (postComment == null) {
+                    request.setAttribute("warning", "No comment yet");
+                    request.getRequestDispatcher("user/ViewComment.jsp").forward(request, response);
+                } else if (pcID == null || pcID.isBlank() || postID == null || postID.isBlank()) {
+                    response.sendRedirect("user?command=ClubPost");
+                } else {
+                    PostComment comment = userDAO.getComment(pcID);
+                    request.setAttribute("post", post);
+                    request.setAttribute("postID", postID);
+                    request.setAttribute("postComment", postComment);
+                    request.setAttribute("thisComment", comment);
+                    request.setAttribute("clubID", clubID);
 //                request.setAttribute("myComment", myComment);
 //                request.setAttribute("myComments", myComments);
 //                request.setAttribute("notMyComments", notMyComments);
-                request.setAttribute("commenterID", memberID);
-                request.getRequestDispatcher("user/ViewComment.jsp").forward(request, response);
+                    request.setAttribute("commenterID", memberID);
+                    session.setAttribute("postID", postID);
+                    session.setAttribute("postCommentID", pcID);
+                    request.getRequestDispatcher("user/ViewComment.jsp").forward(request, response);
+                }
+            } else {
+                response.sendRedirect("user?command=Home");
             }
         } else {
-            response.sendRedirect("user?command=Home");
+            if (!checkPostID.equals(postID) || !checkPostCommentID.equals(pcID)) {
+                response.sendRedirect("user?command=LoadEditComment&pID=" + checkPostID + "&pcID=" + checkPostCommentID);
+            } else {
+                if (clubID != null) {
+                    int memberID = userDAO.getMemberID(user.getID(), clubID);
+                    Post post = userDAO.getPost(clubID, postID);
+                    ArrayList<PostComment> postComment = userDAO.getPostComment(postID);
+                    if (postComment == null) {
+                        request.setAttribute("warning", "No comment yet");
+                        request.getRequestDispatcher("user/ViewComment.jsp").forward(request, response);
+                    } else if (pcID == null || pcID.isBlank() || postID == null || postID.isBlank()) {
+                        response.sendRedirect("user?command=ClubPost");
+                    } else {
+                        PostComment comment = userDAO.getComment(pcID);
+                        request.setAttribute("post", post);
+                        request.setAttribute("postID", postID);
+                        request.setAttribute("postComment", postComment);
+                        request.setAttribute("thisComment", comment);
+                        request.setAttribute("clubID", clubID);
+                        request.setAttribute("commenterID", memberID);
+                        request.getRequestDispatcher("user/ViewComment.jsp").forward(request, response);
+                    }
+                } else {
+                    response.sendRedirect("user?command=Home");
+                }
+            }
         }
     }
 
@@ -3043,27 +3337,55 @@ public class UserServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         String clubID = (String) session.getAttribute("clubID");
+        String checkEventID = (String) session.getAttribute("eventID");
 
         UserDAO userDAO = new UserDAO();
 
-        if (clubID != null) {
-            Event event = userDAO.getEvent(eventID);
-            if (event == null) {
-                request.setAttribute("warning", "No event yet!");
-                request.getRequestDispatcher("user/EventManage.jsp").forward(request, response);
-            } else if (eventID == null || eventID.isBlank()) {
-                request.getSession().removeAttribute("name");
-                request.getSession().removeAttribute("description");
-                response.sendRedirect("user?command=ClubEvent");
+        if (checkEventID == null || checkEventID.isBlank()) {
+            if (clubID != null) {
+                Event event = userDAO.getEvent(eventID);
+                if (event == null) {
+                    request.setAttribute("warning", "No event yet!");
+                    request.getRequestDispatcher("user/EventManage.jsp").forward(request, response);
+                } else if (eventID == null || eventID.isBlank()) {
+                    request.getSession().removeAttribute("name");
+                    request.getSession().removeAttribute("description");
+                    response.sendRedirect("user?command=ClubEvent");
+                } else {
+                    request.setAttribute("event", event);
+                    request.setAttribute("eventID", eventID);
+                    request.getSession().removeAttribute("name");
+                    request.getSession().removeAttribute("description");
+                    session.setAttribute("eventID", eventID);
+                    request.getRequestDispatcher("user/EventManage.jsp").forward(request, response);
+                }
             } else {
-                request.setAttribute("event", event);
-                request.setAttribute("eventID", eventID);
-                request.getSession().removeAttribute("name");
-                request.getSession().removeAttribute("description");
-                request.getRequestDispatcher("user/EventManage.jsp").forward(request, response);
+                response.sendRedirect("user?command=Home");
             }
         } else {
-            response.sendRedirect("user?command=Home");
+            if (!checkEventID.equals(eventID)) {
+                response.sendRedirect("user?command=EventManage&eID=" + checkEventID);
+            } else {
+                if (clubID != null) {
+                    Event event = userDAO.getEvent(eventID);
+                    if (event == null) {
+                        request.setAttribute("warning", "No event yet!");
+                        request.getRequestDispatcher("user/EventManage.jsp").forward(request, response);
+                    } else if (eventID == null || eventID.isBlank()) {
+                        request.getSession().removeAttribute("name");
+                        request.getSession().removeAttribute("description");
+                        response.sendRedirect("user?command=ClubEvent");
+                    } else {
+                        request.setAttribute("event", event);
+                        request.setAttribute("eventID", eventID);
+                        request.getSession().removeAttribute("name");
+                        request.getSession().removeAttribute("description");
+                        request.getRequestDispatcher("user/EventManage.jsp").forward(request, response);
+                    }
+                } else {
+                    response.sendRedirect("user?command=Home");
+                }
+            }
         }
     }
 
@@ -3075,25 +3397,51 @@ public class UserServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         String clubID = (String) session.getAttribute("clubID");
+        String checkEventID = (String) session.getAttribute("eventID");
 
         UserDAO userDAO = new UserDAO();
 
-        if (clubID != null) {
-            Event event = userDAO.getEvent(eventID);
-            if (event == null) {
-                request.setAttribute("warning", "No event yet!");
-                request.getRequestDispatcher("user/EditEvent.jsp").forward(request, response);
-            } else if (eventID == null || eventID.isBlank()) {
-                request.getSession().removeAttribute("name");
-                request.getSession().removeAttribute("description");
-                response.sendRedirect("user?command=ClubEvent");
+        if (checkEventID == null || checkEventID.isBlank()) {
+            if (clubID != null) {
+                Event event = userDAO.getEvent(eventID);
+                if (event == null) {
+                    request.setAttribute("warning", "No event yet!");
+                    request.getRequestDispatcher("user/EditEvent.jsp").forward(request, response);
+                } else if (eventID == null || eventID.isBlank()) {
+                    request.getSession().removeAttribute("name");
+                    request.getSession().removeAttribute("description");
+                    response.sendRedirect("user?command=ClubEvent");
+                } else {
+                    request.setAttribute("event", event);
+                    request.setAttribute("eventID", eventID);
+                    session.setAttribute("eventID", eventID);
+                    request.getRequestDispatcher("user/EditEvent.jsp").forward(request, response);
+                }
             } else {
-                request.setAttribute("event", event);
-                request.setAttribute("eventID", eventID);
-                request.getRequestDispatcher("user/EditEvent.jsp").forward(request, response);
+                response.sendRedirect("user?command=Home");
             }
         } else {
-            response.sendRedirect("user?command=Home");
+            if (!checkEventID.equals(eventID)) {
+                response.sendRedirect("user?command=LoadEditEvent&eID=" + checkEventID);
+            } else {
+                if (clubID != null) {
+                    Event event = userDAO.getEvent(eventID);
+                    if (event == null) {
+                        request.setAttribute("warning", "No event yet!");
+                        request.getRequestDispatcher("user/EditEvent.jsp").forward(request, response);
+                    } else if (eventID == null || eventID.isBlank()) {
+                        request.getSession().removeAttribute("name");
+                        request.getSession().removeAttribute("description");
+                        response.sendRedirect("user?command=ClubEvent");
+                    } else {
+                        request.setAttribute("event", event);
+                        request.setAttribute("eventID", eventID);
+                        request.getRequestDispatcher("user/EditEvent.jsp").forward(request, response);
+                    }
+                } else {
+                    response.sendRedirect("user?command=Home");
+                }
+            }
         }
     }
 
@@ -3179,24 +3527,49 @@ public class UserServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         String clubID = (String) session.getAttribute("clubID");
+        String checkEventID = (String) session.getAttribute("eventID");
 
         UserDAO userDAO = new UserDAO();
 
-        if (clubID != null) {
-            Event event = userDAO.getEvent(eventID);
-            ArrayList<User> eventAttendees = userDAO.getEventAttendeesList(eventID);
-            if (eventAttendees == null) {
-                request.setAttribute("warning", "No attendees this event!");
-                request.getRequestDispatcher("user/EventAttendeesList.jsp").forward(request, response);
+        if (checkEventID == null || checkEventID.isBlank()) {
+            if (clubID != null) {
+                Event event = userDAO.getEvent(eventID);
+                ArrayList<User> eventAttendees = userDAO.getEventAttendeesList(eventID);
+                if (eventAttendees == null) {
+                    request.setAttribute("warning", "No attendees this event!");
+                    request.getRequestDispatcher("user/EventAttendeesList.jsp").forward(request, response);
+                } else {
+                    request.setAttribute("event", event);
+                    request.setAttribute("eventID", eventID);
+                    request.setAttribute("eventAttendees", eventAttendees);
+                    request.setAttribute("eventAttendeess", eventAttendees.size());
+                    session.setAttribute("eventID", eventID);
+                    request.getRequestDispatcher("user/EventAttendeesList.jsp").forward(request, response);
+                }
             } else {
-                request.setAttribute("event", event);
-                request.setAttribute("eventID", eventID);
-                request.setAttribute("eventAttendees", eventAttendees);
-                request.setAttribute("eventAttendeess", eventAttendees.size());
-                request.getRequestDispatcher("user/EventAttendeesList.jsp").forward(request, response);
+                response.sendRedirect("user?command=Home");
             }
         } else {
-            response.sendRedirect("user?command=Home");
+            if (!checkEventID.equals(eventID)) {
+                response.sendRedirect("user?command=EventAttendeesList&eID=" + checkEventID);
+            } else {
+                if (clubID != null) {
+                    Event event = userDAO.getEvent(eventID);
+                    ArrayList<User> eventAttendees = userDAO.getEventAttendeesList(eventID);
+                    if (eventAttendees == null) {
+                        request.setAttribute("warning", "No attendees this event!");
+                        request.getRequestDispatcher("user/EventAttendeesList.jsp").forward(request, response);
+                    } else {
+                        request.setAttribute("event", event);
+                        request.setAttribute("eventID", eventID);
+                        request.setAttribute("eventAttendees", eventAttendees);
+                        request.setAttribute("eventAttendeess", eventAttendees.size());
+                        request.getRequestDispatcher("user/EventAttendeesList.jsp").forward(request, response);
+                    }
+                } else {
+                    response.sendRedirect("user?command=Home");
+                }
+            }
         }
     }
 
@@ -3301,29 +3674,59 @@ public class UserServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("account");
         String clubID = (String) session.getAttribute("clubID");
+        String checkRatingID = (String) session.getAttribute("ratingID");
 
         UserDAO userDAO = new UserDAO();
 
-        if (clubID != null) {
-            int memberID = userDAO.getMemberID(user.getID(), clubID);
-            ArrayList<Rating> rating = userDAO.getRatingFromClubID(clubID);
-            Rating myRating = userDAO.getMyRating(memberID);
-            Rating thisRating = userDAO.getRating(ratingID);
-            if (rating == null) {
-                request.setAttribute("warning", "No rating yet");
-                request.getRequestDispatcher("user/ClubRating.jsp").forward(request, response);
-            } else if (ratingID == null || ratingID.isBlank()) {
-                response.sendRedirect("user?command=ClubRating");
+        if (checkRatingID == null || checkRatingID.isBlank()) {
+            if (clubID != null) {
+                int memberID = userDAO.getMemberID(user.getID(), clubID);
+                ArrayList<Rating> rating = userDAO.getRatingFromClubID(clubID);
+                Rating myRating = userDAO.getMyRating(memberID);
+                Rating thisRating = userDAO.getRating(ratingID);
+                if (rating == null) {
+                    request.setAttribute("warning", "No rating yet");
+                    request.getRequestDispatcher("user/ClubRating.jsp").forward(request, response);
+                } else if (ratingID == null || ratingID.isBlank()) {
+                    response.sendRedirect("user?command=ClubRating");
+                } else {
+                    request.setAttribute("rating", rating);
+                    request.setAttribute("ratings", rating.size());
+                    request.setAttribute("myRating", myRating);
+                    request.setAttribute("thisRating", thisRating);
+                    request.setAttribute("clubID", clubID);
+                    session.setAttribute("ratingID", ratingID);
+                    request.getRequestDispatcher("user/ClubRating.jsp").forward(request, response);
+                }
             } else {
-                request.setAttribute("rating", rating);
-                request.setAttribute("ratings", rating.size());
-                request.setAttribute("myRating", myRating);
-                request.setAttribute("thisRating", thisRating);
-                request.setAttribute("clubID", clubID);
-                request.getRequestDispatcher("user/ClubRating.jsp").forward(request, response);
+                response.sendRedirect("user?command=Home");
             }
         } else {
-            response.sendRedirect("user?command=Home");
+            if (!checkRatingID.equals(ratingID)) {
+                response.sendRedirect("user?command=LoadEditRating&rID=" + checkRatingID);
+            } else {
+                if (clubID != null) {
+                    int memberID = userDAO.getMemberID(user.getID(), clubID);
+                    ArrayList<Rating> rating = userDAO.getRatingFromClubID(clubID);
+                    Rating myRating = userDAO.getMyRating(memberID);
+                    Rating thisRating = userDAO.getRating(ratingID);
+                    if (rating == null) {
+                        request.setAttribute("warning", "No rating yet");
+                        request.getRequestDispatcher("user/ClubRating.jsp").forward(request, response);
+                    } else if (ratingID == null || ratingID.isBlank()) {
+                        response.sendRedirect("user?command=ClubRating");
+                    } else {
+                        request.setAttribute("rating", rating);
+                        request.setAttribute("ratings", rating.size());
+                        request.setAttribute("myRating", myRating);
+                        request.setAttribute("thisRating", thisRating);
+                        request.setAttribute("clubID", clubID);
+                        request.getRequestDispatcher("user/ClubRating.jsp").forward(request, response);
+                    }
+                } else {
+                    response.sendRedirect("user?command=Home");
+                }
+            }
         }
     }
 

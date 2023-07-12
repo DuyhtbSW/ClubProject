@@ -39,10 +39,15 @@
                                     <a href="<%=request.getContextPath()%>/user?command=PostManage&pID=${p.ID}">Manage post</a>
                                 </td>
                             </c:if>
-                            <c:if test="${sessionScope.IsMember != null && myPost.ID == p.ID}">
-                                <td>
-                                    <a href="<%=request.getContextPath()%>/user?command=PostManage&pID=${p.ID}">Manage post</a>
-                                </td>
+                            <%--<c:if test="${sessionScope.IsMember != null && myPost.ID == p.ID}">--%>
+                            <c:if test="${sessionScope.IsMember != null}">
+                                <c:forEach var="mp" items="${myPost}">
+                                    <c:if test="${mp.ID == p.ID}">
+                                        <td>
+                                            <a href="<%=request.getContextPath()%>/user?command=PostManage&pID=${p.ID}">Manage post</a>
+                                        </td>
+                                    </c:if>
+                                </c:forEach>
                             </c:if>
                         </tr>
                     </c:forEach>

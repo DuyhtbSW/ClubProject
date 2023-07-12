@@ -693,8 +693,9 @@ public class UserDAO {
         return null;
     }
 
-    public Post getMyPost(int memberID) {
+    public ArrayList<Post> getMyPost(int memberID) {
         try {
+            post = new ArrayList<>();
             con = new DBConnect().getConnection();
             String query = "SELECT * FROM Post\n" + "WHERE MemberID = ? AND PostStatus = 1 and RemoveStatus = 0";
             PreparedStatement ps = con.prepareStatement(query);
@@ -710,11 +711,11 @@ public class UserDAO {
 
                 String posterName = getNameFromMemberID(mID);
 
-                return new Post(pID, postTitle, postDescription, postDate, posterName, sClubID);
+                post.add(new Post(pID, postTitle, postDescription, postDate, posterName, sClubID));
             }
         } catch (Exception e) {
         }
-        return null;
+        return post;
     }
 
     public Post getPostOfClubCreator(String postID, int memberID) {
@@ -2004,7 +2005,7 @@ public class UserDAO {
         }
         return null;
     }
-    
+
     public void cancelRequestPost(String postID) {
         try {
             con = new DBConnect().getConnection();
@@ -2046,7 +2047,7 @@ public class UserDAO {
         }
         return null;
     }
-    
+
     public void cancelRequestEvent(String eventID) {
         try {
             con = new DBConnect().getConnection();
