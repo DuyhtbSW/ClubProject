@@ -28,6 +28,14 @@
         <servlet-name>NotificationControllerServlet</servlet-name>
         <servlet-class>controller.Admin.NotificationControllerServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UploadProfileServlet</servlet-name>
+        <servlet-class>controller.User.UploadProfileServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UploadFileServlet</servlet-name>
+        <servlet-class>controller.User.UploadFileServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
         <url-pattern>/user</url-pattern>
@@ -55,6 +63,10 @@
     <servlet-mapping>
         <servlet-name>NotificationControllerServlet</servlet-name>
         <url-pattern>/NotificationControllerServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UploadFileServlet</servlet-name>
+        <url-pattern>/upload</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

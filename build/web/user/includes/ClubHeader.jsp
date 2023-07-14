@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<link rel="stylesheet" href="style/Club.css"/>
+<link rel="stylesheet" href="user/style/Club.css"/>
 <!DOCTYPE html>
 <header>
     <div class="search-wrapper">

@@ -12,6 +12,7 @@
             <table>
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Poster</th>
                         <th>Date</th>
                         <th>Title</th>
@@ -27,6 +28,7 @@
                     <c:set var="endIndex" value="${(currentPage * pageSize) - 1}" />
                     <c:forEach var="p" items="${post}" begin="${startIndex}" end="${endIndex}">
                         <tr>
+                            <td><img src="images/${p.img}" width="80" height="50" alt="image"/></td>
                             <td>${p.memberID}</td>
                             <td>${p.date}</td>
                             <td>${p.title}</td>
@@ -39,10 +41,15 @@
                                     <a href="<%=request.getContextPath()%>/user?command=PostManage&pID=${p.ID}">Manage post</a>
                                 </td>
                             </c:if>
-                            <c:if test="${sessionScope.IsMember != null && myPost.ID == p.ID}">
-                                <td>
-                                    <a href="<%=request.getContextPath()%>/user?command=PostManage&pID=${p.ID}">Manage post</a>
-                                </td>
+                            <%--<c:if test="${sessionScope.IsMember != null && myPost.ID == p.ID}">--%>
+                            <c:if test="${sessionScope.IsMember != null}">
+                                <c:forEach var="mp" items="${myPost}">
+                                    <c:if test="${mp.ID == p.ID}">
+                                        <td>
+                                            <a href="<%=request.getContextPath()%>/user?command=PostManage&pID=${p.ID}">Manage post</a>
+                                        </td>
+                                    </c:if>
+                                </c:forEach>
                             </c:if>
                         </tr>
                     </c:forEach>

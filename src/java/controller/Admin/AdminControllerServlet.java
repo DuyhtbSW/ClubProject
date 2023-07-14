@@ -45,33 +45,36 @@ public class AdminControllerServlet extends HttpServlet {
     }
 
     private void loginAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String iD = request.getParameter("username");
-        String passWord = request.getParameter("password");
-        Admin ad = new Admin(iD, passWord);
-        if (AdminDao.login(ad)) {
-            HttpSession session = request.getSession();
-            session.setAttribute("adminLogin", ad);
-            session.setAttribute("loggedIn", true);
-            
-//            request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-//
-//            session = request.getSession();
-//            String prevUrl = request.getHeader("Referer");
-//
-//            session.setAttribute("prevUrl", prevUrl);
-//            session = request.getSession(false);
-//            if (session != null) {
-//                prevUrl = (String) session.getAttribute("prevUrl");
-//                if (prevUrl != null) {
-//                    // Chuyển hướng người dùng về trang trước đó đã xem
-//                    response.sendRedirect(prevUrl);
-//                }
-//            }
+        HttpSession session = request.getSession();
+        String check = (String) request.getSession().getAttribute("check");
 
-            response.sendRedirect("AdminControllerServlet");
+        if (check != null) {
+            String iD = (String) request.getSession().getAttribute("username");
+            String passWord = (String) request.getSession().getAttribute("password");
+            Admin ad = new Admin(iD, passWord);
+            if (AdminDao.login(ad)) {
+                session.setAttribute("adminLogin", ad);
+                session.setAttribute("loggedIn", true);
+                request.getSession().removeAttribute("username");
+                request.getSession().removeAttribute("password");
+                request.getSession().removeAttribute("check");
+                response.sendRedirect("AdminControllerServlet");
+            } else {
+                request.getSession().setAttribute("warning", "Incorrect account or password!");
+                response.sendRedirect("user?command=rLogin");
+            }
         } else {
-            request.setAttribute("loginFail", "Email or password is incorrect");
-            request.getRequestDispatcher("admin/admin-login.jsp").forward(request, response);
+            String iD = request.getParameter("username");
+            String passWord = request.getParameter("password");
+            Admin ad = new Admin(iD, passWord);
+            if (AdminDao.login(ad)) {
+                session.setAttribute("adminLogin", ad);
+                session.setAttribute("loggedIn", true);
+                response.sendRedirect("AdminControllerServlet");
+            } else {
+                request.setAttribute("loginFail", "Email or password is incorrect");
+                request.getRequestDispatcher("admin/admin-login.jsp").forward(request, response);
+            }
         }
     }
 

@@ -34,7 +34,28 @@
         </style>
     </head>
     <body>
-        <a href="<%=request.getContextPath()%>/user?command=Home">Home</a>
+        <c:if test="${sessionScope.account == null}">
+            <script>
+                <%
+//                    String cookie = "";
+//                    Cookie[] cookies = request.getCookies();
+//                    if (cookies != null) {
+//                        for (Cookie c : cookies) {
+//                            if (c.getName().equals("rAcc")) {
+//                                cookie = c.getValue();
+//                            }
+//                        }
+//                        if (cookie != null) {
+//                            response.sendRedirect("user");
+//                        }
+//                    }
+                %>
+            </script>
+            <a href="<%=request.getContextPath()%>/user?command=GetCookie">Home</a>
+        </c:if>
+        <c:if test="${sessionScope.account != null}">
+            <a href="<%=request.getContextPath()%>/user?command=Home">Home</a>
+        </c:if>
         <a href="<%=request.getContextPath()%>/user?command=ClubsList">Clubs List</a>
         <c:if test="${sessionScope.clubCreator != null}">
         <li><a href="<%=request.getContextPath()%>/user?command=ForCreator">Club Manager<h6>for Creator</h6></a></li>
@@ -49,7 +70,7 @@
             <c:if test="${sessionScope.account.name != null}">
             <li><a href="<%=request.getContextPath()%>/user?command=LoadProfile">Hello ${sessionScope.account.name}</a></li>
             </c:if>
-            <li><a href="<%=request.getContextPath()%>/user?command=Notification">Notification</a></li>
+        <li><a href="<%=request.getContextPath()%>/user?command=Notification">Notification</a></li>
             <%--<c:if test="${sessionScope.account.name == null}">--%>
             <!--<li><a href="user?command=LoadProfile">Hello ${sessionScope.account.email}</a></li>-->
         <%--</c:if>--%>

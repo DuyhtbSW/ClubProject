@@ -41,54 +41,59 @@
                                     <h3><%=warning%></h3>
                                 </div>
                                 <%
-                                    // Xóa thông báo sau khi hiển thị
-                                    request.getSession().removeAttribute("warning");
-                                }
+                                        // Xóa thông báo sau khi hiển thị
+                                        request.getSession().removeAttribute("warning");
+                                    }
                                 %>
                             </c:if>
                             <div class="table-responsive">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Club Code</th>
-                                            <th>Club Name</th>
-                                            <th>Club Description</th>
-                                            <th></th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <form action="<%=request.getContextPath()%>/user" method="get">
-                                        <input type="hidden" name="command" value="EditClub">
-                                        <tr>
-                                            <c:if test="${code == null}">
-                                                <td><input type="text" name="code" value="${club.code}"></td>
-                                                </c:if>
-                                                <c:if test="${code != null}">
-                                                <td><input type="text" name="code" value=""></td>
-                                                </c:if>
-                                                <c:if test="${name == null}">
-                                                <td><textarea rows="2" cols="25" name="name">${club.name}</textarea></td>
-                                                </c:if>
-                                                <c:if test="${name != null}">
-                                                <td><textarea rows="2" cols="25" name="name"></textarea></td>
-                                                </c:if>
-                                                <c:if test="${description == null}">
-                                                <td><textarea rows="4" cols="27" name="description">${club.description}</textarea></td>
-                                                </c:if>
-                                                <c:if test="${description != null}">
-                                                <td><textarea rows="4" cols="27" name="description"></textarea></td>
-                                                </c:if>
-                                            <td>
-                                                <input type="submit" name="save" value="Save"/>
-                                            </td>
-                                            <td>
-                                                <a href="<%=request.getContextPath()%>/user?command=ViewClubDetails">Cancel</a>
-                                            </td>
-                                        </tr>
-                                    </form>
-                                    </tbody>
-                                </table>
+                                <form action="<%=request.getContextPath()%>/upload" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" name="command" value="EditClub">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Club Code</th>
+                                                <th>Name</th>
+                                                <th>Description</th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <img src="images/${club.img}" width="80" height="50" alt="image"/>
+                                                    <input type="file" name="image" value="">
+                                                </td>
+                                                <c:if test="${code == null}">
+                                                    <td><input type="text" name="code" value="${club.code}"></td>
+                                                    </c:if>
+                                                    <c:if test="${code != null}">
+                                                    <td><input type="text" name="code" value=""></td>
+                                                    </c:if>
+                                                    <c:if test="${name == null}">
+                                                    <td><textarea rows="2" cols="25" name="name">${club.name}</textarea></td>
+                                                    </c:if>
+                                                    <c:if test="${name != null}">
+                                                    <td><textarea rows="2" cols="25" name="name"></textarea></td>
+                                                    </c:if>
+                                                    <c:if test="${description == null}">
+                                                    <td><textarea rows="4" cols="27" name="description">${club.description}</textarea></td>
+                                                    </c:if>
+                                                    <c:if test="${description != null}">
+                                                    <td><textarea rows="4" cols="27" name="description"></textarea></td>
+                                                    </c:if>
+                                                <td>
+                                                    <input type="submit" name="save" value="Save"/>
+                                                </td>
+                                                <td>
+                                                    <a href="<%=request.getContextPath()%>/user?command=ViewClubDetails">Cancel</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
                             </div>
                         </div>
                     </div>
