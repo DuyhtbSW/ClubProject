@@ -33,6 +33,7 @@
                                 <table>
                                     <thead>
                                         <tr>
+                                            <th></th>
                                             <th>Event Name</th>
                                             <th>Date</th>
                                             <th>Description</th>
@@ -42,6 +43,7 @@
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td><img src="images/${event.img}" width="80" height="50" alt="image"/></td>
                                             <td>${event.name}</td>
                                             <td>${event.date}</td>
                                             <td>${event.description}</td>

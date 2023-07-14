@@ -8,8 +8,9 @@
             <thead>
                 <c:if test="${sessionScope.IsCreator != null || sessionScope.IsManager != null}">
                     <tr>
+                        <th></th>
                         <th>Club Code</th>
-                        <th>Club Name</th>
+                        <th>Name</th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -18,6 +19,7 @@
                 </c:if>
                 <c:if test="${sessionScope.IsMember != null}">
                     <tr>
+                        <th></th>
                         <th>Club Code</th>
                         <th>Name</th>
                         <th>Description</th>
@@ -28,6 +30,7 @@
             <tbody>
                 <c:if test="${sessionScope.IsCreator != null}">
                     <tr>
+                        <td><img src="images/${club.img}" width="80" height="50" alt="image"/></td>
                         <td>${club.code}</td>
                         <td>${club.name}</td>
                         <td>
@@ -48,6 +51,7 @@
                 </c:if>
                 <c:if test="${sessionScope.IsManager != null}">
                     <tr>
+                        <td><img src="images/${club.img}" width="80" height="50" alt="image"/></td>
                         <td>${club.code}</td>
                         <td>${club.name}</td>
                         <td>
@@ -63,6 +67,7 @@
                 </c:if>
                 <c:if test="${sessionScope.IsMember != null}">
                     <tr>
+                        <td><img src="images/${club.img}" width="80" height="50" alt="image"/></td>
                         <td>${club.code}</td>
                         <td>${club.name}</td>
                         <td>${club.description}</td>

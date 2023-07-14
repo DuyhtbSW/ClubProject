@@ -51,6 +51,23 @@ public class UserDAO {
         return null;
     }
 
+    public User checkUserBlock(String acc, String pass) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "select * from Users\n" + "where UserEmail = ? and UserPassword = ? and UserStatus = 1";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, acc);
+            ps.setString(2, pass);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return new User(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(9));
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
     public User checkUserEmail(String email) {
         try {
             con = new DBConnect().getConnection();
@@ -274,7 +291,7 @@ public class UserDAO {
         }
     }
 
-    public int checkClubID(String cCode, String cName, String cDescription, int cCreatorID, Date cDateCreated) {
+    public int checkClubID(String cCode, String cName, String cDescription, int cCreatorID, Date cDateCreated, String cImg) {
         try {
             con = new DBConnect().getConnection();
             String query = "INSERT INTO Clubs VALUES (?, ?, ?, ?, ?, 0, 0, 1, 1, 0, ?)";
@@ -284,7 +301,7 @@ public class UserDAO {
             ps.setString(3, cDescription);
             ps.setInt(4, cCreatorID);
             ps.setDate(5, cDateCreated);
-            ps.setString(6, "");
+            ps.setString(6, cImg);
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 try ( ResultSet rs = ps.getGeneratedKeys()) {
@@ -352,7 +369,7 @@ public class UserDAO {
             String query = "SELECT c.ClubID, c.ClubCode, c.ClubName, c.ClubDescription, c.ClubCreatorID, c.DateCreated\n"
                     + "FROM Clubs c\n"
                     + "INNER JOIN Member m ON c.ClubID = m.ClubID\n"
-                    + "WHERE c.ClubCreatorID <> ? AND c.ClubStatus = 1 AND c.RemoveStatus = 0 AND m.UserID = ? AND m.IsClubManager = 1 AND m.MemberStatus = 1";
+                    + "WHERE c.ClubCreatorID <> ? AND c.ClubStatus = 1 AND c.RemoveStatus = 0 AND m.UserID = ? AND m.IsClubManager = 1 AND m.MemberStatus = 1 AND m.KickStatus = 0";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, userID);
             ps.setInt(2, userID);
@@ -373,7 +390,7 @@ public class UserDAO {
             String query = "SELECT c.ClubID, c.ClubCode, c.ClubName, c.ClubDescription, c.ClubCreatorID, c.DateCreated\n"
                     + "FROM Clubs c\n"
                     + "INNER JOIN Member m ON c.ClubID = m.ClubID\n"
-                    + "WHERE c.ClubCreatorID <> ? AND c.ClubStatus = 1 AND c.RemoveStatus = 0 AND m.UserID = ? AND m.IsClubManager = 0 AND m.MemberStatus = 1";
+                    + "WHERE c.ClubCreatorID <> ? AND c.ClubStatus = 1 AND c.RemoveStatus = 0 AND m.UserID = ? AND m.IsClubManager = 0 AND m.MemberStatus = 1 AND m.KickStatus = 0";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, userID);
             ps.setInt(2, userID);
@@ -461,7 +478,7 @@ public class UserDAO {
             con = new DBConnect().getConnection();
             String query = "SELECT COUNT(*) AS JoinClubRequest\n"
                     + "FROM Member\n"
-                    + "WHERE ClubID = ? AND MemberStatus = 0";
+                    + "WHERE ClubID = ? AND MemberStatus = 0 AND JoinStatus = 1 AND KickStatus = 0";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, clubID);
             ResultSet rs = ps.executeQuery();
@@ -531,8 +548,9 @@ public class UserDAO {
             ps.setString(1, clubID);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                return new Club(rs.getInt(1), rs.getString(2), rs.getString(3),
-                        rs.getString(4), rs.getString(5), rs.getString(6));
+                return new Club(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
+                        rs.getString(10), rs.getString(11), rs.getString(12));
             }
         } catch (Exception e) {
         }
@@ -633,7 +651,8 @@ public class UserDAO {
 
                 String posterName = getNameFromMemberID(memberID);
 
-                post.add(new Post(postID, postTitle, postDescription, postDate, posterName, sClubID));
+                post.add(new Post(postID, postTitle, postDescription, postDate, posterName, sClubID,
+                        rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11)));
 //                post.add(new Post(rs.getInt(1), rs.getString(2), rs.getString(3),
 //                        rs.getString(4), rs.getString(5), rs.getString(6)));
             }
@@ -661,7 +680,8 @@ public class UserDAO {
 
                 String posterName = getNameFromMemberID(memberID);
 
-                return new Post(pID, postTitle, postDescription, postDate, posterName, sClubID);
+                return new Post(pID, postTitle, postDescription, postDate, posterName, sClubID,
+                        rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11));
             }
         } catch (Exception e) {
         }
@@ -777,7 +797,7 @@ public class UserDAO {
         return PosterName;
     }
 
-    public void insertPost(String pTitle, String pDescription, Date pDate, int pMemberID, String pClubID, String pStatus, String cRequest, String cStatus) {
+    public void insertPost(String pTitle, String pDescription, Date pDate, int pMemberID, String pClubID, String pStatus, String cRequest, String cStatus, String pImg) {
         try {
             con = new DBConnect().getConnection();
             String query = "insert into Post values (?, ?, ?, ?, ?, ?, ?, ?, 0, ?)";
@@ -790,13 +810,13 @@ public class UserDAO {
             ps.setString(6, pStatus);
             ps.setString(7, cRequest);
             ps.setString(8, cStatus);
-            ps.setString(9, "");
+            ps.setString(9, pImg);
             ps.executeUpdate();
         } catch (Exception e) {
         }
     }
 
-    public int checkPostID(String pTitle, String pDescription, Date pDate, int pMemberID, String pClubID, String pStatus, String cRequest, String cStatus) {
+    public int checkPostID(String pTitle, String pDescription, Date pDate, int pMemberID, String pClubID, String pStatus, String cRequest, String cStatus, String pImg) {
         try {
             con = new DBConnect().getConnection();
             String query = "INSERT INTO Post VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?)";
@@ -809,7 +829,7 @@ public class UserDAO {
             ps.setString(6, pStatus);
             ps.setString(7, cRequest);
             ps.setString(8, cStatus);
-            ps.setString(9, "");
+            ps.setString(9, pImg);
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 try ( ResultSet rs = ps.getGeneratedKeys()) {
@@ -837,17 +857,19 @@ public class UserDAO {
         return 0;
     }
 
-    public void editPost(String pTitle, String pDescription, String postID) {
+    public void editPost(String pTitle, String pDescription, String pImg, String postID) {
         try {
             con = new DBConnect().getConnection();
             String query = "update Post\n"
                     + "set PostTitle = ?,\n"
-                    + "PostDescription = ?\n"
+                    + "PostDescription = ?,\n"
+                    + "PostImg = ?\n"
                     + "where PostID = ?";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, pTitle);
             ps.setString(2, pDescription);
-            ps.setString(3, postID);
+            ps.setString(3, pImg);
+            ps.setString(4, postID);
             ps.executeUpdate();
         } catch (Exception e) {
         }
@@ -986,19 +1008,21 @@ public class UserDAO {
         return 0;
     }
 
-    public void editClub(String cCode, String cName, String cDescription, String cID) {
+    public void editClub(String cCode, String cName, String cDescription, String cImg, String cID) {
         try {
             con = new DBConnect().getConnection();
             String query = "update Clubs\n"
                     + "set ClubCode = ?,\n"
                     + "ClubName = ?,\n"
-                    + "ClubDescription = ?\n"
+                    + "ClubDescription = ?,\n"
+                    + "ClubImg = ?\n"
                     + "where ClubID = ?";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, cCode);
             ps.setString(2, cName);
             ps.setString(3, cDescription);
-            ps.setString(4, cID);
+            ps.setString(4, cImg);
+            ps.setString(5, cID);
             ps.executeUpdate();
         } catch (Exception e) {
         }
@@ -1373,11 +1397,43 @@ public class UserDAO {
     public void joinClubSuccess(int userID, String clubID, Date joinDate) {
         try {
             con = new DBConnect().getConnection();
-            String query = "insert into Member values (?, ?, 0, ?, 1, 1, 0)";
+            String query = "insert into Member values (?, ?, 0, ?, 1, 0, 0)";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, userID);
             ps.setString(2, clubID);
             ps.setDate(3, joinDate);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void updateClubRequest(Date requestDate, int memberID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "update Member\n"
+                    + "set JoinDate = ?,\n"
+                    + "JoinStatus = 1,\n"
+                    + "KickStatus = 0\n"
+                    + "where MemberID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setDate(1, requestDate);
+            ps.setInt(2, memberID);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void updateClubSuccess(Date joinDate, int memberID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "update Member\n"
+                    + "set JoinDate = ?,\n"
+                    + "JoinStatus = 1,\n"
+                    + "KickStatus = 0\n"
+                    + "where MemberID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setDate(1, joinDate);
+            ps.setInt(2, memberID);
             ps.executeUpdate();
         } catch (Exception e) {
         }
@@ -1389,7 +1445,26 @@ public class UserDAO {
             String query = "SELECT Member.UserID, Users.UserName, Member.JoinDate\n"
                     + "FROM Member JOIN Users\n"
                     + "ON Member.UserID = Users.UserID\n"
-                    + "WHERE ClubID = ? AND Member.UserID = ? AND MemberStatus = 1";
+                    + "WHERE Member.ClubID = ? AND Member.UserID = ? AND Member.MemberStatus = 1 AND Member.KickStatus = 0";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, clubID);
+            ps.setInt(2, userID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return new User(rs.getInt(1), rs.getString(2), rs.getString(3));
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    public User checkKickStatusExist(String clubID, int userID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "SELECT Member.UserID, Users.UserName, Member.JoinDate\n"
+                    + "FROM Member JOIN Users\n"
+                    + "ON Member.UserID = Users.UserID\n"
+                    + "WHERE Member.ClubID = ? AND Member.UserID = ? AND Member.MemberStatus = 0 AND Member.KickStatus = 1";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, clubID);
             ps.setInt(2, userID);
@@ -1408,7 +1483,7 @@ public class UserDAO {
             String query = "SELECT Member.UserID, Users.UserName, Member.JoinDate\n"
                     + "FROM Member JOIN Users\n"
                     + "ON Member.UserID = Users.UserID\n"
-                    + "WHERE ClubID = ? AND Member.UserID = ? AND MemberStatus = 0";
+                    + "WHERE ClubID = ? AND Member.UserID = ? AND MemberStatus = 0 AND JoinStatus = 1 AND KickStatus = 0";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, clubID);
             ps.setInt(2, userID);
@@ -1476,7 +1551,8 @@ public class UserDAO {
 //            String query = "delete Member\n"
 //                    + "where MemberID = ? and IsClubManager = 0 and MemberStatus = 1";
             String query = "update Member\n"
-                    + "set KickStatus = 1\n"
+                    + "set MemberStatus = 0,\n"
+                    + "KickStatus = 1\n"
                     + "where MemberID = ?";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, memberID);
@@ -1491,7 +1567,9 @@ public class UserDAO {
 //            String query = "delete Member\n"
 //                    + "where MemberID = ? and IsClubManager = 1 and MemberStatus = 1";
             String query = "update Member\n"
-                    + "set KickStatus = 1\n"
+                    + "set IsClubManager = 0,\n"
+                    + "MemberStatus = 0,\n"
+                    + "KickStatus = 1\n"
                     + "where MemberID = ?";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, managerID);
@@ -1540,7 +1618,7 @@ public class UserDAO {
             event = new ArrayList<>();
             con = new DBConnect().getConnection();
 //            String query = "select * from [Event]\n" + "where ClubID = ? and EventStatus = 1";
-            String query = "SELECT e.EventID, e.EventName, e.EventDescription, e.EventDate, ea.MemberID, e.EventDate, ea.RemoveStatus\n"
+            String query = "SELECT e.EventID, e.EventName, e.EventDescription, e.EventDate, ea.MemberID, e.EventDate, ea.RemoveStatus, e.EventImg\n"
                     + "FROM [Event] e\n"
                     + "LEFT JOIN EventAttendees ea ON e.EventID = ea.EventID AND ea.MemberID = ?\n"
                     + "WHERE e.ClubID = ? AND e.EventStatus = 1 AND e.RemoveStatus = 0";
@@ -1550,8 +1628,8 @@ public class UserDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 String statusEvent = checkDate(rs.getString(6));
-                event.add(new Event(rs.getInt(1), rs.getString(2), rs.getString(3),
-                        rs.getString(4), rs.getString(5), statusEvent, rs.getString(7)));
+                event.add(new Event(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
+                        rs.getString(5), statusEvent, rs.getString(7), rs.getString(8)));
             }
         } catch (Exception e) {
         }
@@ -1573,7 +1651,7 @@ public class UserDAO {
         }
     }
 
-    public int checkEventID(String eName, String eDescription, Date eDate, String clubID) {
+    public int checkEventID(String eName, String eDescription, Date eDate, String clubID, String eImg) {
         try {
             con = new DBConnect().getConnection();
             String query = "INSERT INTO [Event] VALUES (?, ?, ?, ?, 0, 1, 1, 0, ?)";
@@ -1582,7 +1660,7 @@ public class UserDAO {
             ps.setString(2, eDescription);
             ps.setDate(3, eDate);
             ps.setString(4, clubID);
-            ps.setString(5, "");
+            ps.setString(5, eImg);
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 try ( ResultSet rs = ps.getGeneratedKeys()) {
@@ -1618,27 +1696,29 @@ public class UserDAO {
             ps.setString(1, eventID);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                return new Event(rs.getInt(1), rs.getString(2), rs.getString(3),
-                        rs.getString(4), rs.getString(5), rs.getString(6));
+                return new Event(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10));
             }
         } catch (Exception e) {
         }
         return null;
     }
 
-    public void editEvent(String eName, String eDate, String eDescription, String eventID) {
+    public void editEvent(String eName, String eDate, String eDescription, String eImg, String eventID) {
         try {
             con = new DBConnect().getConnection();
             String query = "update [Event]\n"
                     + "set EventName = ?,\n"
                     + "EventDate = ?,\n"
-                    + "EventDescription = ?\n"
+                    + "EventDescription = ?,\n"
+                    + "EventImg = ?\n"
                     + "where EventID = ?";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, eName);
             ps.setString(2, eDate);
             ps.setString(3, eDescription);
-            ps.setString(4, eventID);
+            ps.setString(4, eImg);
+            ps.setString(5, eventID);
             ps.executeUpdate();
         } catch (Exception e) {
         }

@@ -16,6 +16,12 @@
             th, td {
                 text-align: center;
             }
+
+            .activity-grid {
+                display: grid;
+                grid-template-columns: 95% 25%;
+                grid-column-gap: 1.5rem;
+            }
         </style>
     </head>
     <body>

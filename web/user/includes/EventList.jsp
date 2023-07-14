@@ -12,6 +12,7 @@
             <table>
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Event Name</th>
                         <th>Date</th>
                         <th>Description</th>
@@ -27,6 +28,7 @@
                     <c:set var="endIndex" value="${(currentPage * pageSize) - 1}" />
                     <c:forEach var="e" items="${event}" begin="${startIndex}" end="${endIndex}">
                         <tr>
+                            <td><img src="images/${e.img}" width="80" height="50" alt="image"/></td>
                             <td>${e.name}</td>
                             <td>${e.date}</td>
                             <td>${e.description}</td>
@@ -42,6 +44,13 @@
                             <c:choose>
                                 <%--<c:when test="${e.clubID != joinEvent && e.status == 'Upcoming'}">--%>
                                 <c:when test="${e.removeStatus == 1 && e.status == 'Upcoming'}">
+                                    <c:if test="${sessionScope.IsManager != null || sessionScope.IsMember != null}">
+                                        <td>
+                                            <a href="<%=request.getContextPath()%>/user?command=JoinEvent&eID=${e.ID}">Join event</a>
+                                        </td>
+                                    </c:if>
+                                </c:when>
+                                <c:when test="${e.removeStatus == null && e.status == 'Upcoming'}">
                                     <c:if test="${sessionScope.IsManager != null || sessionScope.IsMember != null}">
                                         <td>
                                             <a href="<%=request.getContextPath()%>/user?command=JoinEvent&eID=${e.ID}">Join event</a>

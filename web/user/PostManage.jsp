@@ -33,6 +33,7 @@
                                 <table>
                                     <thead>
                                         <tr>
+                                            <th></th>
                                             <th>Poster</th>
                                             <th>Post Date</th>
                                             <th>Title</th>
@@ -44,6 +45,7 @@
                                     <tbody>
                                         <c:if test="${sessionScope.IsCreator != null && myPost != null}">
                                             <tr>
+                                                <td><img src="images/${post.img}" width="80" height="50" alt="image"/></td>
                                                 <td>${post.memberID}</td>
                                                 <td>${post.date}</td>
                                                 <td>${post.title}</td>
@@ -58,6 +60,7 @@
                                         </c:if>
                                         <c:if test="${sessionScope.IsCreator != null && myPost == null}">
                                             <tr>
+                                                <td><img src="images/${post.img}" width="80" height="50" alt="image"/></td>
                                                 <td>${post.memberID}</td>
                                                 <td>${post.date}</td>
                                                 <td>${post.title}</td>
@@ -69,6 +72,7 @@
                                         </c:if>
                                         <c:if test="${sessionScope.IsManager != null && myPost != null}">
                                             <tr>
+                                                <td><img src="images/${post.img}" width="80" height="50" alt="image"/></td>
                                                 <td>${post.memberID}</td>
                                                 <td>${post.date}</td>
                                                 <td>${post.title}</td>
@@ -83,6 +87,7 @@
                                         </c:if>
                                         <c:if test="${sessionScope.IsManager != null && myPost == null && postOfClubCreator != null}">
                                             <tr>
+                                                <td><img src="images/${post.img}" width="80" height="50" alt="image"/></td>
                                                 <td>${post.memberID}</td>
                                                 <td>${post.date}</td>
                                                 <td>${post.title}</td>
@@ -91,6 +96,7 @@
                                         </c:if>
                                         <c:if test="${sessionScope.IsManager != null && myPost == null && postOfClubCreator == null}">
                                             <tr>
+                                                <td><img src="images/${post.img}" width="80" height="50" alt="image"/></td>
                                                 <td>${post.memberID}</td>
                                                 <td>${post.date}</td>
                                                 <td>${post.title}</td>
@@ -102,6 +108,7 @@
                                         </c:if>
                                         <c:if test="${sessionScope.IsMember != null}">
                                             <tr>
+                                                <td><img src="images/${post.img}" width="80" height="50" alt="image"/></td>
                                                 <td>${post.memberID}</td>
                                                 <td>${post.date}</td>
                                                 <td>${post.title}</td>

@@ -46,15 +46,16 @@
                                     <h3><%=warning%></h3>
                                 </div>
                                 <%
-                                    // Xóa thông báo sau khi hiển thị
-                                    request.getSession().removeAttribute("warning");
-                                }
+                                        // Xóa thông báo sau khi hiển thị
+                                        request.getSession().removeAttribute("warning");
+                                    }
                                 %>
                             </c:if>
                             <div class="table-responsive">
                                 <table>
                                     <thead>
                                         <tr>
+                                            <th></th>
                                             <th>Poster</th>
                                             <th>Post Date</th>
                                             <th>Title</th>
@@ -65,6 +66,7 @@
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td><img src="images/${post.img}" width="80" height="50" alt="image"/></td>
                                             <td>${post.memberID}</td>
                                             <td>${post.date}</td>
                                             <td>${post.title}</td>

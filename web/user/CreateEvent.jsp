@@ -14,7 +14,7 @@
             th, td {
                 text-align: center;
             }
-            
+
             textarea {
                 resize: none;
             }
@@ -41,35 +41,37 @@
                                     <h3><%=warning%></h3>
                                 </div>
                                 <%
-                                    // Xóa thông báo sau khi hiển thị
-                                    request.getSession().removeAttribute("warning");
-                                }
+                                        // Xóa thông báo sau khi hiển thị
+                                        request.getSession().removeAttribute("warning");
+                                    }
                                 %>
                             </c:if>
                             <div class="table-responsive">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Description</th>
-                                            <th>Date</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <form action="<%=request.getContextPath()%>/user" method="get">
-                                        <input type="hidden" name="command" value="CreateEvent">
-                                        <tr>
-                                            <td><textarea rows="3" cols="27" name="name"></textarea></td>
-                                            <td><textarea rows="3" cols="30" name="description"></textarea></td>
-                                            <td><input type="date" name="date"></td>
-                                            <td>
-                                                <input type="submit" value="Create"/>
-                                            </td>
-                                        </tr>
-                                    </form>
-                                    </tbody>
-                                </table>
+                                <form action="<%=request.getContextPath()%>/upload" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" name="command" value="CreateEvent">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Image</th>
+                                                <th>Name</th>
+                                                <th>Description</th>
+                                                <th>Date</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><input type="file" name="image" value=""></td>
+                                                <td><textarea rows="3" cols="27" name="name"></textarea></td>
+                                                <td><textarea rows="3" cols="30" name="description"></textarea></td>
+                                                <td><input type="date" name="date"></td>
+                                                <td>
+                                                    <input type="submit" value="Create"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
                             </div>
                         </div>
                     </div>

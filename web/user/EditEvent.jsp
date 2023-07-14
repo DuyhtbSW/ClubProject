@@ -40,53 +40,58 @@
                                     <h3><%=warning%></h3>
                                 </div>
                                 <%
-                                    // Xóa thông báo sau khi hiển thị
-                                    request.getSession().removeAttribute("warning");
-                                }
+                                        // Xóa thông báo sau khi hiển thị
+                                        request.getSession().removeAttribute("warning");
+                                    }
                                 %>
                             </c:if>
                             <div class="table-responsive">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Event Name</th>
-                                            <th>Date</th>
-                                            <th>Description</th>
-                                            <th></th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <form action="<%=request.getContextPath()%>/user" method="get">
-                                        <input type="hidden" name="command" value="EditEvent">
-                                        <input type="hidden" name="eID" value="${eventID}">
-                                        <tr>
-                                            <c:if test="${name == null}">
-                                                <td><textarea rows="3" cols="27" name="name">${event.name}</textarea></td>
-                                                </c:if>
-                                            <c:if test="${name != null}">
-                                                <td><textarea rows="3" cols="27" name="name"></textarea></td>
-                                                </c:if>
-                                            <td>
-                                                Old day: <input type="text" name="olddate" value="${event.date}" readonly=""/><br>
-                                                New day: <br><input type="date" name="newdate"/>
-                                            </td>
-                                            <c:if test="${description == null}">
-                                            <td><textarea rows="3" cols="30" name="description">${event.description}</textarea></td>
-                                            </c:if>
-                                            <c:if test="${description != null}">
-                                            <td><textarea rows="3" cols="30" name="description"></textarea></td>
-                                            </c:if>
-                                            <td>
-                                                <input type="submit" value="Save"/>
-                                            </td>
-                                            <td>
-                                                <a href="<%=request.getContextPath()%>/user?command=EventManage&eID=${eventID}">Cancel</a>
-                                            </td>
-                                        </tr>
-                                    </form>
-                                    </tbody>
-                                </table>
+                                <form action="<%=request.getContextPath()%>/upload" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" name="command" value="EditEvent">
+                                    <input type="hidden" name="eID" value="${eventID}">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Event Name</th>
+                                                <th>Date</th>
+                                                <th>Description</th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <img src="images/${event.img}" width="80" height="50" alt="image"/>
+                                                    <input type="file" name="image" value="">
+                                                </td>
+                                                <c:if test="${name == null}">
+                                                    <td><textarea rows="3" cols="27" name="name">${event.name}</textarea></td>
+                                                    </c:if>
+                                                    <c:if test="${name != null}">
+                                                    <td><textarea rows="3" cols="27" name="name"></textarea></td>
+                                                    </c:if>
+                                                <td>
+                                                    Old day: <input type="text" name="olddate" value="${event.date}" readonly=""/><br>
+                                                    New day: <br><input type="date" name="newdate"/>
+                                                </td>
+                                                <c:if test="${description == null}">
+                                                    <td><textarea rows="3" cols="30" name="description">${event.description}</textarea></td>
+                                                    </c:if>
+                                                    <c:if test="${description != null}">
+                                                    <td><textarea rows="3" cols="30" name="description"></textarea></td>
+                                                    </c:if>
+                                                <td>
+                                                    <input type="submit" value="Save"/>
+                                                </td>
+                                                <td>
+                                                    <a href="<%=request.getContextPath()%>/user?command=EventManage&eID=${eventID}">Cancel</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
                             </div>
                         </div>
                     </div>

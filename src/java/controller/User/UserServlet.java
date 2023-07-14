@@ -45,7 +45,13 @@ public class UserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String command = request.getParameter("command");
+        if (command == null) {
+            command = "GetCookie";
+        }
         switch (command) {
+            case "GetCookie":
+                GetCookie(request, response);
+                break;
             case "Home":
                 Home(request, response);
                 break;
@@ -362,6 +368,37 @@ public class UserServlet extends HttpServlet {
         processRequest(request, response);
     }
 
+    private void GetCookie(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Cookie[] cookies = request.getCookies();
+        String cAcc = "";
+        String cPass = "";
+        if (cookies != null) {
+            for (Cookie c : cookies) {
+                if (c.getName().equals("rAcc")) {
+                    cAcc = c.getValue();
+                }
+                if (c.getName().equals("rPass")) {
+                    cPass = c.getValue();
+                }
+            }
+        }
+        HttpSession session = request.getSession();
+        UserDAO userDAO = new UserDAO();
+        User user = userDAO.checkUserLogin(cAcc, cPass);
+        if (user != null) {
+            if (cAcc.equals(user.getEmail()) && cPass.equals(user.getPass())) {
+                session.setAttribute("account", user);
+                session.setMaxInactiveInterval(999999);
+                CheckClubCreatorOrManagerOrMember(request, response);
+            } else {
+                response.sendRedirect("user?command=Home");
+            }
+        } else {
+            response.sendRedirect("user?command=Home");
+        }
+    }
+
     private void Home(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -396,33 +433,39 @@ public class UserServlet extends HttpServlet {
 
         UserDAO userDAO = new UserDAO();
         User user = userDAO.checkUserLogin(acc, pass);
+        User block = userDAO.checkUserBlock(acc, pass);
         Admin admin = new Admin(acc, pass);
         boolean check = AdminDao.login(admin);
 
-        if (user == null && check == false) {
-            request.getSession().setAttribute("warning", "Incorrect account or password!");
+        if (block != null) {
+            request.getSession().setAttribute("warning", "Your account has been locked!");
             response.sendRedirect("user?command=rLogin");
-        } else if (check) {
-            request.getSession().setAttribute("username", acc);
-            request.getSession().setAttribute("password", pass);
-            request.getSession().setAttribute("check", "check");
-            response.sendRedirect("AdminControllerServlet?command=LOGIN");
         } else {
-            HttpSession session = request.getSession();
-            session.setAttribute("account", user);
-            session.setMaxInactiveInterval(999999);
+            if (user == null && check == false) {
+                request.getSession().setAttribute("warning", "Incorrect account or password!");
+                response.sendRedirect("user?command=rLogin");
+            } else if (check) {
+                request.getSession().setAttribute("username", acc);
+                request.getSession().setAttribute("password", pass);
+                request.getSession().setAttribute("check", "check");
+                response.sendRedirect("AdminControllerServlet?command=LOGIN");
+            } else {
+                HttpSession session = request.getSession();
+                session.setAttribute("account", user);
+                session.setMaxInactiveInterval(999999);
 
-            if (remember != null && remember.equals("on")) {
-                Cookie rememberUser = new Cookie("rAcc", acc);
-                Cookie rememberPass = new Cookie("rPass", pass);
-                rememberUser.setMaxAge(60000);
-                rememberPass.setMaxAge(60000);
-                response.addCookie(rememberUser);
-                response.addCookie(rememberPass);
-                session.setAttribute("password", pass);
-                session.setAttribute("remember", remember);
+                if (remember != null && remember.equals("on")) {
+                    Cookie rememberAcc = new Cookie("rAcc", acc);
+                    Cookie rememberPass = new Cookie("rPass", pass);
+                    rememberAcc.setMaxAge(24 * 60 * 60 * 30);
+                    rememberPass.setMaxAge(24 * 60 * 60 * 30);
+                    response.addCookie(rememberAcc);
+                    response.addCookie(rememberPass);
+                    session.setAttribute("password", pass);
+                    session.setAttribute("remember", remember);
+                }
+                CheckClubCreatorOrManagerOrMember(request, response);
             }
-            CheckClubCreatorOrManagerOrMember(request, response);
         }
     }
 
@@ -490,6 +533,12 @@ public class UserServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
+        Cookie rememberAcc = new Cookie("rAcc", "");
+        Cookie rememberPass = new Cookie("rPass", "");
+        rememberAcc.setMaxAge(0);
+        rememberPass.setMaxAge(0);
+        response.addCookie(rememberAcc);
+        response.addCookie(rememberPass);
         session.invalidate();
         response.sendRedirect("user?command=Home");
     }
@@ -560,6 +609,30 @@ public class UserServlet extends HttpServlet {
         return false;
     }
 
+    private void createLastSentEmailCookie(HttpServletResponse response) {
+        long currentTimestamp = System.currentTimeMillis();
+        Cookie cookie = new Cookie("last_sent_email", String.valueOf(currentTimestamp));
+        cookie.setMaxAge(24 * 60 * 60 * 5);
+        response.addCookie(cookie);
+    }
+
+    private void updateLastSentEmailCookie(HttpServletResponse response, long currentTimestamp) {
+        Cookie cookie = new Cookie("last_sent_email", String.valueOf(currentTimestamp));
+        cookie.setMaxAge(24 * 60 * 60 * 5);
+        response.addCookie(cookie);
+    }
+
+    private Cookie findCookie(Cookie[] cookies, String name) {
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(name)) {
+                    return cookie;
+                }
+            }
+        }
+        return null;
+    }
+
     private void Register(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -589,17 +662,42 @@ public class UserServlet extends HttpServlet {
             } else {
                 User u = userDAO.checkUserEmail(acc);
                 if (u == null) {
-                    String recipientEmail = request.getParameter("acc");
-                    String OTP = getRandom();
-                    SendEmail emailSender = new SendEmail();
-                    emailSender.sendEmail(recipientEmail, OTP, "OTP code to register your account");
-                    request.getSession().setAttribute("next", "next");
-                    session.setAttribute("userName", capitalized(extractUsername(acc)));
-                    session.setAttribute("userEmail", acc);
-                    session.setAttribute("userPass", pass);
-                    session.setAttribute("recipientEmail", recipientEmail);
-                    session.setAttribute("OTP", OTP);
-                    response.sendRedirect("user?command=rRegister");
+                    Cookie[] cookies = request.getCookies();
+                    Cookie lastSentEmailCookie = findCookie(cookies, "last_sent_email");
+                    if (lastSentEmailCookie != null) {
+                        long lastSentTimestamp = Long.parseLong(lastSentEmailCookie.getValue());
+                        long currentTimestamp = System.currentTimeMillis();
+                        if (currentTimestamp - lastSentTimestamp < 15 * 60 * 1000) {
+                            request.getSession().setAttribute("warning", "Please wait 15 minutes to re-register!");
+                            response.sendRedirect("user?command=Regist");
+                        } else {
+                            String recipientEmail = request.getParameter("acc");
+                            String OTP = getRandom();
+                            SendEmail emailSender = new SendEmail();
+                            emailSender.sendEmail(recipientEmail, OTP, "OTP code to register your account");
+                            request.getSession().setAttribute("next", "next");
+                            session.setAttribute("userName", capitalized(extractUsername(acc)));
+                            session.setAttribute("userEmail", acc);
+                            session.setAttribute("userPass", pass);
+                            session.setAttribute("recipientEmail", recipientEmail);
+                            session.setAttribute("OTP", OTP);
+                            updateLastSentEmailCookie(response, currentTimestamp);
+                            response.sendRedirect("user?command=rRegister");
+                        }
+                    } else {
+                        String recipientEmail = request.getParameter("acc");
+                        String OTP = getRandom();
+                        SendEmail emailSender = new SendEmail();
+                        emailSender.sendEmail(recipientEmail, OTP, "OTP code to register your account");
+                        request.getSession().setAttribute("next", "next");
+                        session.setAttribute("userName", capitalized(extractUsername(acc)));
+                        session.setAttribute("userEmail", acc);
+                        session.setAttribute("userPass", pass);
+                        session.setAttribute("recipientEmail", recipientEmail);
+                        session.setAttribute("OTP", OTP);
+                        createLastSentEmailCookie(response);
+                        response.sendRedirect("user?command=rRegister");
+                    }
                 } else {
                     request.getSession().setAttribute("warning", "Email already exists!");
                     response.sendRedirect("user?command=Regist");
@@ -788,12 +886,32 @@ public class UserServlet extends HttpServlet {
                 request.getSession().setAttribute("warning", "Email does not exist!");
                 response.sendRedirect("user?command=rForgotPass");
             } else {
-                SendEmail emailSender = new SendEmail();
-                emailSender.sendEmail(recipientEmail, OTP, "OTP code to reset your password");
-                request.getSession().setAttribute("next", "next");
-                session.setAttribute("email", recipientEmail);
-                session.setAttribute("OTP", OTP);
-                response.sendRedirect("user?command=rForgotsPass");
+                Cookie[] cookies = request.getCookies();
+                Cookie lastSentEmailCookie = findCookie(cookies, "last_sent_email");
+                if (lastSentEmailCookie != null) {
+                    long lastSentTimestamp = Long.parseLong(lastSentEmailCookie.getValue());
+                    long currentTimestamp = System.currentTimeMillis();
+                    if (currentTimestamp - lastSentTimestamp < 15 * 60 * 1000) {
+                        request.getSession().setAttribute("warning", "Please wait 15 minutes to resend!");
+                        response.sendRedirect("user?command=rForgotPass");
+                    } else {
+                        SendEmail emailSender = new SendEmail();
+                        emailSender.sendEmail(recipientEmail, OTP, "OTP code to reset your password");
+                        request.getSession().setAttribute("next", "next");
+                        session.setAttribute("email", recipientEmail);
+                        session.setAttribute("OTP", OTP);
+                        updateLastSentEmailCookie(response, currentTimestamp);
+                        response.sendRedirect("user?command=rForgotsPass");
+                    }
+                } else {
+                    SendEmail emailSender = new SendEmail();
+                    emailSender.sendEmail(recipientEmail, OTP, "OTP code to reset your password");
+                    request.getSession().setAttribute("next", "next");
+                    session.setAttribute("email", recipientEmail);
+                    session.setAttribute("OTP", OTP);
+                    createLastSentEmailCookie(response);
+                    response.sendRedirect("user?command=rForgotsPass");
+                }
             }
         }
     }
@@ -884,6 +1002,7 @@ public class UserServlet extends HttpServlet {
         session.removeAttribute("IsCreator");
         session.removeAttribute("IsManager");
         session.removeAttribute("IsMember");
+        session.removeAttribute("editProfile");
         User user = (User) session.getAttribute("account");
 
         if (user == null) {
@@ -918,6 +1037,7 @@ public class UserServlet extends HttpServlet {
 
             User users = userDAO.getUserByID(ID);
             request.setAttribute("user", users);
+            session.setAttribute("editProfile", "editProfile");
             request.getRequestDispatcher("user/EditProfile.jsp").forward(request, response);
         }
     }
@@ -1172,7 +1292,7 @@ public class UserServlet extends HttpServlet {
                 request.getSession().setAttribute("warning", "Club Code must be letters!");
                 response.sendRedirect("user?command=LoadDetailsClubs");
             } else {
-                userDAO.editClub(code.toUpperCase(), name, description, clubID);
+                userDAO.editClub(code.toUpperCase(), name, description, "", clubID);
                 response.sendRedirect("user?command=ViewDetailsClubs&cID=" + clubID);
             }
         }
@@ -1376,7 +1496,7 @@ public class UserServlet extends HttpServlet {
                 request.getSession().setAttribute("warning", "Please complete all information!");
                 response.sendRedirect("user?command=LoadDetailsPosts");
             } else {
-                userDAO.editPost(title, description, postID);
+                userDAO.editPost(title, description, "", postID);
                 response.sendRedirect("user?command=ViewDetailsPosts&pID=" + postID);
             }
         } else {
@@ -1511,10 +1631,10 @@ public class UserServlet extends HttpServlet {
                 request.getSession().setAttribute("warning", "Please complete all information!");
                 response.sendRedirect("user?command=ViewDetailsEvents&eID=" + eventID);
             } else if (newdate == null || newdate.isBlank()) {
-                userDAO.editEvent(name, formattedDate, description, eventID);
+                userDAO.editEvent(name, formattedDate, description, "", eventID);
                 response.sendRedirect("user?command=ViewDetailsEvents&eID=" + eventID);
             } else if (!newdate.isBlank() && isDateAfterToday(newdate)) {
-                userDAO.editEvent(name, newdate, description, eventID);
+                userDAO.editEvent(name, newdate, description, "", eventID);
                 response.sendRedirect("user?command=ViewDetailsEvents&eID=" + eventID);
             } else {
                 request.getSession().setAttribute("warning", "Please select after current date!");
@@ -1570,6 +1690,7 @@ public class UserServlet extends HttpServlet {
         session.removeAttribute("notfound");
         session.removeAttribute("cClubID");
         session.removeAttribute("cClubCreatorID");
+        session.removeAttribute("createClub");
 
         UserDAO userDAO = new UserDAO();
         ArrayList<Club> club = userDAO.getAllClub();
@@ -1679,6 +1800,7 @@ public class UserServlet extends HttpServlet {
         session.removeAttribute("IsCreator");
         session.removeAttribute("IsManager");
         session.removeAttribute("IsMember");
+        session.setAttribute("createClub", "createClub");
         request.getRequestDispatcher("user/CreateClub.jsp").forward(request, response);
     }
 
@@ -1715,7 +1837,7 @@ public class UserServlet extends HttpServlet {
                 request.getSession().setAttribute("warning", "Club Code must be letters!");
                 response.sendRedirect("user?command=rCreateClub");
             } else {
-                int clubID = userDAO.checkClubID(clubCode.toUpperCase(), clubName, clubDescription, user.getID(), java.sql.Date.valueOf(currentDate));
+                int clubID = userDAO.checkClubID(clubCode.toUpperCase(), clubName, clubDescription, user.getID(), java.sql.Date.valueOf(currentDate), "");
 //                int clubID = userDAO.checkClubID();
                 userDAO.insertNotification("Create Club", "Pending", user.getID(), clubID, 1, 1, 1, java.sql.Date.valueOf(currentDate));
                 request.getSession().setAttribute("warning", "Please wait for admin to accept!");
@@ -1749,38 +1871,68 @@ public class UserServlet extends HttpServlet {
         } else {
             UserDAO userDAO = new UserDAO();
             User checkUserIsMember = userDAO.checkUserIsMember(clubID, user.getID());
+            User checkKickStatusExist = userDAO.checkKickStatusExist(clubID, user.getID());
             User checkJoinRequestExist = userDAO.checkJoinRequestExist(clubID, user.getID());
             Club club = userDAO.getClubByID(clubID);
             Club clubStatus = userDAO.checkClubStatus(clubID);
             String ClubCreatorName = userDAO.getClubCreatorName(clubCreatorID);
 
             if (checkUserIsMember == null) {
-                if (checkJoinRequestExist == null) {
-                    if (clubStatus != null) {
-                        userDAO.joinClubRequest(user.getID(), clubID, java.sql.Date.valueOf(currentDate));
-                        int memberID = userDAO.getMemberID(user.getID(), clubID);
-                        userDAO.insertNotification("Join Club", "Pending", user.getID(), Integer.parseInt(clubID), memberID, 1, 1, java.sql.Date.valueOf(currentDate));
-                        request.setAttribute("club", club);
-                        request.setAttribute("clubCreatorName", ClubCreatorName);
-                        request.getSession().setAttribute("warning", "Please wait for the manager to accept!");
-                        response.sendRedirect("user?command=ViewDetailsClub&cID=" + clubID + "&cCID=" + clubCreatorID + "");
+                if (checkKickStatusExist == null) {
+                    if (checkJoinRequestExist == null) {
+                        if (clubStatus != null) {
+                            userDAO.joinClubRequest(user.getID(), clubID, java.sql.Date.valueOf(currentDate));
+                            int memberID = userDAO.getMemberID(user.getID(), clubID);
+                            userDAO.insertNotification("Join Club", "Pending", user.getID(), Integer.parseInt(clubID), memberID, 1, 1, java.sql.Date.valueOf(currentDate));
+                            request.setAttribute("club", club);
+                            request.setAttribute("clubCreatorName", ClubCreatorName);
+                            request.getSession().setAttribute("warning", "Please wait for the manager to accept!");
+                            response.sendRedirect("user?command=ViewDetailsClub&cID=" + clubID + "&cCID=" + clubCreatorID + "");
+                        } else {
+                            userDAO.joinClubSuccess(user.getID(), clubID, java.sql.Date.valueOf(currentDate));
+                            int memberID = userDAO.getMemberID(user.getID(), clubID);
+                            userDAO.insertNotification("Join Club", "Welcome to the " + clubName + "Club", user.getID(), Integer.parseInt(clubID), memberID, 1, 1, java.sql.Date.valueOf(currentDate));
+                            request.setAttribute("club", club);
+                            request.setAttribute("clubCreatorName", ClubCreatorName);
+                            String isMember = userDAO.getClubMemberFromUserID(user.getID());
+                            session.setAttribute("clubMember", isMember);
+                            session.setMaxInactiveInterval(999999);
+                            request.getSession().setAttribute("warning", "Join club success!");
+                            response.sendRedirect("user?command=ViewDetailsClub&cID=" + clubID + "&cCID=" + clubCreatorID + "");
+                        }
                     } else {
-                        userDAO.joinClubSuccess(user.getID(), clubID, java.sql.Date.valueOf(currentDate));
-                        int memberID = userDAO.getMemberID(user.getID(), clubID);
-                        userDAO.insertNotification("Join Club", "Welcome to the " + clubName + "Club", user.getID(), Integer.parseInt(clubID), memberID, 1, 1, java.sql.Date.valueOf(currentDate));
                         request.setAttribute("club", club);
                         request.setAttribute("clubCreatorName", ClubCreatorName);
-                        String isMember = userDAO.getClubMemberFromUserID(user.getID());
-                        session.setAttribute("clubMember", isMember);
-                        session.setMaxInactiveInterval(999999);
-                        request.getSession().setAttribute("warning", "Join club success!");
+                        request.getSession().setAttribute("warning", "Request has been sent!\nPlease wait for the manager to accept!");
                         response.sendRedirect("user?command=ViewDetailsClub&cID=" + clubID + "&cCID=" + clubCreatorID + "");
                     }
                 } else {
-                    request.setAttribute("club", club);
-                    request.setAttribute("clubCreatorName", ClubCreatorName);
-                    request.getSession().setAttribute("warning", "Request has been sent!\nPlease wait for the manager to accept!");
-                    response.sendRedirect("user?command=ViewDetailsClub&cID=" + clubID + "&cCID=" + clubCreatorID + "");
+                    if (checkJoinRequestExist == null) {
+                        int memberID = userDAO.getMemberID(user.getID(), clubID);
+                        if (clubStatus != null) {
+                            userDAO.updateClubRequest(java.sql.Date.valueOf(currentDate), memberID);
+                            userDAO.insertNotification("Join Club", "Pending", user.getID(), Integer.parseInt(clubID), memberID, 1, 1, java.sql.Date.valueOf(currentDate));
+                            request.setAttribute("club", club);
+                            request.setAttribute("clubCreatorName", ClubCreatorName);
+                            request.getSession().setAttribute("warning", "Please wait for the manager to accept!");
+                            response.sendRedirect("user?command=ViewDetailsClub&cID=" + clubID + "&cCID=" + clubCreatorID + "");
+                        } else {
+                            userDAO.updateClubSuccess(java.sql.Date.valueOf(currentDate), memberID);
+                            userDAO.insertNotification("Join Club", "Welcome to the " + clubName + "Club", user.getID(), Integer.parseInt(clubID), memberID, 1, 1, java.sql.Date.valueOf(currentDate));
+                            request.setAttribute("club", club);
+                            request.setAttribute("clubCreatorName", ClubCreatorName);
+                            String isMember = userDAO.getClubMemberFromUserID(user.getID());
+                            session.setAttribute("clubMember", isMember);
+                            session.setMaxInactiveInterval(999999);
+                            request.getSession().setAttribute("warning", "Join club success!");
+                            response.sendRedirect("user?command=ViewDetailsClub&cID=" + clubID + "&cCID=" + clubCreatorID + "");
+                        }
+                    } else {
+                        request.setAttribute("club", club);
+                        request.setAttribute("clubCreatorName", ClubCreatorName);
+                        request.getSession().setAttribute("warning", "Request has been sent!\nPlease wait for the manager to accept!");
+                        response.sendRedirect("user?command=ViewDetailsClub&cID=" + clubID + "&cCID=" + clubCreatorID + "");
+                    }
                 }
             } else {
                 request.setAttribute("club", club);
@@ -2187,6 +2339,7 @@ public class UserServlet extends HttpServlet {
                 request.setAttribute("posts", post.size());
                 request.setAttribute("myPost", myPost);
                 request.setAttribute("clubID", clubID);
+                session.removeAttribute("createPost");
                 request.getRequestDispatcher("user/ClubPost.jsp").forward(request, response);
             }
         } else {
@@ -2200,6 +2353,7 @@ public class UserServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         session.removeAttribute("eventID");
+        session.removeAttribute("createEvent");
         User user = (User) session.getAttribute("account");
         String clubID = (String) session.getAttribute("clubID");
 
@@ -2307,6 +2461,7 @@ public class UserServlet extends HttpServlet {
             request.getSession().removeAttribute("code");
             request.getSession().removeAttribute("name");
             request.getSession().removeAttribute("description");
+            session.removeAttribute("editClub");
             request.getRequestDispatcher("user/ViewClubDetails.jsp").forward(request, response);
         } else {
             response.sendRedirect("user?command=Home");
@@ -2326,6 +2481,7 @@ public class UserServlet extends HttpServlet {
             Club clubs = userDAO.getClubToManage(clubID);
             request.setAttribute("club", clubs);
             request.setAttribute("clubID", clubID);
+            session.setAttribute("editClub", "editClub");
             request.getRequestDispatcher("user/EditClubDetails.jsp").forward(request, response);
         } else {
             response.sendRedirect("user?command=Home");
@@ -2368,7 +2524,7 @@ public class UserServlet extends HttpServlet {
                 request.getSession().setAttribute("warning", "Club Code must be letters!");
                 response.sendRedirect("user?command=LoadEditClub");
             } else {
-                userDAO.editClub(code.toUpperCase(), name, description, clubID);
+                userDAO.editClub(code.toUpperCase(), name, description, "", clubID);
                 response.sendRedirect("user?command=ViewClubDetails");
             }
         }
@@ -2626,6 +2782,8 @@ public class UserServlet extends HttpServlet {
     private void rCreatePost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession();
+        session.setAttribute("createPost", "createPost");
         request.getRequestDispatcher("user/CreatePost.jsp").forward(request, response);
     }
 
@@ -2651,10 +2809,10 @@ public class UserServlet extends HttpServlet {
                 int memberID = userDAO.getMemberID(user.getID(), clubID);
                 int isClubManager = userDAO.isClubManager(memberID);
                 if (isClubManager == 1) {
-                    userDAO.insertPost(title, description, java.sql.Date.valueOf(currentDate), memberID, clubID, "1", "0", "0");
+                    userDAO.insertPost(title, description, java.sql.Date.valueOf(currentDate), memberID, clubID, "1", "0", "0", "");
                     response.sendRedirect("user?command=ClubPost");
                 } else {
-                    int postID = userDAO.checkPostID(title, description, java.sql.Date.valueOf(currentDate), memberID, clubID, "0", "1", "1");
+                    int postID = userDAO.checkPostID(title, description, java.sql.Date.valueOf(currentDate), memberID, clubID, "0", "1", "1", "");
 //                    int postID = userDAO.checkPostID();
 //                    System.out.println(postID);
                     userDAO.insertNotification("Create Post", "Pending", user.getID(), Integer.parseInt(clubID), memberID, postID, 1, java.sql.Date.valueOf(currentDate));
@@ -2674,6 +2832,7 @@ public class UserServlet extends HttpServlet {
         String postID = request.getParameter("pID");
 
         HttpSession session = request.getSession();
+        session.removeAttribute("editPost");
         User user = (User) session.getAttribute("account");
         String clubID = (String) session.getAttribute("clubID");
         String checkPostID = (String) session.getAttribute("postID");
@@ -2771,6 +2930,7 @@ public class UserServlet extends HttpServlet {
                     request.setAttribute("postID", postID);
                     request.setAttribute("clubID", clubID);
                     session.setAttribute("postID", postID);
+                    session.setAttribute("editPost", "editPost");
                     request.getRequestDispatcher("user/EditPost.jsp").forward(request, response);
                 }
             } else {
@@ -2793,6 +2953,7 @@ public class UserServlet extends HttpServlet {
                         request.setAttribute("post", post);
                         request.setAttribute("postID", postID);
                         request.setAttribute("clubID", clubID);
+                        session.setAttribute("editPost", "editPost");
                         request.getRequestDispatcher("user/EditPost.jsp").forward(request, response);
                     }
                 } else {
@@ -2825,7 +2986,7 @@ public class UserServlet extends HttpServlet {
                 request.getSession().setAttribute("warning", "Please complete all information!");
                 response.sendRedirect("user?command=LoadEditPost&pID=" + postID);
             } else {
-                userDAO.editPost(title, description, postID);
+                userDAO.editPost(title, description, "", postID);
                 response.sendRedirect("user?command=PostManage&pID=" + postID);
             }
         } else {
@@ -3290,6 +3451,8 @@ public class UserServlet extends HttpServlet {
     private void rCreateEvent(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession();
+        session.setAttribute("createEvent", "createEvent");
         request.getRequestDispatcher("user/CreateEvent.jsp").forward(request, response);
     }
 
@@ -3318,7 +3481,7 @@ public class UserServlet extends HttpServlet {
                 request.getSession().setAttribute("warning", "Please select after current date!");
                 response.sendRedirect("user?command=rCreateEvent");
             } else {
-                int eventID = userDAO.checkEventID(name, description, java.sql.Date.valueOf(date), clubID);
+                int eventID = userDAO.checkEventID(name, description, java.sql.Date.valueOf(date), clubID, "");
 //                int eventID = userDAO.checkEventID();
                 userDAO.insertNotification("Create Event", "Pending", user.getID(), Integer.parseInt(clubID), memberID, 1, eventID, java.sql.Date.valueOf(currentDate));
                 request.getSession().setAttribute("warning", "Please wait for admin to accept!");
@@ -3336,6 +3499,7 @@ public class UserServlet extends HttpServlet {
         String eventID = request.getParameter("eID");
 
         HttpSession session = request.getSession();
+        session.removeAttribute("editEvent");
         String clubID = (String) session.getAttribute("clubID");
         String checkEventID = (String) session.getAttribute("eventID");
 
@@ -3415,6 +3579,7 @@ public class UserServlet extends HttpServlet {
                     request.setAttribute("event", event);
                     request.setAttribute("eventID", eventID);
                     session.setAttribute("eventID", eventID);
+                    session.setAttribute("editEvent", "editEvent");
                     request.getRequestDispatcher("user/EditEvent.jsp").forward(request, response);
                 }
             } else {
@@ -3436,6 +3601,7 @@ public class UserServlet extends HttpServlet {
                     } else {
                         request.setAttribute("event", event);
                         request.setAttribute("eventID", eventID);
+                        session.setAttribute("editEvent", "editEvent");
                         request.getRequestDispatcher("user/EditEvent.jsp").forward(request, response);
                     }
                 } else {
@@ -3481,10 +3647,10 @@ public class UserServlet extends HttpServlet {
                 request.getSession().setAttribute("warning", "Please complete all information!");
                 response.sendRedirect("user?command=LoadEditEvent&eID=" + eventID);
             } else if (newdate.isBlank()) {
-                userDAO.editEvent(name, formattedDate, description, eventID);
+                userDAO.editEvent(name, formattedDate, description, "", eventID);
                 response.sendRedirect("user?command=EventManage&eID=" + eventID);
             } else if (!newdate.isBlank() && isDateAfterToday(newdate)) {
-                userDAO.editEvent(name, newdate, description, eventID);
+                userDAO.editEvent(name, newdate, description, "", eventID);
                 response.sendRedirect("user?command=EventManage&eID=" + eventID);
             } else if (eventID == null || eventID.isBlank()) {
                 response.sendRedirect("user?command=ClubEvent");
