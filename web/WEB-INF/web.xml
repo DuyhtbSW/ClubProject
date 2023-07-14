@@ -75,7 +75,7 @@
     </session-config>
     <welcome-file-list>
         <welcome-file>
-            /user/Home.jsp
+            user
         </welcome-file>
     </welcome-file-list>
 </web-app>

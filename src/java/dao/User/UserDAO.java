@@ -1520,7 +1520,8 @@ public class UserDAO {
             con = new DBConnect().getConnection();
             String query = "update Member\n"
                     + "set JoinDate = ?,\n"
-                    + "MemberStatus = 1\n"
+                    + "MemberStatus = 1,\n"
+                    + "JoinStatus = 0\n"
                     + "where MemberID = ?";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setDate(1, joinDate);
@@ -2154,6 +2155,24 @@ public class UserDAO {
         }
     }
 
+    public int checkNotificationID(int memberID, String Title) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "SELECT NotificationID\n"
+                    + "FROM [Notification]\n"
+                    + "WHERE MemberID = ? AND Title = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, memberID);
+            ps.setString(2, Title);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+        return 0;
+    }
+
     public void insertNotification(String title, String note, int userID, int clubID, int memberID, int postID, int eventID, Date date) {
         try {
             con = new DBConnect().getConnection();
@@ -2167,6 +2186,24 @@ public class UserDAO {
             ps.setInt(6, postID);
             ps.setInt(7, eventID);
             ps.setDate(8, date);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void editNotification(String title, String note, Date date, int notificationID) {
+        try {
+            con = new DBConnect().getConnection();
+            String query = "update [Notification]\n"
+                    + "set Title = ?,\n"
+                    + "Note = ?,\n"
+                    + "[Date] = ?\n"
+                    + "where NotificationID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, title);
+            ps.setString(2, note);
+            ps.setDate(3, date);
+            ps.setInt(4, notificationID);
             ps.executeUpdate();
         } catch (Exception e) {
         }

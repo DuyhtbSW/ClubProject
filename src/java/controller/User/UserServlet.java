@@ -1891,7 +1891,7 @@ public class UserServlet extends HttpServlet {
                         } else {
                             userDAO.joinClubSuccess(user.getID(), clubID, java.sql.Date.valueOf(currentDate));
                             int memberID = userDAO.getMemberID(user.getID(), clubID);
-                            userDAO.insertNotification("Join Club", "Welcome to the " + clubName + "Club", user.getID(), Integer.parseInt(clubID), memberID, 1, 1, java.sql.Date.valueOf(currentDate));
+                            userDAO.insertNotification("Join Club", "Welcome to the " + clubName + "", user.getID(), Integer.parseInt(clubID), memberID, 1, 1, java.sql.Date.valueOf(currentDate));
                             request.setAttribute("club", club);
                             request.setAttribute("clubCreatorName", ClubCreatorName);
                             String isMember = userDAO.getClubMemberFromUserID(user.getID());
@@ -1909,16 +1909,17 @@ public class UserServlet extends HttpServlet {
                 } else {
                     if (checkJoinRequestExist == null) {
                         int memberID = userDAO.getMemberID(user.getID(), clubID);
+                        int notificationID = userDAO.checkNotificationID(memberID, "Join Club");
                         if (clubStatus != null) {
                             userDAO.updateClubRequest(java.sql.Date.valueOf(currentDate), memberID);
-                            userDAO.insertNotification("Join Club", "Pending", user.getID(), Integer.parseInt(clubID), memberID, 1, 1, java.sql.Date.valueOf(currentDate));
+                            userDAO.editNotification("Join Club", "Pending", java.sql.Date.valueOf(currentDate), notificationID);
                             request.setAttribute("club", club);
                             request.setAttribute("clubCreatorName", ClubCreatorName);
                             request.getSession().setAttribute("warning", "Please wait for the manager to accept!");
                             response.sendRedirect("user?command=ViewDetailsClub&cID=" + clubID + "&cCID=" + clubCreatorID + "");
                         } else {
                             userDAO.updateClubSuccess(java.sql.Date.valueOf(currentDate), memberID);
-                            userDAO.insertNotification("Join Club", "Welcome to the " + clubName + "Club", user.getID(), Integer.parseInt(clubID), memberID, 1, 1, java.sql.Date.valueOf(currentDate));
+                            userDAO.editNotification("Join Club", "Welcome to the " + clubName + "", java.sql.Date.valueOf(currentDate), notificationID);
                             request.setAttribute("club", club);
                             request.setAttribute("clubCreatorName", ClubCreatorName);
                             String isMember = userDAO.getClubMemberFromUserID(user.getID());
@@ -2679,8 +2680,9 @@ public class UserServlet extends HttpServlet {
         } else {
             UserDAO userDAO = new UserDAO();
             int userID = userDAO.getUserID(Integer.parseInt(memberID));
+            int notificationID = userDAO.checkNotificationID(Integer.parseInt(memberID), "Join Club");
             userDAO.joinRequestAccept(java.sql.Date.valueOf(currentDate), memberID);
-//            userDAO.insertNotification("Join Club", "Accepted", userID, java.sql.Date.valueOf(currentDate));
+            userDAO.editNotification("Join Club", "Accepted", java.sql.Date.valueOf(currentDate), notificationID);
             response.sendRedirect("user?command=JoinClubRequestList");
         }
     }
@@ -2701,8 +2703,9 @@ public class UserServlet extends HttpServlet {
         } else {
             UserDAO userDAO = new UserDAO();
             int userID = userDAO.getUserID(Integer.parseInt(memberID));
+            int notificationID = userDAO.checkNotificationID(Integer.parseInt(memberID), "Join Club");
             userDAO.joinRequestDecline(memberID);
-//            userDAO.insertNotification("Join Club", "Not Accepted", userID, java.sql.Date.valueOf(currentDate));
+            userDAO.editNotification("Join Club", "Not Accepted", java.sql.Date.valueOf(currentDate), notificationID);
             response.sendRedirect("user?command=JoinClubRequestList");
         }
     }
