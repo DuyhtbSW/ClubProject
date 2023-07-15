@@ -30,8 +30,8 @@
                                     return false">Cancel</a></th>
                         <td>
                             <%
-                                                        String warning = (String) request.getSession().getAttribute("warning");
-                                                        if (warning != null && !warning.isEmpty()) {
+                                String warning = (String) request.getSession().getAttribute("warning");
+                                if (warning != null && !warning.isEmpty()) {
                             %>
                         <div class="warning-message" style="margin-bottom: 10px; color: red; font-style: italic; ">
                                 <%=warning%>
@@ -40,7 +40,8 @@
                                 request.getSession().removeAttribute("warning");
                             }
                             %>
-                            <input type="submit" value="Sent" class="save" onclick="alert('Sent Notification')"/>
+                            <input type="submit" value="Send" class="save" onclick="if (!(confirm('Feedback this request?')))
+                                        return false"/>
                         </td>
                 </tbody>
             </table>

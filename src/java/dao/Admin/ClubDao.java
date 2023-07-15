@@ -154,7 +154,7 @@ public class ClubDao {
 
     public static int countClubRequest() {
         ConnectDB db = ConnectDB.getInstance();
-        String sql = "Select count(*) as count from Clubs where clubstatus = 0";
+        String sql = "Select count(*) as count from Clubs where CreateRequest = 1";
         Connection con = null;
         int count = 0;
         try {

@@ -62,7 +62,7 @@
             </c:url>
             <button>
                 <span class="ti-gift"></span>
-                <a href="<%=request.getContextPath()%>/${tempLink}">View detail</a>
+                <a href="<%=request.getContextPath()%>/${tempLink}" style="color: #94c9ff;">View detail</a>
             </button>
         </div>
     </div>

@@ -30,8 +30,7 @@
                             <td>${item.userName}</td>
                             <td>${item.userGender}</td>
                             <td>
-                                <a href="${deleteLink}" onclick="if (!(confirm('Sure?')))
-                                            return false">Block</a>
+                                <a href="${deleteLink}" onclick="if (!(confirm('Block ${item.userName} ?'))) return false">Block</a>
                             </td>
                             <td>
                                 <a href="${tempLink}">View detail</a>

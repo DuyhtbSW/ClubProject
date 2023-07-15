@@ -30,7 +30,7 @@
                             <td>${item.eventName}</td>
                             <td>${item.eventDate}</td>
                             <td>
-                                <a href="${deleteLink}" onclick="if(!(confirm('Sure?'))) return false">Remove</a>
+                                <a href="${deleteLink}" onclick="if(!(confirm('Remove ${item.eventName} ?'))) return false">Remove</a>
                             </td>
                             <td>
                                 <a href="${tempLink}">View detail</a>

@@ -30,7 +30,7 @@
                                     return false">Cancel</a></th>
                         <td>
                             <p style="color: red; font-style: italic;"><%= request.getAttribute("warning") != null ? request.getAttribute("warning") : ""%></p>
-                            <input type="submit" value="Sent" class="save" onclick="alert('Sent Notification')"/>
+                            <input type="submit" value="Send" class="save" onclick="if (!(confirm('Feedback this request?'))) return false"/>
                         </td>
                 </tbody>
             </table>

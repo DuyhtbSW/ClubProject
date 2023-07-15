@@ -9,7 +9,7 @@
             <table border="1">
                 <thead>
                     <tr>
-                        <th>Club ID</th>
+                        <th>Club Code</th>
                         <th>Club Name</th>
                         <th>Number of member</th>
                         <th>Manager</th>
@@ -24,7 +24,7 @@
                             <c:param name="clubId" value="${item.clubId}"></c:param>    
                         </c:url>
                         <tr>
-                            <td>${item.clubId}</td>
+                            <td>${item.clubCode}</td>
                             <td>${item.clubName}</td>
                             <td><c:out value="${MemberDao.countMemberOfClub(item.clubId)}" /></td>
                             <td>${UserDao.getUserName(item.clubCreatorId)}</td>
