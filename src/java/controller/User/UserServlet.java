@@ -3059,8 +3059,9 @@ public class UserServlet extends HttpServlet {
         } else {
             UserDAO userDAO = new UserDAO();
             int userID = userDAO.getUserID(Integer.parseInt(memberID));
+            int notificationID = userDAO.checkNotificationID(Integer.parseInt(postID), "Create Post");
             userDAO.postRequestAccept(postID);
-//            userDAO.insertNotification("Create Post", "Accepted", userID, java.sql.Date.valueOf(currentDate));
+            userDAO.editNotification("Create Post", "Accepted", java.sql.Date.valueOf(currentDate), notificationID);
             response.sendRedirect("user?command=PostClubRequestList");
         }
     }
@@ -3082,8 +3083,9 @@ public class UserServlet extends HttpServlet {
         } else {
             UserDAO userDAO = new UserDAO();
             int userID = userDAO.getUserID(Integer.parseInt(memberID));
+            int notificationID = userDAO.checkNotificationID(Integer.parseInt(postID), "Create Post");
             userDAO.postRequestDecline(postID);
-//            userDAO.insertNotification("Create Post", "Not Accepted", userID, java.sql.Date.valueOf(currentDate));
+            userDAO.editNotification("Create Post", "Not Accepted", java.sql.Date.valueOf(currentDate), notificationID);
             response.sendRedirect("user?command=PostClubRequestList");
         }
     }

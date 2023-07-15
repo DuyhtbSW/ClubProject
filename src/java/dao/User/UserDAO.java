@@ -1031,7 +1031,10 @@ public class UserDAO {
     public void deleteClub(String clubID) {
         try {
             con = new DBConnect().getConnection();
-            String query = "delete Clubs\n" + "where ClubID = ?";
+//            String query = "delete Clubs\n" + "where ClubID = ?";
+            String query = "update Clubs\n"
+                    + "set RemoveStatus = 1\n"
+                    + "where ClubID = ?";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, clubID);
             ps.executeUpdate();
@@ -2155,22 +2158,42 @@ public class UserDAO {
         }
     }
 
-    public int checkNotificationID(int memberID, String Title) {
+    public int checkNotificationID(int generalID, String title) {
         try {
+            String query;
+            PreparedStatement ps = null;
+            ResultSet rs = null;
             con = new DBConnect().getConnection();
-            String query = "SELECT NotificationID\n"
-                    + "FROM [Notification]\n"
-                    + "WHERE MemberID = ? AND Title = ?";
-            PreparedStatement ps = con.prepareStatement(query);
-            ps.setInt(1, memberID);
-            ps.setString(2, Title);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                return rs.getInt(1);
+            switch (title) {
+                case "Join Club":
+                    query = "SELECT NotificationID\n"
+                            + "FROM [Notification]\n"
+                            + "WHERE MemberID = ? AND Title = ?";
+                    ps = con.prepareStatement(query);
+                    ps.setInt(1, generalID);
+                    ps.setString(2, title);
+                    rs = ps.executeQuery();
+                    while (rs.next()) {
+                        return rs.getInt(1);
+                    }
+                    break;
+                case "Create Post":
+                    query = "SELECT NotificationID\n"
+                            + "FROM [Notification]\n"
+                            + "WHERE PostID = ? AND Title = ?";
+                    ps = con.prepareStatement(query);
+                    ps.setInt(1, generalID);
+                    ps.setString(2, title);
+                    rs = ps.executeQuery();
+                    while (rs.next()) {
+                        return rs.getInt(1);
+                    }
+                    break;
             }
         } catch (Exception e) {
         }
         return 0;
+
     }
 
     public void insertNotification(String title, String note, int userID, int clubID, int memberID, int postID, int eventID, Date date) {
